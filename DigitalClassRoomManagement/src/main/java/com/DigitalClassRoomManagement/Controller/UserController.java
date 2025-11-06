@@ -1,9 +1,9 @@
 package com.DigitalClassRoomManagement.Controller;
 
+import com.DigitalClassRoomManagement.Dto.userDto;
 import com.DigitalClassRoomManagement.Entity.user;
 import com.DigitalClassRoomManagement.Exception.UserNotFoundException;
 import com.DigitalClassRoomManagement.Service.UserService;
-import com.DigitalClassRoomManagement.dto.userDto;
 import com.DigitalClassRoomManagement.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

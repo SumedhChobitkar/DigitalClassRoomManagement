@@ -1,11 +1,11 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
-import com.DigitalClassRoomManagement.CommonUtil.ValidationClass;
+import com.DigitalClassRoomManagement.Dto.userDto;
 import com.DigitalClassRoomManagement.Entity.user;
 import com.DigitalClassRoomManagement.Exception.UserNotFoundException;
 import com.DigitalClassRoomManagement.Repository.UserRepository;
 import com.DigitalClassRoomManagement.Service.UserService;
-import com.DigitalClassRoomManagement.dto.userDto;
+import com.DigitalClassRoomManagement.commonUtil.ValidationClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

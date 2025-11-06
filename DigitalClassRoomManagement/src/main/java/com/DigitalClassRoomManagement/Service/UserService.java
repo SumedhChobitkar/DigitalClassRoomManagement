@@ -1,7 +1,7 @@
 package com.DigitalClassRoomManagement.Service;
 
+import com.DigitalClassRoomManagement.Dto.userDto;
 import com.DigitalClassRoomManagement.Entity.user;
-import com.DigitalClassRoomManagement.dto.userDto;
 
 import java.util.List;
 
