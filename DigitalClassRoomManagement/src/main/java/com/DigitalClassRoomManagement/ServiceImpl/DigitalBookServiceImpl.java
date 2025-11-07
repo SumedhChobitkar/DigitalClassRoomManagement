@@ -1,6 +1,6 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
-import com.DigitalClassRoomManagement.Dto.DigitalBookDTO;
+import com.DigitalClassRoomManagement.dto.DigitalBookDTO;
 import com.DigitalClassRoomManagement.Entity.DigitalBook;
 import com.DigitalClassRoomManagement.Exception.BookNotFoundException;
 import com.DigitalClassRoomManagement.Repository.DigitalBookRepository;
