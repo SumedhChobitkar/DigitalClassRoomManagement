@@ -14,5 +14,15 @@ public class ValidationClass {
     public static final Pattern ROLE_PATTERN = Pattern.compile("^(ADMIN|PRINCIPAL|TEACHER|STUDENT|PARENT)$");
 
     public static final Pattern LANGUAGE_PATTERN = Pattern.compile("^[A-Za-z -]{2,20}$");
+
+
+
+    // DigitalBook
+    public static final Pattern TITLE_PATTERN = Pattern.compile("^[A-Z][a-zA-Z0-9 ]*$");
+    public static final Pattern GRADE_PATTERN = Pattern.compile("^[a-zA-Z0-9 ]+$");
+    public static final Pattern SUBJECT_PATTERN = Pattern.compile("^[a-zA-Z ]+$");
+    public static final Pattern FILE_TYPE_PATTERN = Pattern.compile(".*\\.(pdf)$");
+    public static final long MAX_FILE_SIZE = 50 * 1024 * 1024;
+
 }
 
