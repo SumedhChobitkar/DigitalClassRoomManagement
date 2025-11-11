@@ -1,0 +1,1869 @@
+Index: src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Repository;\r\n\r\nimport com.DigitalClassRoomManagement.Entity.Attendance;\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\n\r\npublic interface AttendanceRepository extends JpaRepository<Attendance,Long> {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java b/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java	(date 1762862221893)
+@@ -2,6 +2,8 @@
+ 
+ import com.DigitalClassRoomManagement.Entity.Attendance;
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.stereotype.Repository;
+ 
++@Repository
+ public interface AttendanceRepository extends JpaRepository<Attendance,Long> {
+ }
+Index: src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Repository;\r\n\r\nimport com.DigitalClassRoomManagement.Entity.user;\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.stereotype.Repository;\r\n\r\nimport java.util.Optional;\r\n\r\n@Repository\r\npublic interface UserRepository extends JpaRepository<user,Long> {\r\n     Optional<user> findByEmail(String email);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java b/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java	(date 1762862221896)
+@@ -1,12 +1,12 @@
+ package com.DigitalClassRoomManagement.Repository;
+ 
+-import com.DigitalClassRoomManagement.Entity.user;
++import com.DigitalClassRoomManagement.Entity.User;
+ import org.springframework.data.jpa.repository.JpaRepository;
+ import org.springframework.stereotype.Repository;
+ 
+ import java.util.Optional;
+ 
+ @Repository
+-public interface UserRepository extends JpaRepository<user,Long> {
+-     Optional<user> findByEmail(String email);
++public interface UserRepository extends JpaRepository<User,Long> {
++     Optional<User> findByEmail(String email);
+ }
+Index: src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Repository;\r\n\r\nimport com.DigitalClassRoomManagement.Entity.Teacher;\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\n\r\npublic interface TeacherRepository extends JpaRepository<Teacher,Long> {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java b/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java	(date 1762862221894)
+@@ -2,6 +2,8 @@
+ 
+ import com.DigitalClassRoomManagement.Entity.Teacher;
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.stereotype.Repository;
+ 
++@Repository
+ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
+ }
+Index: src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement;\r\n\r\nimport org.springframework.boot.SpringApplication;\r\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\r\n\r\n@SpringBootApplication\r\npublic class DigitalClassRoomManagementApplication {\r\n\r\n\tpublic static void main(String[] args) {\r\n        SpringApplication.run(DigitalClassRoomManagementApplication.class, args);\r\n        System.out.println(\"Application runed \");\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java b/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java
+--- a/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java	(date 1762862221887)
+@@ -3,7 +3,9 @@
+ import org.springframework.boot.SpringApplication;
+ import org.springframework.boot.autoconfigure.SpringBootApplication;
+ 
++
+ @SpringBootApplication
++
+ public class DigitalClassRoomManagementApplication {
+ 
+ 	public static void main(String[] args) {
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring.application.name=DigitalClassRoomManagement\r\n\r\nspring.datasource.url=jdbc:mysql://localhost:3306/digitalClassManagement?useSSL=false&allowPublicKeyRetrieval=true\r\nspring.datasource.username=root\r\n\r\n# spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver   # optional, auto-detect\r\n# spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect # optional, auto\r\n\r\nspring.datasource.password=root\r\nspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect\r\nspring.jpa.show-sql=true\r\n\r\nspring.jpa.hibernate.ddl-auto=update\r\nspring.jpa.show-sql=true\r\nspring.jpa.properties.hibernate.format_sql=true\r\nspring.jpa.open-in-view=false\r\nspring.jpa.properties.hibernate.jdbc.time_zone=UTC\r\n\r\n# ---- Dev Error Visibility (turn these off in prod) ----\r\nserver.error.include-message=always\r\nserver.error.include-binding-errors=always\r\nserver.error.include-exception=true\r\n# server.error.include-stacktrace=always\r\n\r\n# ---- Logging ----\r\nlogging.level.root=INFO\r\nlogging.level.com.DigitalClassRoomManagement=DEBUG\r\n\r\n# ---- Upload limits ----\r\nspring.servlet.multipart.max-file-size=512MB\r\nspring.servlet.multipart.max-request-size=512MB\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+--- a/src/main/resources/application.properties	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/resources/application.properties	(date 1762862221908)
+@@ -5,10 +5,10 @@
+ 
+ # spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver   # optional, auto-detect
+ # spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect # optional, auto
+-
++server.port=9090
+ spring.datasource.password=root
+ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+-spring.jpa.show-sql=true
++
+ 
+ spring.jpa.hibernate.ddl-auto=update
+ spring.jpa.show-sql=true
+Index: src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.ServiceImpl;\r\n\r\nimport com.DigitalClassRoomManagement.Dto.TeacherDto;\r\nimport com.DigitalClassRoomManagement.Entity.Teacher;\r\nimport com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;\r\nimport com.DigitalClassRoomManagement.Repository.TeacherRepository;\r\nimport com.DigitalClassRoomManagement.Service.TeacherService;\r\nimport org.slf4j.Logger;\r\nimport org.slf4j.LoggerFactory;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.List;\r\n\r\n@Service\r\npublic class TeacherServiceImpl implements TeacherService {\r\n\r\n    private static final Logger log = LoggerFactory.getLogger(TeacherServiceImpl.class);\r\n\r\n    @Autowired\r\n    private TeacherRepository repo;\r\n\r\n    @Override\r\n    public String addTeacher(TeacherDto dto) {\r\n        log.info(\"Adding new teacher with email: {}\", dto.getEmail());\r\n        Teacher teacher = new Teacher();\r\n        teacher.setEmail(dto.getEmail());\r\n        teacher.setGender(dto.getGender());\r\n        teacher.setPhone(dto.getPhone());\r\n        teacher.setFirstName(dto.getFirstName());\r\n        teacher.setLastName(dto.getLastName());\r\n        teacher.setQualification(dto.getQualification());\r\n        teacher.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));\r\n        teacher.setExperienceYears(dto.getExperienceYears());\r\n\r\n        Teacher savedTeacher = repo.save(teacher);\r\n        log.info(\"Teacher added successfully with ID: {}\", savedTeacher.getId());\r\n        return \"New Teacher Added Successfully with ID: \" + savedTeacher.getId();\r\n    }\r\n\r\n    @Override\r\n    public List<Teacher> getAllTeacher() {\r\n        log.info(\"Fetching all teacher records from database...\");\r\n        List<Teacher> teachers = repo.findAll();\r\n        log.info(\"Total teachers found: {}\", teachers.size());\r\n        return teachers;\r\n    }\r\n\r\n    @Override\r\n    public Teacher getTeacherById(Long id) {\r\n        log.info(\"Fetching teacher details for ID: {}\", id);\r\n        return repo.findById(id)\r\n                .orElseThrow(() -> {\r\n                    log.error(\"Teacher not found with ID: {}\", id);\r\n                    return new TeacherNotFoundException(\"Teacher not found with ID: \" + id);\r\n                });\r\n    }\r\n\r\n    @Override\r\n    public String updateTeacherInfo(Long id, TeacherDto dto) {\r\n        log.info(\"Updating teacher information for ID: {}\", id);\r\n        try {\r\n            Teacher existing = repo.findById(id)\r\n                    .orElseThrow(() -> {\r\n                        log.error(\"Teacher not found with ID: {}\", id);\r\n                        return new TeacherNotFoundException(\"Teacher not found with ID: \" + id);\r\n                    });\r\n\r\n            existing.setEmail(dto.getEmail());\r\n            existing.setGender(dto.getGender());\r\n            existing.setPhone(dto.getPhone());\r\n            existing.setFirstName(dto.getFirstName());\r\n            existing.setLastName(dto.getLastName());\r\n            existing.setQualification(dto.getQualification());\r\n            existing.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));\r\n            existing.setExperienceYears(dto.getExperienceYears());\r\n\r\n            repo.save(existing);\r\n            log.info(\"Teacher information updated successfully for ID: {}\", id);\r\n            return \"Updation successful\";\r\n        } catch (TeacherNotFoundException tx) {\r\n            log.warn(\"Attempted to update non-existing teacher with ID: {}\", id);\r\n            throw tx;\r\n        } catch (Exception e) {\r\n            log.error(\"Error occurred while updating teacher with ID: {} - {}\", id, e.getMessage(), e);\r\n            throw new RuntimeException(\"Updation failed: \" + e.getMessage());\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String deleteTeacherById(Long id) {\r\n        log.info(\"Attempting to delete teacher with ID: {}\", id);\r\n        try {\r\n            Teacher existing = repo.findById(id)\r\n                    .orElseThrow(() -> {\r\n                        log.error(\"Teacher not found with ID: {}\", id);\r\n                        return new TeacherNotFoundException(\"Teacher not found with ID: \" + id);\r\n                    });\r\n            repo.delete(existing);\r\n            log.info(\"Teacher deleted successfully with ID: {}\", id);\r\n            return \"Teacher information deleted successfully with ID: \" + id;\r\n        } catch (TeacherNotFoundException tx) {\r\n            log.warn(\"Attempted to delete non-existing teacher with ID: {}\", id);\r\n            throw tx;\r\n        } catch (Exception e) {\r\n            log.error(\"Error occurred while deleting teacher with ID: {} - {}\", id, e.getMessage(), e);\r\n            throw new RuntimeException(\"Deletion failed: \" + e.getMessage());\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java
+--- a/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java	(date 1762862221902)
+@@ -32,7 +32,8 @@
+         teacher.setQualification(dto.getQualification());
+         teacher.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));
+         teacher.setExperienceYears(dto.getExperienceYears());
+-
++        teacher.setAssign_class(dto.getAssign_class());
++        teacher.setAssign_section(dto.getAssign_section());
+         Teacher savedTeacher = repo.save(teacher);
+         log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
+         return "New Teacher Added Successfully with ID: " + savedTeacher.getId();
+Index: src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Dto;\r\n\r\nimport jakarta.validation.constraints.Email;\r\nimport jakarta.validation.constraints.NotBlank;\r\nimport jakarta.validation.constraints.Past;\r\nimport jakarta.validation.constraints.Pattern;\r\nimport lombok.AllArgsConstructor;\r\nimport lombok.Getter;\r\nimport lombok.NoArgsConstructor;\r\nimport lombok.Setter;\r\nimport org.springframework.data.repository.NoRepositoryBean;\r\n\r\nimport java.time.LocalDate;\r\n\r\n@Getter\r\n@Setter\r\n@AllArgsConstructor\r\n@NoArgsConstructor\r\npublic class TeacherDto {\r\n    @NotBlank(message = \"First name can not be empty\")\r\n    @Pattern(regexp = \"^[A-Za-z]+$\",message = \"First name should only contain alphabets and spaces\")\r\n    private String firstName;\r\n    @NotBlank(message = \"Last name can not be empty\")\r\n    @Pattern(regexp = \"^[A-Za-z]+$\",message = \"Last name should only contain alphabets and spaces\")\r\n    private String lastName;\r\n    @NotBlank(message=\"Email can not be blank\")\r\n    @Email(message = \"Kindly provide valid email id\")\r\n    private String email;\r\n    @NotBlank(message = \"Phone number cannot be empty\")\r\n    @Pattern(regexp = \"^[6-9]\\\\d{9}$\", message = \"Phone number must be 10 digits and start with 6, 7, 8, or 9\")\r\n    private String phone;\r\n    private String qualification;\r\n    private Integer experienceYears;\r\n    private String gender;\r\n    @Past(message = \"Birth date should be from past\")\r\n    private LocalDate dateOfBirth;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java b/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java	(date 1762862221888)
+@@ -8,7 +8,6 @@
+ import lombok.Getter;
+ import lombok.NoArgsConstructor;
+ import lombok.Setter;
+-import org.springframework.data.repository.NoRepositoryBean;
+ 
+ import java.time.LocalDate;
+ 
+@@ -34,4 +33,6 @@
+     private String gender;
+     @Past(message = "Birth date should be from past")
+     private LocalDate dateOfBirth;
++    private String assign_class;
++    private String assign_section;
+ }
+Index: src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Entity;\r\n\r\nimport jakarta.persistence.*;\r\nimport lombok.AllArgsConstructor;\r\nimport lombok.Getter;\r\nimport lombok.NoArgsConstructor;\r\nimport lombok.Setter;\r\n\r\n@Entity\r\n@Getter\r\n@Setter\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Table(name=\"Teacher\")\r\npublic class Teacher {\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n\r\n    private String firstName;\r\n    private String lastName;\r\n    private String email;\r\n    private String phone;\r\n    private String qualification;\r\n    private Integer experienceYears;\r\n    private String gender;\r\n    private String dateOfBirth;\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java b/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java	(date 1762862221891)
+@@ -1,11 +1,10 @@
+ package com.DigitalClassRoomManagement.Entity;
+ 
++import com.fasterxml.jackson.annotation.JsonIgnore;
+ import jakarta.persistence.*;
+-import lombok.AllArgsConstructor;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-import lombok.Setter;
++import lombok.*;
+ 
++@Builder
+ @Entity
+ @Getter
+ @Setter
+@@ -25,5 +24,51 @@
+     private Integer experienceYears;
+     private String gender;
+     private String dateOfBirth;
++    private String assign_class;
++    private String assign_section;
++    @OneToOne(fetch = FetchType.LAZY)
++    @JoinColumn(name = "user_id")
++    @JsonIgnore
++    private User user;
+ 
++
++//    @ManyToMany
++//    @JoinTable(
++//            name = "teacher_class",
++//            joinColumns = @JoinColumn(name = "teacher_id"),
++//            inverseJoinColumns = @JoinColumn(name = "class_id")
++//    )
++//    @Builder.Default
++//    private List<SchoolClass> assignedClass = new ArrayList<>();
++//
++//    @ManyToMany
++//    @JoinTable(
++//            name = "teacher_section",
++//            joinColumns = @JoinColumn(name = "teacher_id"),
++//            inverseJoinColumns = @JoinColumn(name = "section_id")
++//    )
++//    @Builder.Default
++//    private List<Section> assignedSection = new ArrayList<>();
++//
++//    @ManyToMany
++//    @JoinTable(
++//            name = "teacher_student",
++//            joinColumns = @JoinColumn(name = "teacher_id"),
++//            inverseJoinColumns = @JoinColumn(name = "student_reg_id")
++//    )
++//    @Builder.Default
++//    private List<Student> student = new ArrayList<>();
++//
++//
++//    @Column(name = "assigned_at")
++//    private LocalDateTime assignedAt;
++//
++//    private boolean assignedAsClassTeacher;
++//
++//    @OneToOne(fetch=FetchType.LAZY)
++//    @JoinColumn(name="classTeacherId")
++//    private ClassTeacher classTeacher;
++//
++//    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
++//    private List<PTM> ptms;
+ }
+Index: src/main/java/com/DigitalClassRoomManagement/Entity/user.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Entity;\r\n\r\nimport jakarta.persistence.*;\r\nimport lombok.Data;\r\n\r\n@Data\r\n@Entity\r\n@Table(name=\"users\")\r\npublic class user {\r\n\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    @Column(name=\"user_id\")\r\n    private Long userId;\r\n\r\n    private String name;\r\n    private String email;\r\n    private String password;\r\n\r\n    @Enumerated(EnumType.STRING)\r\n    private Role role; // ADMIN, PRINCIPAL, TEACHER, STUDENT, PARENT\r\n    private String languagePreference;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Entity/user.java b/src/main/java/com/DigitalClassRoomManagement/Entity/User.java
+rename from src/main/java/com/DigitalClassRoomManagement/Entity/user.java
+rename to src/main/java/com/DigitalClassRoomManagement/Entity/User.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Entity/user.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Entity/User.java	(date 1762862221892)
+@@ -1,12 +1,17 @@
+ package com.DigitalClassRoomManagement.Entity;
+ 
+ import jakarta.persistence.*;
+-import lombok.Data;
++
++import lombok.*;
+ 
+ @Data
+ @Entity
+ @Table(name="users")
+-public class user {
++@Getter
++@Setter
++@NoArgsConstructor
++@AllArgsConstructor
++public class User {
+ 
+ 
+     @Id
+Index: src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.security;\r\n\r\nimport com.DigitalClassRoomManagement.Entity.user;\r\nimport com.DigitalClassRoomManagement.Repository.UserRepository;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.security.core.userdetails.*;\r\nimport org.springframework.security.core.authority.SimpleGrantedAuthority;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.Collections;\r\n\r\n@Service\r\npublic class CustomUserDetailsService implements UserDetailsService {\r\n\r\n    @Autowired\r\n    private UserRepository userRepository;\r\n\r\n    @Override\r\n    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {\r\n        user user = userRepository.findByEmail(email)\r\n                .orElseThrow(() -> new UsernameNotFoundException(\"User not found with email: \" + email));\r\n\r\n        return new org.springframework.security.core.userdetails.User(\r\n                user.getEmail(),\r\n                user.getPassword(),\r\n                Collections.singletonList(new SimpleGrantedAuthority(\"ROLE_\" + user.getRole()))\r\n        );\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java b/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java
+--- a/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java	(date 1762862221908)
+@@ -1,6 +1,6 @@
+ package com.DigitalClassRoomManagement.security;
+ 
+-import com.DigitalClassRoomManagement.Entity.user;
++import com.DigitalClassRoomManagement.Entity.User;
+ import com.DigitalClassRoomManagement.Repository.UserRepository;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.security.core.userdetails.*;
+@@ -17,7 +17,7 @@
+ 
+     @Override
+     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+-        user user = userRepository.findByEmail(email)
++        User user = userRepository.findByEmail(email)
+                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+ 
+         return new org.springframework.security.core.userdetails.User(
+Index: src/main/java/com/DigitalClassRoomManagement/Controller/AdminController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Controller;\r\n\r\nimport com.DigitalClassRoomManagement.Entity.Admin;\r\nimport com.DigitalClassRoomManagement.Service.AdminService;\r\nimport com.DigitalClassRoomManagement.dto.AdminDTO;\r\nimport jakarta.validation.Valid;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.*;\r\n\r\nimport java.util.List;\r\n\r\n@RestController\r\n@RequestMapping(\"/api/admin\")\r\npublic class AdminController {\r\n\r\n    @Autowired\r\n    private AdminService adminService;\r\n\r\n\r\n    @PostMapping(\"/create\")\r\n    public ResponseEntity<String> createAdmin(@Valid @RequestBody Admin admin) {\r\n        String message = adminService.GetData(admin);\r\n        return new ResponseEntity<>(message, HttpStatus.CREATED);\r\n    }\r\n\r\n\r\n    @GetMapping(\"/all\")\r\n    public ResponseEntity<List<Admin>> getAllAdmins() {\r\n        List<Admin> admins = adminService.sendData();\r\n        return new ResponseEntity<>(admins, HttpStatus.OK);\r\n    }\r\n\r\n\r\n    @DeleteMapping(\"/delete/{id}\")\r\n    public ResponseEntity<String> deleteById(@PathVariable Long id) {\r\n        String message = adminService.deleteById(id);\r\n        return new ResponseEntity<>(message, HttpStatus.OK);\r\n    }\r\n\r\n\r\n    @PutMapping(\"/update/{id}\")\r\n    public ResponseEntity<String> updateById(@PathVariable Long id, @Valid @RequestBody AdminDTO adminDTO) {\r\n        String message = adminService.updateById(id, adminDTO);\r\n        return new ResponseEntity<>(message, HttpStatus.OK);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Controller/AdminController.java b/src/main/java/com/DigitalClassRoomManagement/Controller/AdminController.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Controller/AdminController.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Controller/AdminController.java	(date 1762862221884)
+@@ -1,8 +1,10 @@
+ package com.DigitalClassRoomManagement.Controller;
+ 
++import com.DigitalClassRoomManagement.Dto.UnApproveAdminsDto;
+ import com.DigitalClassRoomManagement.Entity.Admin;
++import com.DigitalClassRoomManagement.Entity.UnAppproveAdmins;
+ import com.DigitalClassRoomManagement.Service.AdminService;
+-import com.DigitalClassRoomManagement.dto.AdminDTO;
++import com.DigitalClassRoomManagement.Dto.AdminDTO;
+ import jakarta.validation.Valid;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.http.HttpStatus;
+@@ -19,6 +21,14 @@
+     private AdminService adminService;
+ 
+ 
++
++    @PostMapping("/register")
++    public UnAppproveAdmins unApproveAdminsRegister(@RequestBody UnApproveAdminsDto tempAdmin){
++        System.out.println("The req reached here");
++        return adminService.unApproveAdminsRegister(tempAdmin);
++    }
++
++
+     @PostMapping("/create")
+     public ResponseEntity<String> createAdmin(@Valid @RequestBody Admin admin) {
+         String message = adminService.GetData(admin);
+Index: ../.idea/modules.xml
+===================================================================
+diff --git a/../.idea/modules.xml b/../.idea/modules.xml
+deleted file mode 100644
+--- a/../.idea/modules.xml	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ /dev/null	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ProjectModuleManager">
+-    <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/DigitalClassRoomManagement.iml" filepath="$PROJECT_DIR$/.idea/DigitalClassRoomManagement.iml" />
+-    </modules>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: src/main/java/com/DigitalClassRoomManagement/dto/HolidayDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.dto;\r\n\r\nimport lombok.*;\r\nimport java.time.LocalDate;\r\n\r\n@Data\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Builder\r\npublic class HolidayDto {\r\n    private Long id;\r\n    private String holidayName;\r\n    private LocalDate holidayDate;\r\n    private String description;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/dto/HolidayDto.java b/src/main/java/com/DigitalClassRoomManagement/dto/HolidayDto.java
+--- a/src/main/java/com/DigitalClassRoomManagement/dto/HolidayDto.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/dto/HolidayDto.java	(date 1762862221906)
+@@ -1,4 +1,4 @@
+-package com.DigitalClassRoomManagement.dto;
++package com.DigitalClassRoomManagement.Dto;
+ 
+ import lombok.*;
+ import java.time.LocalDate;
+Index: src/main/java/com/DigitalClassRoomManagement/dto/EventDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.dto;\r\n\r\n\r\nimport lombok.*;\r\nimport java.time.LocalDate;\r\n\r\n@Data\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Builder\r\npublic class EventDto {\r\n    private Long id;\r\n    private String eventName;\r\n    private String description;\r\n    private LocalDate eventDate;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/dto/EventDto.java b/src/main/java/com/DigitalClassRoomManagement/dto/EventDto.java
+--- a/src/main/java/com/DigitalClassRoomManagement/dto/EventDto.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/dto/EventDto.java	(date 1762862221905)
+@@ -1,4 +1,4 @@
+-package com.DigitalClassRoomManagement.dto;
++package com.DigitalClassRoomManagement.Dto;
+ 
+ 
+ import lombok.*;
+Index: src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.ServiceImpl;\r\n\r\nimport com.DigitalClassRoomManagement.Dto.userDto;\r\nimport com.DigitalClassRoomManagement.Entity.user;\r\nimport com.DigitalClassRoomManagement.Exception.UserNotFoundException;\r\nimport com.DigitalClassRoomManagement.Repository.UserRepository;\r\nimport com.DigitalClassRoomManagement.Service.UserService;\r\nimport com.DigitalClassRoomManagement.commonUtil.ValidationClass;\r\nimport org.slf4j.Logger;\r\nimport org.slf4j.LoggerFactory;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.security.crypto.password.PasswordEncoder;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.List;\r\nimport java.util.Optional;\r\nimport java.util.stream.Collectors;\r\n\r\n@Service\r\npublic class UserServiceimpl implements UserService {\r\n\r\n    @Autowired\r\n    private UserRepository userRepository;\r\n\r\n    @Autowired\r\n    private PasswordEncoder passwordEncoder;\r\n\r\n    private static final Logger logger = LoggerFactory.getLogger(UserServiceimpl.class);\r\n\r\n    @Override\r\n    public userDto registeration(user user1) {\r\n        try {\r\n            validation(user1);\r\n\r\n            Optional<user> existingUser = userRepository.findByEmail(user1.getEmail());\r\n            if (existingUser.isPresent()) {\r\n                throw new RuntimeException(\"User already registered with email: \" + user1.getEmail());\r\n            }\r\n\r\n            user1.setPassword(passwordEncoder.encode(user1.getPassword()));\r\n\r\n            user savedUser = userRepository.save(user1);\r\n\r\n            return toDto(savedUser);\r\n        } catch (Exception e) {\r\n            logger.error(\"Error: \" + e.getMessage());\r\n            throw e;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public user login(String email, String password) {\r\n        try {\r\n            Optional<user> optional = userRepository.findByEmail(email);\r\n            if (optional.isPresent()) {\r\n                user u = optional.get();\r\n                if (passwordEncoder.matches(password, u.getPassword())) {\r\n                    return u;\r\n                } else {\r\n                    throw new UserNotFoundException(\"Password not match\");\r\n                }\r\n            } else {\r\n                throw new IllegalArgumentException(\"Email does not exist\");\r\n            }\r\n        } catch (Exception e) {\r\n            logger.error(\"Error: \" + e.getMessage());\r\n            throw e;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public List<userDto> getAll() {\r\n        try {\r\n            List<user> users = userRepository.findAll();\r\n            return users.stream().map(this::toDto).collect(Collectors.toList());\r\n        } catch (Exception e) {\r\n            logger.error(\"Error: \" + e.getMessage());\r\n            throw e;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public userDto getUserById(Long id) {\r\n        try {\r\n            Optional<user> opt = userRepository.findById(id);\r\n            if (opt.isPresent()) {\r\n                return toDto(opt.get());\r\n            }\r\n            throw new RuntimeException(\"ID NOT FOUND\");\r\n        } catch (Exception e) {\r\n            logger.error(\"Error: \" + e.getMessage());\r\n            throw e;\r\n        }\r\n    }\r\n\r\n    public static void validation(user user1) {\r\n\r\n        if (user1.getName() == null || !ValidationClass.NAME_PATTERN.matcher(user1.getName()).matches()) {\r\n            throw new IllegalArgumentException(\"Invalid Name: Must start with uppercase and contain only letters, spaces, or dots.\");\r\n        }\r\n\r\n        if (user1.getEmail() == null || !ValidationClass.EMAIL_PATTERN.matcher(user1.getEmail()).matches()) {\r\n            throw new IllegalArgumentException(\"Invalid Email: Must be a valid email address (e.g., example@domain.com).\");\r\n        }\r\n\r\n        if (user1.getPassword() == null || !ValidationClass.PASSWORD_PATTERN.matcher(user1.getPassword()).matches()) {\r\n            throw new IllegalArgumentException(\"Invalid Password: Must contain 6–20 chars, at least one letter, one digit, and one special character.\");\r\n        }\r\n\r\n        if (user1.getRole() == null || !ValidationClass.ROLE_PATTERN.matcher(user1.getRole().name()).matches()) {\r\n            throw new IllegalArgumentException(\"Invalid Role: Must be one of ADMIN, PRINCIPAL, TEACHER, STUDENT, or PARENT.\");\r\n        }\r\n\r\n        if (user1.getLanguagePreference() == null || !ValidationClass.LANGUAGE_PATTERN.matcher(user1.getLanguagePreference()).matches()) {\r\n            throw new IllegalArgumentException(\"Invalid Language Preference: Only letters, spaces, or dashes allowed (e.g., English, en-US).\");\r\n        }\r\n    }\r\n\r\n    private userDto toDto(user u) {\r\n        userDto dto = new userDto();\r\n        dto.setUserId(u.getUserId());\r\n        dto.setName(u.getName());\r\n        dto.setEmail(u.getEmail());\r\n        dto.setRole(u.getRole());\r\n        dto.setLanguagePreference(u.getLanguagePreference());\r\n        return dto;\r\n    }\r\n\r\n    private user toEntity(userDto dto) {\r\n        user u = new user();\r\n        u.setUserId(dto.getUserId());\r\n        u.setName(dto.getName());\r\n        u.setEmail(dto.getEmail());\r\n        u.setRole(dto.getRole());\r\n        u.setLanguagePreference(dto.getLanguagePreference());\r\n        return u;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java
+--- a/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java	(date 1762862221903)
+@@ -1,7 +1,7 @@
+ package com.DigitalClassRoomManagement.ServiceImpl;
+ 
+ import com.DigitalClassRoomManagement.Dto.userDto;
+-import com.DigitalClassRoomManagement.Entity.user;
++import com.DigitalClassRoomManagement.Entity.User;
+ import com.DigitalClassRoomManagement.Exception.UserNotFoundException;
+ import com.DigitalClassRoomManagement.Repository.UserRepository;
+ import com.DigitalClassRoomManagement.Service.UserService;
+@@ -28,18 +28,18 @@
+     private static final Logger logger = LoggerFactory.getLogger(UserServiceimpl.class);
+ 
+     @Override
+-    public userDto registeration(user user1) {
++    public userDto registeration(User user1) {
+         try {
+             validation(user1);
+ 
+-            Optional<user> existingUser = userRepository.findByEmail(user1.getEmail());
++            Optional<User> existingUser = userRepository.findByEmail(user1.getEmail());
+             if (existingUser.isPresent()) {
+                 throw new RuntimeException("User already registered with email: " + user1.getEmail());
+             }
+ 
+             user1.setPassword(passwordEncoder.encode(user1.getPassword()));
+ 
+-            user savedUser = userRepository.save(user1);
++            User savedUser = userRepository.save(user1);
+ 
+             return toDto(savedUser);
+         } catch (Exception e) {
+@@ -49,11 +49,11 @@
+     }
+ 
+     @Override
+-    public user login(String email, String password) {
++    public User login(String email, String password) {
+         try {
+-            Optional<user> optional = userRepository.findByEmail(email);
++            Optional<User> optional = userRepository.findByEmail(email);
+             if (optional.isPresent()) {
+-                user u = optional.get();
++                User u = optional.get();
+                 if (passwordEncoder.matches(password, u.getPassword())) {
+                     return u;
+                 } else {
+@@ -71,7 +71,7 @@
+     @Override
+     public List<userDto> getAll() {
+         try {
+-            List<user> users = userRepository.findAll();
++            List<User> users = userRepository.findAll();
+             return users.stream().map(this::toDto).collect(Collectors.toList());
+         } catch (Exception e) {
+             logger.error("Error: " + e.getMessage());
+@@ -82,7 +82,7 @@
+     @Override
+     public userDto getUserById(Long id) {
+         try {
+-            Optional<user> opt = userRepository.findById(id);
++            Optional<User> opt = userRepository.findById(id);
+             if (opt.isPresent()) {
+                 return toDto(opt.get());
+             }
+@@ -93,7 +93,7 @@
+         }
+     }
+ 
+-    public static void validation(user user1) {
++    public static void validation(User user1) {
+ 
+         if (user1.getName() == null || !ValidationClass.NAME_PATTERN.matcher(user1.getName()).matches()) {
+             throw new IllegalArgumentException("Invalid Name: Must start with uppercase and contain only letters, spaces, or dots.");
+@@ -116,7 +116,7 @@
+         }
+     }
+ 
+-    private userDto toDto(user u) {
++    private userDto toDto(User u) {
+         userDto dto = new userDto();
+         dto.setUserId(u.getUserId());
+         dto.setName(u.getName());
+@@ -126,8 +126,8 @@
+         return dto;
+     }
+ 
+-    private user toEntity(userDto dto) {
+-        user u = new user();
++    private User toEntity(userDto dto) {
++        User u = new User();
+         u.setUserId(dto.getUserId());
+         u.setName(dto.getName());
+         u.setEmail(dto.getEmail());
+Index: src/main/java/com/DigitalClassRoomManagement/dto/AdminDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.dto;\r\n\r\nimport com.DigitalClassRoomManagement.Entity.AdminRole;\r\nimport com.DigitalClassRoomManagement.Entity.Status;\r\n\r\npublic class AdminDTO {\r\n    private Long adminId;\r\n    private String password;\r\n    private AdminRole role;\r\n    private Status status;\r\n    private String username;\r\n\r\n    public Long getAdminId() {\r\n        return adminId;\r\n    }\r\n\r\n    public void setAdminId(Long adminId) {\r\n        this.adminId = adminId;\r\n    }\r\n\r\n    public String getPassword() {\r\n        return password;\r\n    }\r\n\r\n    public void setPassword(String password) {\r\n        this.password = password;\r\n    }\r\n\r\n    public AdminRole getRole() {\r\n        return role;\r\n    }\r\n\r\n    public void setRole(AdminRole role) {\r\n        this.role = role;\r\n    }\r\n\r\n    public Status getStatus() {\r\n        return status;\r\n    }\r\n\r\n    public void setStatus(Status status) {\r\n        this.status = status;\r\n    }\r\n\r\n    public String getUsername() {\r\n        return username;\r\n    }\r\n\r\n    public void setUsername(String username) {\r\n        this.username = username;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/dto/AdminDTO.java b/src/main/java/com/DigitalClassRoomManagement/dto/AdminDTO.java
+--- a/src/main/java/com/DigitalClassRoomManagement/dto/AdminDTO.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/dto/AdminDTO.java	(date 1762862221903)
+@@ -1,4 +1,4 @@
+-package com.DigitalClassRoomManagement.dto;
++package com.DigitalClassRoomManagement.Dto;
+ 
+ import com.DigitalClassRoomManagement.Entity.AdminRole;
+ import com.DigitalClassRoomManagement.Entity.Status;
+Index: src/main/java/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.ServiceImpl;\r\n\r\n\r\nimport com.DigitalClassRoomManagement.dto.*;\r\nimport com.DigitalClassRoomManagement.Entity.*;\r\nimport com.DigitalClassRoomManagement.Repository.*;\r\nimport com.DigitalClassRoomManagement.Service.CalendarService;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.List;\r\nimport java.util.stream.Collectors;\r\n\r\n@Service\r\n@RequiredArgsConstructor\r\npublic class CalendarServiceImpl implements CalendarService {\r\n\r\n    private final AcademicCalendarRepository calendarRepo;\r\n    private final EventRepository eventRepo;\r\n    private final HolidayRepository holidayRepo;\r\n\r\n    @Override\r\n    public CalendarDto createAcademicCalender(CreateAcademicCalenderRequest request, String username) {\r\n        AcademicCalendar calendar = AcademicCalendar.builder()\r\n                .academicYear(request.getAcademicYear())\r\n                .startDate(request.getStartDate())\r\n                .endDate(request.getEndDate())\r\n                .createdBy(username)\r\n                .build();\r\n        calendarRepo.save(calendar);\r\n        return mapToDto(calendar);\r\n    }\r\n\r\n    @Override\r\n    public HolidayDto addHoliday(Long calendarId, Holiday holiday) {\r\n        AcademicCalendar calendar = calendarRepo.findById(calendarId).orElseThrow();\r\n        holiday.setCalendar(calendar);\r\n        holidayRepo.save(holiday);\r\n        return mapHolidayToDto(holiday);\r\n    }\r\n\r\n    @Override\r\n    public EventDto addEvent(Long calendarId, Event event) {\r\n        AcademicCalendar calendar = calendarRepo.findById(calendarId).orElseThrow();\r\n        event.setCalendar(calendar);\r\n        eventRepo.save(event);\r\n        return mapEventToDto(event);\r\n    }\r\n\r\n    @Override\r\n    public List<EventDto> viewCalenderEvents() {\r\n        return eventRepo.findAll().stream().map(this::mapEventToDto).collect(Collectors.toList());\r\n    }\r\n\r\n    @Override\r\n    public CalendarDto updateAcademicCalender(Long calendarId, UpdateAcademicCalenderRequest request) {\r\n        AcademicCalendar calendar = calendarRepo.findById(calendarId).orElseThrow();\r\n        calendar.setAcademicYear(request.getAcademicYear());\r\n        calendar.setStartDate(request.getStartDate());\r\n        calendar.setEndDate(request.getEndDate());\r\n        calendarRepo.save(calendar);\r\n        return mapToDto(calendar);\r\n    }\r\n\r\n    @Override\r\n    public List<CalendarDto> getAcademicCalenders() {\r\n        return calendarRepo.findAll().stream().map(this::mapToDto).collect(Collectors.toList());\r\n    }\r\n\r\n    @Override\r\n    public CalendarDto getAcademicCalender(Long calendarId) {\r\n        return mapToDto(calendarRepo.findById(calendarId).orElseThrow());\r\n    }\r\n\r\n    @Override\r\n    public HolidayDto updateHoliday(Long holidayId, Holiday holiday) {\r\n        Holiday existing = holidayRepo.findById(holidayId).orElseThrow();\r\n        existing.setHolidayName(holiday.getHolidayName());\r\n        existing.setDescription(holiday.getDescription());\r\n        existing.setHolidayDate(holiday.getHolidayDate());\r\n        holidayRepo.save(existing);\r\n        return mapHolidayToDto(existing);\r\n    }\r\n\r\n    @Override\r\n    public String removeHoliday(Long holidayId) {\r\n        holidayRepo.deleteById(holidayId);\r\n        return \"Holiday removed successfully\";\r\n    }\r\n\r\n    @Override\r\n    public String removeEvent(Long eventId) {\r\n        eventRepo.deleteById(eventId);\r\n        return \"Event removed successfully\";\r\n    }\r\n\r\n    @Override\r\n    public EventDto updateEvent(Long eventId, Event event) {\r\n        Event existing = eventRepo.findById(eventId).orElseThrow();\r\n        existing.setEventName(event.getEventName());\r\n        existing.setDescription(event.getDescription());\r\n        existing.setEventDate(event.getEventDate());\r\n        eventRepo.save(existing);\r\n        return mapEventToDto(existing);\r\n    }\r\n\r\n    @Override\r\n    public EventDto viewEvent(Long eventId) {\r\n        return mapEventToDto(eventRepo.findById(eventId).orElseThrow());\r\n    }\r\n\r\n    @Override\r\n    public HolidayDto viewHoliday(Long holidayId) {\r\n        return mapHolidayToDto(holidayRepo.findById(holidayId).orElseThrow());\r\n    }\r\n\r\n    @Override\r\n    public List<HolidayDto> viewHolidays() {\r\n        return holidayRepo.findAll().stream().map(this::mapHolidayToDto).collect(Collectors.toList());\r\n    }\r\n\r\n    private CalendarDto mapToDto(AcademicCalendar cal) {\r\n        return CalendarDto.builder()\r\n                .id(cal.getId())\r\n                .academicYear(cal.getAcademicYear())\r\n                .startDate(cal.getStartDate())\r\n                .endDate(cal.getEndDate())\r\n                .createdBy(cal.getCreatedBy())\r\n                .holidays(cal.getHolidays() == null ? null :\r\n                        cal.getHolidays().stream().map(this::mapHolidayToDto).collect(Collectors.toList()))\r\n                .events(cal.getEvents() == null ? null :\r\n                        cal.getEvents().stream().map(this::mapEventToDto).collect(Collectors.toList()))\r\n                .build();\r\n    }\r\n\r\n    private EventDto mapEventToDto(Event e) {\r\n        return EventDto.builder()\r\n                .id(e.getId())\r\n                .eventName(e.getEventName())\r\n                .description(e.getDescription())\r\n                .eventDate(e.getEventDate())\r\n                .build();\r\n    }\r\n\r\n    private HolidayDto mapHolidayToDto(Holiday h) {\r\n        return HolidayDto.builder()\r\n                .id(h.getId())\r\n                .holidayName(h.getHolidayName())\r\n                .holidayDate(h.getHolidayDate())\r\n                .description(h.getDescription())\r\n                .build();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.java b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.java
+--- a/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.java	(date 1762862221901)
+@@ -1,7 +1,7 @@
+ package com.DigitalClassRoomManagement.ServiceImpl;
+ 
+ 
+-import com.DigitalClassRoomManagement.dto.*;
++import com.DigitalClassRoomManagement.Dto.*;
+ import com.DigitalClassRoomManagement.Entity.*;
+ import com.DigitalClassRoomManagement.Repository.*;
+ import com.DigitalClassRoomManagement.Service.CalendarService;
+Index: src/main/java/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.ServiceImpl;\r\n\r\nimport com.DigitalClassRoomManagement.Entity.Admin;\r\nimport com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;\r\nimport com.DigitalClassRoomManagement.Repository.AdminRepository;\r\nimport com.DigitalClassRoomManagement.Service.AdminService;\r\nimport com.DigitalClassRoomManagement.dto.AdminDTO;\r\nimport jakarta.validation.Valid;\r\nimport org.slf4j.Logger;\r\nimport org.slf4j.LoggerFactory;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\n@Service\r\npublic class AdminServiceImpl implements AdminService {\r\n\r\n    private static final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);\r\n\r\n    @Autowired\r\n    private AdminRepository adminRepo;\r\n\r\n    @Override\r\n    public List<Admin> sendData() {\r\n        return adminRepo.findAll();\r\n    }\r\n\r\n    @Override\r\n    public String deleteById(Long id) {\r\n        Optional<Admin> adminOpt = adminRepo.findById(id);\r\n\r\n        if (adminOpt.isEmpty()) {\r\n            logger.error(\"Cannot find the admin with the Admin ID\");\r\n            throw new ResourceNotFoundException(\"Cannot find the given Admin with ID: \" + id);\r\n        }\r\n\r\n        adminRepo.deleteById(id);\r\n        return \"Admin deleted successfully\";\r\n    }\r\n    @Override\r\n    public String updateById(Long id, @Valid AdminDTO adminDTO) {\r\n        Optional<Admin> dummyAdmin = adminRepo.findById(id);\r\n        if(!dummyAdmin.isPresent()){\r\n            logger.error(\"Cannot find the user with \"+id +\" id\");\r\n            throw new ResourceNotFoundException(\"Cannot find the given Admin with ID: \" + id);\r\n        }\r\n        Admin admin = dummyAdmin.get();\r\n        if (adminDTO.getUsername() != null && !adminDTO.getUsername().isBlank()) {\r\n            admin.setUsername(adminDTO.getUsername());\r\n        }\r\n        if (adminDTO.getPassword() != null && !adminDTO.getPassword().isBlank()) {\r\n            admin.setPassword(adminDTO.getPassword());\r\n        }\r\n        if (adminDTO.getRole() != null) {\r\n            admin.setRole(adminDTO.getRole());\r\n        }\r\n        if (adminDTO.getStatus() != null) {\r\n            admin.setStatus(adminDTO.getStatus());\r\n        }\r\n\r\n        adminRepo.save(admin);\r\n        return \"Admin updated successfully\";\r\n    }\r\n\r\n    @Override\r\n    public String GetData(@Valid Admin admin) {\r\n        adminRepo.save(admin);\r\n        return \"Data saved successfully\";\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.java b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.java
+--- a/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.java	(date 1762862221899)
+@@ -1,10 +1,16 @@
+ package com.DigitalClassRoomManagement.ServiceImpl;
+ 
++import com.DigitalClassRoomManagement.Dto.AdminResponseDTO;
++import com.DigitalClassRoomManagement.Dto.UnApproveAdminsDto;
+ import com.DigitalClassRoomManagement.Entity.Admin;
++import com.DigitalClassRoomManagement.Entity.AdminRole;
++import com.DigitalClassRoomManagement.Entity.Status;
++import com.DigitalClassRoomManagement.Entity.UnAppproveAdmins;
+ import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
+ import com.DigitalClassRoomManagement.Repository.AdminRepository;
++import com.DigitalClassRoomManagement.Repository.UnApproveAdminRepo;
+ import com.DigitalClassRoomManagement.Service.AdminService;
+-import com.DigitalClassRoomManagement.dto.AdminDTO;
++import com.DigitalClassRoomManagement.Dto.AdminDTO;
+ import jakarta.validation.Valid;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+@@ -19,6 +25,10 @@
+ 
+     private static final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
+ 
++
++    @Autowired
++    private UnApproveAdminRepo unapprovedadminsrepo;
++
+     @Autowired
+     private AdminRepository adminRepo;
+ 
+@@ -27,6 +37,39 @@
+         return adminRepo.findAll();
+     }
+ 
++    @Override
++    public UnAppproveAdmins unApproveAdminsRegister(UnApproveAdminsDto tempAdmin){
++       UnAppproveAdmins dummyadmin = new UnAppproveAdmins();
++       dummyadmin.setAdminId(tempAdmin.getAdminId());
++       dummyadmin.setUsername(tempAdmin.getUsername());
++       dummyadmin.setPassword(tempAdmin.getPassword());
++       unapprovedadminsrepo.save(dummyadmin);
++       return dummyadmin;
++    }
++
++    @Override
++    public List<AdminResponseDTO> getAllUnApproveAdmins(){
++        return unapprovedadminsrepo.getALlUnAppproveAdmins();
++    }
++
++    @Override
++    public String makeAdmin(Long id){
++        Optional<UnAppproveAdmins> T = unapprovedadminsrepo.findById(id);
++        if(T.isPresent()){
++            UnAppproveAdmins tempAdmin =T.get();
++            Admin a1=new Admin();
++            a1.setUsername(tempAdmin.getUsername());
++            a1.setPassword(tempAdmin.getPassword());
++            a1.setAdminId(tempAdmin.getAdminId());
++            a1.setRole(AdminRole.SUB_ADMIN);
++            a1.setStatus(Status.ACTIVE);
++            adminRepo.save(a1);
++            unapprovedadminsrepo.deleteById(id);
++            return "Admin created SuccessFully";
++        }
++        return "Something went wrong with the id you entered";
++    }
++
+     @Override
+     public String deleteById(Long id) {
+         Optional<Admin> adminOpt = adminRepo.findById(id);
+Index: target/classes/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring.application.name=DigitalClassRoomManagement\r\n\r\nspring.datasource.url=jdbc:mysql://localhost:3306/digitalClassManagement?useSSL=false&allowPublicKeyRetrieval=true\r\nspring.datasource.username=root\r\n\r\n# spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver   # optional, auto-detect\r\n# spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect # optional, auto\r\n\r\nspring.datasource.password=root\r\nspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect\r\nspring.jpa.show-sql=true\r\n\r\nspring.jpa.hibernate.ddl-auto=update\r\nspring.jpa.show-sql=true\r\nspring.jpa.properties.hibernate.format_sql=true\r\nspring.jpa.open-in-view=false\r\nspring.jpa.properties.hibernate.jdbc.time_zone=UTC\r\n\r\n# ---- Dev Error Visibility (turn these off in prod) ----\r\nserver.error.include-message=always\r\nserver.error.include-binding-errors=always\r\nserver.error.include-exception=true\r\n# server.error.include-stacktrace=always\r\n\r\n# ---- Logging ----\r\nlogging.level.root=INFO\r\nlogging.level.com.DigitalClassRoomManagement=DEBUG\r\n\r\n# ---- Upload limits ----\r\nspring.servlet.multipart.max-file-size=512MB\r\nspring.servlet.multipart.max-request-size=512MB\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/target/classes/application.properties b/target/classes/application.properties
+--- a/target/classes/application.properties	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/target/classes/application.properties	(date 1762862238431)
+@@ -5,10 +5,10 @@
+ 
+ # spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver   # optional, auto-detect
+ # spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect # optional, auto
+-
++server.port=9090
+ spring.datasource.password=root
+ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+-spring.jpa.show-sql=true
++
+ 
+ spring.jpa.hibernate.ddl-auto=update
+ spring.jpa.show-sql=true
+Index: src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Config;\r\n\r\nimport com.DigitalClassRoomManagement.Entity.Role;\r\nimport com.DigitalClassRoomManagement.Entity.user;\r\nimport com.DigitalClassRoomManagement.Repository.UserRepository;\r\nimport org.springframework.boot.CommandLineRunner;\r\nimport org.springframework.context.annotation.Bean;\r\nimport org.springframework.context.annotation.Configuration;\r\nimport org.springframework.security.crypto.password.PasswordEncoder;\r\n\r\n@Configuration\r\npublic class StartupDataLoader {\r\n\r\n    @Bean\r\n    public CommandLineRunner loadDefaultAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {\r\n        return args -> {\r\n            String email = \"admin@classroom.com\";\r\n\r\n            // Check if Admin already exists\r\n            if (userRepository.findByEmail(email).isPresent()) {\r\n                System.out.println(\"✅ Admin user already exists.\");\r\n                return;\r\n            }\r\n\r\n            user admin = new user();\r\n            admin.setName(\"System Admin\");\r\n            admin.setEmail(email);\r\n            admin.setPassword(passwordEncoder.encode(\"Admin@123\"));\r\n            admin.setRole(Role.ADMIN); // Available roles: ADMIN, TEACHER, STUDENT, PARENT\r\n            admin.setLanguagePreference(\"ENGLISH\");\r\n\r\n            userRepository.save(admin);\r\n\r\n            System.out.println(\"✅ Default Admin created successfully!\");\r\n            System.out.println(\"Email: \" + email);\r\n            System.out.println(\"Password: Admin@123\");\r\n        };\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java b/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java	(date 1762862221883)
+@@ -1,13 +1,14 @@
+ package com.DigitalClassRoomManagement.Config;
+ 
+ import com.DigitalClassRoomManagement.Entity.Role;
+-import com.DigitalClassRoomManagement.Entity.user;
++import com.DigitalClassRoomManagement.Entity.User;
+ import com.DigitalClassRoomManagement.Repository.UserRepository;
+ import org.springframework.boot.CommandLineRunner;
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
+ import org.springframework.security.crypto.password.PasswordEncoder;
+ 
++//sa login -> admin regiter
+ @Configuration
+ public class StartupDataLoader {
+ 
+@@ -16,17 +17,16 @@
+         return args -> {
+             String email = "admin@classroom.com";
+ 
+-            // Check if Admin already exists
+             if (userRepository.findByEmail(email).isPresent()) {
+                 System.out.println("✅ Admin user already exists.");
+                 return;
+             }
+ 
+-            user admin = new user();
++            User admin = new User();
+             admin.setName("System Admin");
+             admin.setEmail(email);
+             admin.setPassword(passwordEncoder.encode("Admin@123"));
+-            admin.setRole(Role.ADMIN); // Available roles: ADMIN, TEACHER, STUDENT, PARENT
++            admin.setRole(Role.ADMIN);
+             admin.setLanguagePreference("ENGLISH");
+ 
+             userRepository.save(admin);
+Index: src/main/java/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.dto;\r\n\r\n\r\nimport lombok.*;\r\nimport java.time.LocalDate;\r\n\r\n@Data\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Builder\r\npublic class UpdateAcademicCalenderRequest {\r\n    private String academicYear;\r\n    private LocalDate startDate;\r\n    private LocalDate endDate;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest.java b/src/main/java/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest.java
+--- a/src/main/java/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest.java	(date 1762862221907)
+@@ -1,4 +1,4 @@
+-package com.DigitalClassRoomManagement.dto;
++package com.DigitalClassRoomManagement.Dto;
+ 
+ 
+ import lombok.*;
+Index: src/main/java/com/DigitalClassRoomManagement/dto/CalendarDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.dto;\r\n\r\n\r\nimport lombok.*;\r\nimport java.time.LocalDate;\r\nimport java.util.List;\r\n\r\n@Data\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Builder\r\npublic class CalendarDto {\r\n    private Long id;\r\n    private String academicYear;\r\n    private LocalDate startDate;\r\n    private LocalDate endDate;\r\n    private String createdBy;\r\n    private List<HolidayDto> holidays;\r\n    private List<EventDto> events;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/dto/CalendarDto.java b/src/main/java/com/DigitalClassRoomManagement/dto/CalendarDto.java
+--- a/src/main/java/com/DigitalClassRoomManagement/dto/CalendarDto.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/dto/CalendarDto.java	(date 1762862221904)
+@@ -1,4 +1,4 @@
+-package com.DigitalClassRoomManagement.dto;
++package com.DigitalClassRoomManagement.Dto;
+ 
+ 
+ import lombok.*;
+Index: src/main/java/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.dto;\r\n\r\nimport lombok.*;\r\nimport java.time.LocalDate;\r\n\r\n@Data\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Builder\r\npublic class CreateAcademicCalenderRequest {\r\n    private String academicYear;\r\n    private LocalDate startDate;\r\n    private LocalDate endDate;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest.java b/src/main/java/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest.java
+--- a/src/main/java/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest.java	(date 1762862221904)
+@@ -1,4 +1,4 @@
+-package com.DigitalClassRoomManagement.dto;
++package com.DigitalClassRoomManagement.Dto;
+ 
+ import lombok.*;
+ import java.time.LocalDate;
+Index: src/main/java/com/DigitalClassRoomManagement/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/.gitignore b/src/main/java/com/DigitalClassRoomManagement/.gitignore
+new file mode 100644
+--- /dev/null	(date 1762862221881)
++++ b/src/main/java/com/DigitalClassRoomManagement/.gitignore	(date 1762862221881)
+@@ -0,0 +1,1 @@
++src/main/resources/application.properties
+Index: .idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/encodings.xml b/.idea/encodings.xml
+new file mode 100644
+--- /dev/null	(date 1762862221878)
++++ b/.idea/encodings.xml	(date 1762862221878)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Encoding">
++    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: ../.idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"MavenProjectsManager\">\r\n    <option name=\"originalFiles\">\r\n      <list>\r\n        <option value=\"$PROJECT_DIR$/DigitalClassRoomManagement/pom.xml\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_21\" default=\"true\" project-jdk-name=\"21\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../.idea/misc.xml b/../.idea/misc.xml
+--- a/../.idea/misc.xml	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/../.idea/misc.xml	(date 1762862221877)
+@@ -8,7 +8,7 @@
+       </list>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="21" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" default="true" project-jdk-name="21" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: src/main/java/com/DigitalClassRoomManagement/Service/AdminService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Service;\r\n\r\nimport com.DigitalClassRoomManagement.Entity.Admin;\r\nimport com.DigitalClassRoomManagement.dto.AdminDTO;\r\nimport org.springframework.http.ResponseEntity;\r\n\r\nimport java.util.List;\r\n\r\npublic interface AdminService {\r\n\r\n    public List<Admin> sendData();\r\n    public String deleteById(Long id);\r\n    public String updateById(Long id, AdminDTO username);\r\n    public String GetData(Admin admin1);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Service/AdminService.java b/src/main/java/com/DigitalClassRoomManagement/Service/AdminService.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Service/AdminService.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Service/AdminService.java	(date 1762862221897)
+@@ -1,13 +1,18 @@
+ package com.DigitalClassRoomManagement.Service;
+ 
++import com.DigitalClassRoomManagement.Dto.AdminResponseDTO;
++import com.DigitalClassRoomManagement.Dto.UnApproveAdminsDto;
+ import com.DigitalClassRoomManagement.Entity.Admin;
+-import com.DigitalClassRoomManagement.dto.AdminDTO;
+-import org.springframework.http.ResponseEntity;
++import com.DigitalClassRoomManagement.Dto.AdminDTO;
++import com.DigitalClassRoomManagement.Entity.UnAppproveAdmins;
+ 
+ import java.util.List;
+ 
+ public interface AdminService {
+ 
++    public String makeAdmin(Long id);
++    public List<AdminResponseDTO> getAllUnApproveAdmins();
++    public UnAppproveAdmins unApproveAdminsRegister(UnApproveAdminsDto tempAdmin);
+     public List<Admin> sendData();
+     public String deleteById(Long id);
+     public String updateById(Long id, AdminDTO username);
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"MavenProjectsManager\">\r\n    <option name=\"originalFiles\">\r\n      <list>\r\n        <option value=\"$PROJECT_DIR$/pom.xml\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_25\" default=\"true\" project-jdk-name=\"openjdk-25\" project-jdk-type=\"JavaSDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/.idea/misc.xml	(date 1762862514253)
+@@ -8,5 +8,5 @@
+       </list>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" default="true" project-jdk-name="openjdk-25" project-jdk-type="JavaSDK" />
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="openjdk-25" project-jdk-type="JavaSDK" />
+ </project>
+\ No newline at end of file
+Index: src/main/java/com/DigitalClassRoomManagement/Service/CalendarService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Service;\r\n\r\nimport com.DigitalClassRoomManagement.dto.*;\r\nimport com.DigitalClassRoomManagement.Entity.Event;\r\nimport com.DigitalClassRoomManagement.Entity.Holiday;\r\n\r\nimport java.util.List;\r\n\r\npublic interface CalendarService {\r\n\r\n    CalendarDto createAcademicCalender(CreateAcademicCalenderRequest request, String username);\r\n\r\n    HolidayDto addHoliday(Long calendarId, Holiday holiday);\r\n    HolidayDto updateHoliday(Long holidayId, Holiday holiday);\r\n    String removeHoliday(Long holidayId);\r\n    HolidayDto viewHoliday(Long holidayId);\r\n    List<HolidayDto> viewHolidays();\r\n\r\n    EventDto addEvent(Long calendarId, Event event);\r\n    EventDto updateEvent(Long eventId, Event event);\r\n    String removeEvent(Long eventId);\r\n    EventDto viewEvent(Long eventId);\r\n    List<EventDto> viewCalenderEvents();\r\n\r\n    CalendarDto updateAcademicCalender(Long calendarId, UpdateAcademicCalenderRequest request);\r\n    List<CalendarDto> getAcademicCalenders();\r\n    CalendarDto getAcademicCalender(Long calendarId);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Service/CalendarService.java b/src/main/java/com/DigitalClassRoomManagement/Service/CalendarService.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Service/CalendarService.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Service/CalendarService.java	(date 1762862221897)
+@@ -1,6 +1,6 @@
+ package com.DigitalClassRoomManagement.Service;
+ 
+-import com.DigitalClassRoomManagement.dto.*;
++import com.DigitalClassRoomManagement.Dto.*;
+ import com.DigitalClassRoomManagement.Entity.Event;
+ import com.DigitalClassRoomManagement.Entity.Holiday;
+ 
+Index: src/main/java/com/DigitalClassRoomManagement/Controller/AdminSubjectController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Controller/AdminSubjectController.java b/src/main/java/com/DigitalClassRoomManagement/Controller/AdminSubjectController.java
+new file mode 100644
+--- /dev/null	(date 1762862221885)
++++ b/src/main/java/com/DigitalClassRoomManagement/Controller/AdminSubjectController.java	(date 1762862221885)
+@@ -0,0 +1,51 @@
++package com.DigitalClassRoomManagement.Controller;
++
++import com.DigitalClassRoomManagement.Dto.SubjectDto;
++import com.DigitalClassRoomManagement.Entity.Subject;
++import com.DigitalClassRoomManagement.Service.SubjectService;
++import jakarta.validation.Valid;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.http.ResponseEntity;
++import org.springframework.web.bind.annotation.*;
++
++import java.util.List;
++
++@RestController
++@RequestMapping("/api/subject")
++public class AdminSubjectController {
++    private static  final Logger log= LoggerFactory.getLogger(AdminSubjectController.class);
++    @Autowired
++    private SubjectService sservice;
++
++    @PostMapping("/add")
++    public ResponseEntity<String> addNewSubject( @Valid @RequestBody SubjectDto dto){
++        log.info("Recieved subject to be added with name: {}"+dto.getSubjectName());
++        return ResponseEntity.ok(sservice.addSubject(dto));
++    }
++
++    @GetMapping("/fetch")
++    public ResponseEntity<List<Subject>> fetchAllsubject(){
++        log.info("Recieved a request to fetch all subjects");
++        return ResponseEntity.ok(sservice.getAllSubject());
++    }
++
++    @GetMapping("/fetch/{subjectId}")
++    public ResponseEntity<Subject> fetchSubjectById(@PathVariable Long subjectId){
++        log.info("Received a request to fetch subject with id:{}", subjectId);
++        return ResponseEntity.ok(sservice.getSubjectById(subjectId));
++    }
++
++    @PutMapping("/update/{subjectId}")
++    public ResponseEntity<String> updateSubjectInfo(@RequestBody SubjectDto sdto,@PathVariable  Long subjectId){
++        log.info("Received a request to update subject with id:{}", subjectId);
++        return ResponseEntity.ok(sservice.updateSubject(sdto, subjectId));
++    }
++
++    @DeleteMapping("/delete/{subjectId}")
++    public ResponseEntity<String> deleteSubject(@PathVariable Long subjectId){
++        log.info("Received a request to delete subject with id:{}", subjectId);
++        return ResponseEntity.ok(sservice.deleteSubject(subjectId));
++    }
++}
+Index: src/main/java/com/DigitalClassRoomManagement/Service/SubjectService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Service/SubjectService.java b/src/main/java/com/DigitalClassRoomManagement/Service/SubjectService.java
+new file mode 100644
+--- /dev/null	(date 1762862221897)
++++ b/src/main/java/com/DigitalClassRoomManagement/Service/SubjectService.java	(date 1762862221897)
+@@ -0,0 +1,19 @@
++package com.DigitalClassRoomManagement.Service;
++
++
++import com.DigitalClassRoomManagement.Dto.SubjectDto;
++import com.DigitalClassRoomManagement.Entity.Subject;
++
++import java.util.List;
++
++public interface SubjectService {
++     String addSubject(SubjectDto sdto);
++     List<Subject> getAllSubject();
++     Subject getSubjectById(Long subjectId);
++     String updateSubject(SubjectDto dto, Long subjectId);
++     String deleteSubject(Long subjectId);
++
++
++
++
++}
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jarRepositories.xml b/.idea/jarRepositories.xml
+new file mode 100644
+--- /dev/null	(date 1762862221879)
++++ b/.idea/jarRepositories.xml	(date 1762862221879)
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Central Repository" />
++      <option name="url" value="https://repo.maven.apache.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java b/src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java
+new file mode 100644
+--- /dev/null	(date 1762862221890)
++++ b/src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java	(date 1762862221890)
+@@ -0,0 +1,52 @@
++package com.DigitalClassRoomManagement.Entity;
++
++import com.fasterxml.jackson.annotation.JsonIgnore;
++import jakarta.persistence.*;
++import jakarta.validation.constraints.NotBlank;
++import lombok.*;
++import org.hibernate.annotations.CreationTimestamp;
++import org.hibernate.annotations.UpdateTimestamp;
++
++import java.math.BigDecimal;
++import java.time.LocalDateTime;
++
++@Entity
++@Getter
++@Setter
++@AllArgsConstructor
++@NoArgsConstructor
++@Builder
++public class Subject {
++    @Id
++    @GeneratedValue(strategy = GenerationType.AUTO)
++    private Long subjectId;
++
++    private String subjectName;
++
++    @NotBlank
++    @Column(unique = true)
++    private String subjectCode;
++
++//    @ManyToOne(fetch = FetchType.LAZY)
++//    @JoinColumn(name = "classId", nullable = false)
++//    private SchoolClass schoolClass;
++    @NotBlank
++    private String schoolClass;
++
++    @ManyToOne(fetch = FetchType.LAZY, optional = true)
++    @JoinColumn(name = "teacherId")
++    @JsonIgnore
++    private Teacher teacher;
++
++    @Column(columnDefinition = "TEXT")
++    private String description;
++
++    @Builder.Default
++    private Boolean isActive = true;
++    @Column(nullable = false)
++    private BigDecimal maxMarks;
++    @CreationTimestamp
++    private LocalDateTime createdAt;
++    @UpdateTimestamp
++    private LocalDateTime updatedAt;
++}
+Index: src/main/java/com/DigitalClassRoomManagement/Entity/UnAppproveAdmins.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Entity/UnAppproveAdmins.java b/src/main/java/com/DigitalClassRoomManagement/Entity/UnAppproveAdmins.java
+new file mode 100644
+--- /dev/null	(date 1762862221891)
++++ b/src/main/java/com/DigitalClassRoomManagement/Entity/UnAppproveAdmins.java	(date 1762862221891)
+@@ -0,0 +1,22 @@
++package com.DigitalClassRoomManagement.Entity;
++
++
++import jakarta.persistence.*;
++import lombok.Getter;
++import lombok.Setter;
++
++
++@Entity
++@Getter
++@Setter
++public class UnAppproveAdmins {
++
++    @Id
++    @GeneratedValue(strategy = GenerationType.IDENTITY)
++    private Long adminId;
++    @Column(nullable = false)
++    private String username;
++    @Column(nullable = false)
++    private String password;
++
++}
+\ No newline at end of file
+Index: src/main/java/com/DigitalClassRoomManagement/Dto/SubjectDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Dto/SubjectDto.java b/src/main/java/com/DigitalClassRoomManagement/Dto/SubjectDto.java
+new file mode 100644
+--- /dev/null	(date 1762862221888)
++++ b/src/main/java/com/DigitalClassRoomManagement/Dto/SubjectDto.java	(date 1762862221888)
+@@ -0,0 +1,53 @@
++package com.DigitalClassRoomManagement.Dto;
++
++import com.DigitalClassRoomManagement.Entity.Teacher;
++import com.fasterxml.jackson.annotation.JsonIgnore;
++import jakarta.persistence.*;
++import jakarta.validation.constraints.NotBlank;
++import lombok.*;
++import org.hibernate.annotations.CreationTimestamp;
++import org.hibernate.annotations.UpdateTimestamp;
++
++import java.math.BigDecimal;
++import java.time.LocalDateTime;
++
++
++@Getter
++@Setter
++@AllArgsConstructor
++@NoArgsConstructor
++@Builder
++public class SubjectDto {
++
++
++    @NotBlank
++    private String subjectName;
++
++    @NotBlank
++    @Column(unique = true)
++    private String subjectCode;
++
++    //    @ManyToOne(fetch = FetchType.LAZY)
++//    @JoinColumn(name = "classId", nullable = false)
++//    private SchoolClass schoolClass;
++    @NotBlank
++    private String schoolClass;
++
++    @ManyToOne(fetch = FetchType.LAZY, optional = true)
++    @JoinColumn(name = "teacherId")
++    @JsonIgnore
++    private Teacher teacher;
++
++    @Column(columnDefinition = "TEXT")
++    private String description;
++
++    @Builder.Default
++    private Boolean isActive = true;
++    @Column(nullable = false)
++    private BigDecimal maxMarks;
++    @CreationTimestamp
++    private LocalDateTime createdAt;
++
++    @UpdateTimestamp
++    private LocalDateTime updatedAt;
++}
+Index: src/main/java/com/DigitalClassRoomManagement/Dto/AdminResponseDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Dto/AdminResponseDTO.java b/src/main/java/com/DigitalClassRoomManagement/Dto/AdminResponseDTO.java
+new file mode 100644
+--- /dev/null	(date 1762862221887)
++++ b/src/main/java/com/DigitalClassRoomManagement/Dto/AdminResponseDTO.java	(date 1762862221887)
+@@ -0,0 +1,20 @@
++package com.DigitalClassRoomManagement.Dto;
++
++public class AdminResponseDTO {
++
++    private Long adminId;
++    private String username;
++
++    public AdminResponseDTO(Long adminId, String username) {
++        this.adminId = adminId;
++        this.username = username;
++    }
++
++    public Long getAdminId() {
++        return adminId;
++    }
++
++    public String getUsername() {
++        return username;
++    }
++}
+Index: src/main/java/com/DigitalClassRoomManagement/Repository/UnApproveAdminRepo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Repository/UnApproveAdminRepo.java b/src/main/java/com/DigitalClassRoomManagement/Repository/UnApproveAdminRepo.java
+new file mode 100644
+--- /dev/null	(date 1762862221894)
++++ b/src/main/java/com/DigitalClassRoomManagement/Repository/UnApproveAdminRepo.java	(date 1762862221894)
+@@ -0,0 +1,16 @@
++package com.DigitalClassRoomManagement.Repository;
++
++import com.DigitalClassRoomManagement.Dto.AdminResponseDTO;
++import com.DigitalClassRoomManagement.Entity.UnAppproveAdmins;
++import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.data.jpa.repository.Query;
++import org.springframework.stereotype.Repository;
++
++import java.util.List;
++
++@Repository
++public interface UnApproveAdminRepo extends JpaRepository<UnAppproveAdmins,Long> {
++    @Query("SELECT new com.DigitalClassRoomManagement.Dto.AdminResponseDTO(u.adminId, u.username) FROM UnAppproveAdmins u")
++    public List<AdminResponseDTO> getALlUnAppproveAdmins();
++
++}
+Index: src/main/java/com/DigitalClassRoomManagement/Repository/SubjectRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Repository/SubjectRepository.java b/src/main/java/com/DigitalClassRoomManagement/Repository/SubjectRepository.java
+new file mode 100644
+--- /dev/null	(date 1762862221893)
++++ b/src/main/java/com/DigitalClassRoomManagement/Repository/SubjectRepository.java	(date 1762862221893)
+@@ -0,0 +1,9 @@
++package com.DigitalClassRoomManagement.Repository;
++
++import com.DigitalClassRoomManagement.Entity.Subject;
++import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.stereotype.Repository;
++
++@Repository
++public interface SubjectRepository extends JpaRepository<Subject,Long> {
++}
+Index: src/main/java/com/DigitalClassRoomManagement/ServiceImpl/SubjectServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/SubjectServiceImpl.java b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/SubjectServiceImpl.java
+new file mode 100644
+--- /dev/null	(date 1762862221901)
++++ b/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/SubjectServiceImpl.java	(date 1762862221901)
+@@ -0,0 +1,110 @@
++package com.DigitalClassRoomManagement.ServiceImpl;
++
++import com.DigitalClassRoomManagement.Dto.SubjectDto;
++import com.DigitalClassRoomManagement.Entity.Subject;
++import com.DigitalClassRoomManagement.Exception.SubjectNotFoundException;
++import com.DigitalClassRoomManagement.Repository.SubjectRepository;
++import com.DigitalClassRoomManagement.Service.SubjectService;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.stereotype.Service;
++
++import java.util.List;
++
++@Service
++public class SubjectServiceImpl implements SubjectService {
++    private static final Logger log = LoggerFactory.getLogger(TeacherServiceImpl.class);
++
++    @Autowired
++    private SubjectRepository srepo;
++    @Override
++    public String addSubject( SubjectDto sdto){
++        log.info("Adding new subject with code: {}"+ sdto.getSubjectCode());
++        Subject subject = new Subject();
++//        subject.setSubjectId(sdto.getSubjectId());
++        subject.setSubjectCode(sdto.getSubjectCode());
++        subject.setSubjectName(sdto.getSubjectName());
++        subject.setDescription(sdto.getDescription());
++        subject.setMaxMarks(sdto.getMaxMarks());
++        subject.setIsActive(sdto.getIsActive());
++        subject.setCreatedAt(sdto.getCreatedAt());
++        subject.setTeacher(sdto.getTeacher());
++        subject.setSchoolClass(sdto.getSchoolClass());
++        subject.setUpdatedAt(sdto.getUpdatedAt());
++        Subject savedSubject=srepo.save(subject);
++        return "New subject added successfully with id:"+savedSubject.getSubjectId();
++    }
++
++    @Override
++    public List<Subject> getAllSubject(){
++        log.info("Fetching list of all subjects");
++        List<Subject> subject = srepo.findAll();
++        log.info("Total number of subjects found:{}", subject.size());
++        return subject;
++    }
++
++    @Override
++    public Subject getSubjectById( Long subjectId){
++        log.info("Fetching information about subject with id:{}", subjectId);
++        return  srepo.findById(subjectId)
++                .orElseThrow(() ->{
++                    log.error("No subject present  with id:"+subjectId);
++                    return new SubjectNotFoundException("NO subject fuound with id :"+subjectId);
++                } );
++
++    }
++
++    @Override
++    public String updateSubject(SubjectDto sdto, Long subjectId){
++        try{
++            Subject existing = srepo.findById(subjectId)
++                    .orElseThrow(()->{
++                        log.error("No subject present  with id:"+subjectId);
++                        return new SubjectNotFoundException("NO subject fuound with id :"+subjectId);
++                    });
++//            existing.setSubjectId(sdto.getSubjectId());
++            existing.setSubjectCode(sdto.getSubjectCode());
++            existing.setSubjectName(sdto.getSubjectName());
++            existing.setDescription(sdto.getDescription());
++            existing.setMaxMarks(sdto.getMaxMarks());
++            existing.setIsActive(sdto.getIsActive());
++            existing.setCreatedAt(sdto.getCreatedAt());
++            existing.setTeacher(sdto.getTeacher());
++            existing.setSchoolClass(sdto.getSchoolClass());
++            existing.setUpdatedAt(sdto.getUpdatedAt());
++            srepo.save(existing);
++            log.info("Subject information is updated with id:{}", subjectId);
++            return "Updation Successfull";
++        }catch(SubjectNotFoundException se){
++            log.warn("Attempted to update subjet with non existing id:{}", subjectId);
++            throw  se;
++        }catch(Exception e){
++            log.warn("Error occured while upating subject with id:{}", subjectId);
++            throw new RuntimeException("Updation failed"+e.getMessage());
++        }
++    }
++
++    @Override
++    public String deleteSubject(Long subjectId) {
++        log.info("Attempting to delete subject with is:{}", subjectId);
++        try{
++            Subject existing = srepo.findById(subjectId)
++                    .orElseThrow(()->{
++                        log.error("No subject present  with id:"+subjectId);
++                        return new SubjectNotFoundException("NO subject fuound with id :"+subjectId);
++                    });
++            srepo.delete(existing);
++            log.info("Teacher deleted successfully with ID: {}", subjectId);
++            return "Subject  information deleted successfully with ID: " + subjectId;
++        } catch (SubjectNotFoundException tx) {
++            log.warn("Attempted to delete non-existing subject with ID: {}", subjectId);
++            throw tx;
++        } catch (Exception e) {
++            log.error("Error occurred while deleting teacher with ID: {} - {}", subjectId, e.getMessage(), e);
++            throw new RuntimeException("Deletion failed: " + e.getMessage());
++        }
++    }
++
++
++}
+Index: src/main/java/com/DigitalClassRoomManagement/Service/UserService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Service;\r\n\r\nimport com.DigitalClassRoomManagement.Dto.userDto;\r\nimport com.DigitalClassRoomManagement.Entity.user;\r\n\r\nimport java.util.List;\r\n\r\npublic interface UserService {\r\n\r\n    userDto registeration(user user1);\r\n    user login(String email,String password);\r\n    List<userDto> getAll();\r\n    userDto getUserById(Long id);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java b/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java	(date 1762862221898)
+@@ -1,14 +1,14 @@
+ package com.DigitalClassRoomManagement.Service;
+ 
+ import com.DigitalClassRoomManagement.Dto.userDto;
+-import com.DigitalClassRoomManagement.Entity.user;
++import com.DigitalClassRoomManagement.Entity.User;
+ 
+ import java.util.List;
+ 
+ public interface UserService {
+ 
+-    userDto registeration(user user1);
+-    user login(String email,String password);
++    userDto registeration(User user1);
++    User login(String email, String password);
+     List<userDto> getAll();
+     userDto getUserById(Long id);
+ }
+Index: src/main/java/com/DigitalClassRoomManagement/Exception/SubjectNotFoundException.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Exception/SubjectNotFoundException.java b/src/main/java/com/DigitalClassRoomManagement/Exception/SubjectNotFoundException.java
+new file mode 100644
+--- /dev/null	(date 1762862221892)
++++ b/src/main/java/com/DigitalClassRoomManagement/Exception/SubjectNotFoundException.java	(date 1762862221892)
+@@ -0,0 +1,7 @@
++package com.DigitalClassRoomManagement.Exception;
++
++public class SubjectNotFoundException extends RuntimeException{
++    public SubjectNotFoundException(String message) {
++        super(message);
++    }
++}
+Index: src/main/java/com/DigitalClassRoomManagement/Dto/UnApproveAdminsDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Dto/UnApproveAdminsDto.java b/src/main/java/com/DigitalClassRoomManagement/Dto/UnApproveAdminsDto.java
+new file mode 100644
+--- /dev/null	(date 1762862221889)
++++ b/src/main/java/com/DigitalClassRoomManagement/Dto/UnApproveAdminsDto.java	(date 1762862221889)
+@@ -0,0 +1,14 @@
++package com.DigitalClassRoomManagement.Dto;
++
++import lombok.Getter;
++import lombok.Setter;
++
++@Getter
++@Setter
++public class UnApproveAdminsDto {
++    public Long adminId;
++
++    public String username;
++    public String password;
++
++}
+Index: ../target/classes/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/../target/classes/application.properties b/../target/classes/application.properties
+new file mode 100644
+--- /dev/null	(date 1762862221942)
++++ b/../target/classes/application.properties	(date 1762862221942)
+@@ -0,0 +1,31 @@
++spring.application.name=DigitalClassRoomManagement
++
++spring.datasource.url=jdbc:mysql://localhost:3306/digitalClassManagement?useSSL=false&allowPublicKeyRetrieval=true
++spring.datasource.username=root
++
++# spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver   # optional, auto-detect
++# spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect # optional, auto
++
++spring.datasource.password=Ankit2003#
++spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
++spring.jpa.show-sql=true
++
++spring.jpa.hibernate.ddl-auto=update
++
++spring.jpa.properties.hibernate.format_sql=true
++spring.jpa.open-in-view=false
++spring.jpa.properties.hibernate.jdbc.time_zone=UTC
++
++# ---- Dev Error Visibility (turn these off in prod) ----
++server.error.include-message=always
++server.error.include-binding-errors=always
++server.error.include-exception=true
++# server.error.include-stacktrace=always
++
++# ---- Logging ----
++logging.level.root=INFO
++logging.level.com.DigitalClassRoomManagement=DEBUG
++
++# ---- Upload limits ----
++spring.servlet.multipart.max-file-size=512MB
++spring.servlet.multipart.max-request-size=512MB
+Index: src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Controller;\r\n\r\nimport com.DigitalClassRoomManagement.Dto.userDto;\r\nimport com.DigitalClassRoomManagement.Entity.user;\r\nimport com.DigitalClassRoomManagement.Exception.UserNotFoundException;\r\nimport com.DigitalClassRoomManagement.Service.UserService;\r\nimport com.DigitalClassRoomManagement.security.JwtService;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.*;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Map;\r\n\r\n@RestController\r\n@CrossOrigin(\"*\")\r\n@RequestMapping(\"/api/digitalClassroom\")\r\npublic class UserController {\r\n\r\n    @Autowired\r\n    private UserService userService;\r\n\r\n    @Autowired\r\n    private JwtService jwtService;\r\n\r\n    @PostMapping(\"/registerUser\")\r\n    public ResponseEntity<?> registeration(@RequestBody user user1)\r\n    {\r\n        try {\r\n            userDto user2 = userService.registeration(user1);\r\n            return ResponseEntity.status(HttpStatus.CREATED).body(user2);\r\n        } catch (Exception e) {\r\n            return ResponseEntity.internalServerError().body(\"Email Already Exist\");\r\n        }\r\n    }\r\n\r\n    @PostMapping(\"/login\")\r\n    public ResponseEntity<?> login(@RequestParam String email,@RequestParam String password)\r\n    {\r\n        try {\r\n            user user = userService.login(email, password);\r\n\r\n            String token = jwtService.generateToken(user.getEmail(), user.getRole());\r\n\r\n            Map<String, Object> response = new HashMap<>();\r\n            response.put(\"message\", \"Login Successful\");\r\n            response.put(\"token\", token);\r\n\r\n            return new ResponseEntity<>(response, HttpStatus.OK);\r\n        }\r\n        catch (UserNotFoundException e)\r\n        {\r\n            return ResponseEntity.badRequest().body(\"Password not Match\");\r\n        } catch (Exception e) {\r\n            return ResponseEntity.internalServerError().body(\"Email Not Exist\");\r\n        }\r\n    }\r\n\r\n    @GetMapping(\"/getAll\")\r\n    public ResponseEntity<?> getAllUser()\r\n    {\r\n        try {\r\n            List<userDto> u = userService.getAll();\r\n            return ResponseEntity.ok(u);\r\n        } catch (Exception e) {\r\n            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(\"DATA NOT FOUND\");\r\n        }\r\n    }\r\n\r\n    @GetMapping(\"/getById/{id}\")\r\n    public ResponseEntity<?> getUserById(@PathVariable Long id)\r\n    {\r\n        try {\r\n            userDto u = userService.getUserById(id);\r\n            return ResponseEntity.ok(u);\r\n        } catch (Exception e) {\r\n            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(\"ID NOT FOUND\");\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java b/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java	(date 1762862221886)
+@@ -1,9 +1,12 @@
+ package com.DigitalClassRoomManagement.Controller;
+ 
++import com.DigitalClassRoomManagement.Dto.AdminResponseDTO;
+ import com.DigitalClassRoomManagement.Dto.userDto;
+-import com.DigitalClassRoomManagement.Entity.user;
++import com.DigitalClassRoomManagement.Entity.UnAppproveAdmins;
++import com.DigitalClassRoomManagement.Entity.User;
+ import com.DigitalClassRoomManagement.Exception.UserNotFoundException;
+ import com.DigitalClassRoomManagement.Service.UserService;
++import com.DigitalClassRoomManagement.ServiceImpl.AdminServiceImpl;
+ import com.DigitalClassRoomManagement.security.JwtService;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.http.HttpStatus;
+@@ -22,11 +25,16 @@
+     @Autowired
+     private UserService userService;
+ 
++    @Autowired
++    private AdminServiceImpl adminService;
++
+     @Autowired
+     private JwtService jwtService;
+ 
++
++
+     @PostMapping("/registerUser")
+-    public ResponseEntity<?> registeration(@RequestBody user user1)
++    public ResponseEntity<?> registeration(@RequestBody User user1)
+     {
+         try {
+             userDto user2 = userService.registeration(user1);
+@@ -40,7 +48,7 @@
+     public ResponseEntity<?> login(@RequestParam String email,@RequestParam String password)
+     {
+         try {
+-            user user = userService.login(email, password);
++            User user = userService.login(email, password);
+ 
+             String token = jwtService.generateToken(user.getEmail(), user.getRole());
+ 
+@@ -69,6 +77,16 @@
+         }
+     }
+ 
++    @GetMapping("/getAllUnapprovedAdmins")
++    public List<AdminResponseDTO> getAllUnApproveAdmins(){
++        return adminService.getAllUnApproveAdmins();
++    }
++
++    @GetMapping("/makeAdmin/{id}")
++    public String makeAdmin(@PathVariable Long id){
++        return adminService.makeAdmin(id);
++    }
++
+     @GetMapping("/getById/{id}")
+     public ResponseEntity<?> getUserById(@PathVariable Long id)
+     {
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"a124b332-d0cf-4127-9556-26e04c0797e5\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/../.idea/.gitignore\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/../.idea/DigitalClassRoomManagement.iml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/../.idea/compiler.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/../.idea/encodings.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/../.idea/jarRepositories.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/../.idea/misc.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/../.idea/modules.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/../.idea/vcs.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/AttendanceController.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/DigitalBookController.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/TeacherController.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/AttendanceDto.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/DigitalBookDTO.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/userDto.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Attendance.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/AttendanceStatus.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/DigitalBook.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/MarkBy.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Role.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/AttendanceNotFoundException.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/BookNotFoundException.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/TeacherNotFoundException.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/UserNotFoundException.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/DigitalBookRepository.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/AttendanceService.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/DigitalBookService.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/TeacherService.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/AttendanceServiceImpl.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/DigitalBookServiceImpl.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/commonUtil/ValidationClass.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/JwtFilter.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/JwtService.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/SecurityConfig.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/AttendanceController.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/TeacherController.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/AttendanceDto.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/TeacherDto.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Attendance.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/AttendanceStatus.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/MarkBy.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/AttendanceNotFoundException.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/TeacherNotFoundException.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/UserNotFoundException.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/AttendanceRepository.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/TeacherRepository.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/AttendanceService.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/TeacherService.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/AttendanceServiceImpl.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.class\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/commonUtil/ValidationClass.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/pom.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/user.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/user.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/userDto.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/resources/application.properties\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/resources/application.properties\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/classes/application.properties\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/application.properties\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/UserController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/UserController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/user.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/user.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/UserRepository.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/UserRepository.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/UserService.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/UserService.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/userDto.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/userDto.class\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/..\" />\r\n  </component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"file://$PROJECT_DIR$/pom.xml\" root0=\"SKIP_INSPECTION\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 0\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"358ypOKPVa6n151foFXOT8eAqsF\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Application.DigitalClassRoomManagementApplication.executor&quot;: &quot;Run&quot;,\r\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;Merging 010&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP/Desktop/DigitalClassRoom-Management/DigitalClassRoomManagement/DigitalClassRoomManagement/DigitalClassRoomManagement&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;\r\n  }\r\n}</component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"a124b332-d0cf-4127-9556-26e04c0797e5\" name=\"Changes\" comment=\"\" />\r\n      <created>1762506179159</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1762506179159</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/.idea/workspace.xml	(date 1762862514249)
+@@ -4,118 +4,200 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="a124b332-d0cf-4127-9556-26e04c0797e5" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/../.idea/.gitignore" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/../.idea/DigitalClassRoomManagement.iml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/../.idea/compiler.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/../.idea/encodings.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/../.idea/jarRepositories.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/../.idea/modules.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/AttendanceController.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/DigitalBookController.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/TeacherController.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/AttendanceDto.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/DigitalBookDTO.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/userDto.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Attendance.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/AttendanceStatus.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/DigitalBook.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/MarkBy.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Role.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/AttendanceNotFoundException.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/BookNotFoundException.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/TeacherNotFoundException.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/UserNotFoundException.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/DigitalBookRepository.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/AttendanceService.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/DigitalBookService.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/TeacherService.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/AttendanceServiceImpl.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/DigitalBookServiceImpl.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/commonUtil/ValidationClass.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/JwtFilter.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/JwtService.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/SecurityConfig.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/AttendanceController.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/TeacherController.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/AttendanceDto.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/TeacherDto.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Attendance.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/AttendanceStatus.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/MarkBy.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/AttendanceNotFoundException.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/TeacherNotFoundException.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/UserNotFoundException.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/AttendanceRepository.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/TeacherRepository.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/AttendanceService.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/TeacherService.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/AttendanceServiceImpl.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.class" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/commonUtil/ValidationClass.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.java" beforeDir="false" />
++    <list default="true" id="a124b332-d0cf-4127-9556-26e04c0797e5" name="Changes" comment="Changes in Subject functionality">
++      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/.gitignore" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/AdminSubjectController.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/AdminResponseDTO.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/SubjectDto.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/UnApproveAdminsDto.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/UnAppproveAdmins.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/SubjectNotFoundException.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/SubjectRepository.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/UnApproveAdminRepo.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/SubjectService.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/SubjectServiceImpl.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/AdminSubjectController.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/AdminResponseDTO.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/MultimediaContentResponseDto$MultimediaContentResponseDtoBuilder.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/MultimediaContentResponseDto.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/MultimediaMetaUpdateDto.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/SubjectDto$SubjectDtoBuilder.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/SubjectDto.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/UnApproveAdminsDto.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Subject$SubjectBuilder.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Subject.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher$TeacherBuilder.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/UnAppproveAdmins.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/User.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/SubjectNotFoundException.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/SubjectRepository.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/UnApproveAdminRepo.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/SubjectService.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/SubjectServiceImpl.class" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/../target/classes/application.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/AdminController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/CalendarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/CalendarController.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/user.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/user.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/user.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/User.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/AdminService.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/CalendarService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/CalendarService.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/userDto.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/AdminDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/AdminDTO.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/CalendarDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/CalendarDto.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/EventDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/EventDto.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/HolidayDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/HolidayDto.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Config/StartupDataLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Config/StartupDataLoader.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/AdminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/AdminController.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/CalendarController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/CalendarController.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/UserController.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/user.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/user.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/user.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/AttendanceRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/AttendanceRepository.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/TeacherRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/TeacherRepository.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/UserRepository.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/AdminService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/AdminService.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/CalendarService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/CalendarService.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/UserService.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/userDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/userDto.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/AdminDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/AdminDTO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/CalendarDto$CalendarDtoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/CalendarDto$CalendarDtoBuilder.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/CalendarDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/CalendarDto.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest$CreateAcademicCalenderRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/CreateAcademicCalenderRequest$CreateAcademicCalenderRequestBuilder.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/CreateAcademicCalenderRequest.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/EventDto$EventDtoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/EventDto$EventDtoBuilder.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/EventDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/EventDto.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/HolidayDto$HolidayDtoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/HolidayDto$HolidayDtoBuilder.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/HolidayDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/HolidayDto.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/TeacherDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/TeacherDto.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest$UpdateAcademicCalenderRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/UpdateAcademicCalenderRequest$UpdateAcademicCalenderRequestBuilder.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/UpdateAcademicCalenderRequest.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/userDto.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/security/CustomUserDetailsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/security/CustomUserDetailsService.class" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Interface" />
++        <option value="Class" />
++      </list>
++    </option>
+   </component>
+   <component name="Git.Settings">
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$/.." value="Master" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+   </component>
++  <component name="GitHubPullRequestSearchHistory">{
++  &quot;lastFilter&quot;: {
++    &quot;state&quot;: &quot;OPEN&quot;,
++    &quot;assignee&quot;: &quot;NupurMeghal&quot;
++  }
++}</component>
++  <component name="GithubPullRequestsUISettings">{
++  &quot;selectedUrlAndAccountId&quot;: {
++    &quot;url&quot;: &quot;https://github.com/SumedhChobitkar/DigitalClassRoomManagement.git&quot;,
++    &quot;accountId&quot;: &quot;9cbf498f-749c-4d4e-ac5b-cf618262704c&quot;
++  }
++}</component>
+   <component name="HighlightingSettingsPerFile">
+     <setting file="file://$PROJECT_DIR$/pom.xml" root0="SKIP_INSPECTION" />
+   </component>
++  <component name="ProblemsViewState">
++    <option name="selectedTabId" value="CurrentFile" />
++  </component>
+   <component name="ProjectColorInfo">{
+   &quot;associatedIndex&quot;: 0
+ }</component>
+   <component name="ProjectId" id="358ypOKPVa6n151foFXOT8eAqsF" />
++  <component name="ProjectLevelVcsManager">
++    <ConfirmationsSetting value="1" id="Add" />
++  </component>
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;Application.DigitalClassRoomManagementApplication.executor&quot;: &quot;Run&quot;,
+-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;Merging 010&quot;,
+-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP/Desktop/DigitalClassRoom-Management/DigitalClassRoomManagement/DigitalClassRoomManagement/DigitalClassRoomManagement&quot;,
+-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+-  }
+-}</component>
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "Application.DigitalClassRoomManagementApplication.executor": "Debug",
++    "Maven.DigitalClassRoomManagement [clean].executor": "Run",
++    "Maven.DigitalClassRoomManagement [install].executor": "Run",
++    "ModuleVcsDetector.initialDetectionPerformed": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
++    "RunOnceActivity.git.unshallow": "true",
++    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
++    "git-widget-placeholder": "Merging Master",
++    "ignore.virus.scanning.warn.message": "true",
++    "kotlin-language-version-configured": "true",
++    "last_opened_file_path": "C:/Users/91916/Downloads/DGCM/DigitalClassRoomManagement/DigitalClassRoomManagement",
++    "project.structure.last.edited": "Modules",
++    "project.structure.proportion": "0.0",
++    "project.structure.side.proportion": "0.0"
++  }
++}]]></component>
++  <component name="RecentsManager">
++    <key name="CreateClassDialog.RecentsKey">
++      <recent name="com.DigitalClassRoomManagement.Exception" />
++    </key>
++  </component>
++  <component name="RunManager">
++    <configuration name="DigitalClassRoomManagementApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="com.DigitalClassRoomManagement.DigitalClassRoomManagementApplication" />
++      <module name="DigitalClassRoomManagement" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="com.DigitalClassRoomManagement.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <recent_temporary>
++      <list>
++        <item itemvalue="Application.DigitalClassRoomManagementApplication" />
++      </list>
++    </recent_temporary>
++  </component>
++  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+       <changelist id="a124b332-d0cf-4127-9556-26e04c0797e5" name="Changes" comment="" />
+@@ -124,6 +206,63 @@
+       <option name="presentableId" value="Default" />
+       <updated>1762506179159</updated>
+     </task>
++    <task id="LOCAL-00001" summary="I have added Subject Module">
++      <option name="closed" value="true" />
++      <created>1762844088250</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1762844088250</updated>
++    </task>
++    <task id="LOCAL-00002" summary="I have added Subject Module">
++      <option name="closed" value="true" />
++      <created>1762844527883</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1762844527883</updated>
++    </task>
++    <task id="LOCAL-00003" summary="I have added Subject Module">
++      <option name="closed" value="true" />
++      <created>1762844644377</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1762844644377</updated>
++    </task>
++    <task id="LOCAL-00004" summary="I have added Subject Module">
++      <option name="closed" value="true" />
++      <created>1762844670688</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1762844670688</updated>
++    </task>
++    <task id="LOCAL-00005" summary="Changes in Subject functionality">
++      <option name="closed" value="true" />
++      <created>1762861021011</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1762861021011</updated>
++    </task>
++    <option name="localTasksCounter" value="6" />
+     <servers />
+   </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="I have added Subject Module" />
++    <MESSAGE value="Changes in Subject functionality" />
++    <option name="LAST_COMMIT_MESSAGE" value="Changes in Subject functionality" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <annotationProcessing>\r\n      <profile default=\"true\" name=\"Default\" enabled=\"true\" />\r\n      <profile name=\"Annotation profile for DigitalClassRoomManagement\" enabled=\"true\">\r\n        <sourceOutputDir name=\"target/generated-sources/annotations\" />\r\n        <sourceTestOutputDir name=\"target/generated-test-sources/test-annotations\" />\r\n        <outputRelativeToContentRoot value=\"true\" />\r\n        <processorPath useClasspath=\"false\">\r\n          <entry name=\"$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar\" />\r\n        </processorPath>\r\n        <module name=\"DigitalClassRoomManagement\" />\r\n      </profile>\r\n    </annotationProcessing>\r\n  </component>\r\n  <component name=\"JavacSettings\">\r\n    <option name=\"ADDITIONAL_OPTIONS_OVERRIDE\">\r\n      <module name=\"DigitalClassRoomManagement\" options=\"-parameters\" />\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/.idea/compiler.xml	(date 1762862221878)
+@@ -9,6 +9,7 @@
+         <outputRelativeToContentRoot value="true" />
+         <processorPath useClasspath="false">
+           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
++          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+         </processorPath>
+         <module name="DigitalClassRoomManagement" />
+       </profile>
+Index: src/main/java/com/DigitalClassRoomManagement/Controller/CalendarController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.DigitalClassRoomManagement.Controller;\r\n\r\n\r\nimport com.DigitalClassRoomManagement.Repository.AdminRepository;\r\nimport com.DigitalClassRoomManagement.dto.*;\r\nimport com.DigitalClassRoomManagement.Entity.*;\r\nimport com.DigitalClassRoomManagement.Service.CalendarService;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.*;\r\n\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\n@RestController\r\n@RequestMapping(\"/api/calendars\")\r\n@RequiredArgsConstructor\r\npublic class CalendarController {\r\n\r\n    private final CalendarService calendarService;\r\n\r\n    @Autowired\r\n    private AdminRepository adminrepo;\r\n\r\n    @PostMapping(\"/create/{id}\")\r\n    public ResponseEntity<CalendarDto> createCalendar(\r\n            @RequestBody CreateAcademicCalenderRequest request,\r\n            @PathVariable Long id) {\r\n        Optional<Admin> dummyAdmin = adminrepo.findById(id);\r\n        if(!dummyAdmin.isPresent()){\r\n            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);\r\n        }\r\n        String username = dummyAdmin.get().getUsername();\r\n        return ResponseEntity.ok(calendarService.createAcademicCalender(request, username));\r\n    }\r\n\r\n    @PostMapping(\"/{calendarId}/holiday\")\r\n    public ResponseEntity<HolidayDto> addHoliday(@PathVariable Long calendarId, @RequestBody Holiday holiday) {\r\n        return ResponseEntity.ok(calendarService.addHoliday(calendarId, holiday));\r\n    }\r\n\r\n    @PostMapping(\"/{calendarId}/event\")\r\n    public ResponseEntity<EventDto> addEvent(@PathVariable Long calendarId, @RequestBody Event event) {\r\n        return ResponseEntity.ok(calendarService.addEvent(calendarId, event));\r\n    }\r\n\r\n    @GetMapping(\"/events\")\r\n    public ResponseEntity<List<EventDto>> viewEvents() {\r\n        return ResponseEntity.ok(calendarService.viewCalenderEvents());\r\n    }\r\n\r\n    @GetMapping(\"/{calendarId}\")\r\n    public ResponseEntity<CalendarDto> getCalendar(@PathVariable Long calendarId) {\r\n        return ResponseEntity.ok(calendarService.getAcademicCalender(calendarId));\r\n    }\r\n\r\n    @PutMapping(\"/{calendarId}\")\r\n    public ResponseEntity<CalendarDto> updateCalendar(\r\n            @PathVariable Long calendarId,\r\n            @RequestBody UpdateAcademicCalenderRequest request) {\r\n        return ResponseEntity.ok(calendarService.updateAcademicCalender(calendarId, request));\r\n    }\r\n\r\n    @GetMapping\r\n    public ResponseEntity<List<CalendarDto>> getAllCalendars() {\r\n        return ResponseEntity.ok(calendarService.getAcademicCalenders());\r\n    }\r\n\r\n    @DeleteMapping(\"/holiday/{holidayId}\")\r\n    public ResponseEntity<String> deleteHoliday(@PathVariable Long holidayId) {\r\n        return ResponseEntity.ok(calendarService.removeHoliday(holidayId));\r\n    }\r\n\r\n    @DeleteMapping(\"/event/{eventId}\")\r\n    public ResponseEntity<String> deleteEvent(@PathVariable Long eventId) {\r\n        return ResponseEntity.ok(calendarService.removeEvent(eventId));\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/DigitalClassRoomManagement/Controller/CalendarController.java b/src/main/java/com/DigitalClassRoomManagement/Controller/CalendarController.java
+--- a/src/main/java/com/DigitalClassRoomManagement/Controller/CalendarController.java	(revision d6a9bf46f86c0c944be23dc777d7ef7708165f99)
++++ b/src/main/java/com/DigitalClassRoomManagement/Controller/CalendarController.java	(date 1762862221886)
+@@ -2,7 +2,7 @@
+ 
+ 
+ import com.DigitalClassRoomManagement.Repository.AdminRepository;
+-import com.DigitalClassRoomManagement.dto.*;
++import com.DigitalClassRoomManagement.Dto.*;
+ import com.DigitalClassRoomManagement.Entity.*;
+ import com.DigitalClassRoomManagement.Service.CalendarService;
+ import lombok.RequiredArgsConstructor;
