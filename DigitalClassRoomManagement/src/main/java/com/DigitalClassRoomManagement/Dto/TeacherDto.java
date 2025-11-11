@@ -34,4 +34,6 @@ public class TeacherDto {
     private String gender;
     @Past(message = "Birth date should be from past")
     private LocalDate dateOfBirth;
+    private String assign_class;
+    private String assign_section;
 }

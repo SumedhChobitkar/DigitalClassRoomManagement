@@ -1,12 +1,17 @@
 package com.DigitalClassRoomManagement.Entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 @Data
 @Entity
 @Table(name="users")
-public class user {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
 
 
     @Id

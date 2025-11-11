@@ -32,7 +32,8 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setQualification(dto.getQualification());
         teacher.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));
         teacher.setExperienceYears(dto.getExperienceYears());
-
+        teacher.setAssign_class(dto.getAssign_class());
+        teacher.setAssign_section(dto.getAssign_section());
         Teacher savedTeacher = repo.save(teacher);
         log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
         return "New Teacher Added Successfully with ID: " + savedTeacher.getId();

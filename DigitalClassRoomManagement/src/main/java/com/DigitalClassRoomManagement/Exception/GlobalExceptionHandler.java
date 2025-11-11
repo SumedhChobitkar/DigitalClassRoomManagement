@@ -33,4 +33,5 @@ public class GlobalExceptionHandler {
         ex.printStackTrace(); // as you asked, quick visibility
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of("error", "Something went wrong", "detail", ex.getMessage()));
+    }
 }

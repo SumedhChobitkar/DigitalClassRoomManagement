@@ -1,9 +1,9 @@
 package com.DigitalClassRoomManagement.Repository;
 
-import com.DigitalClassRoomManagement.Entity.Attendance;
+import com.DigitalClassRoomManagement.Entity.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AttendanceRepository extends JpaRepository<Attendance,Long> {
+public interface SubjectRepository extends JpaRepository<Subject,Long> {
 }
