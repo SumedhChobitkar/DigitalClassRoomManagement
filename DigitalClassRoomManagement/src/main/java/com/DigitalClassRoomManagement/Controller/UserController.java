@@ -3,7 +3,7 @@ package com.DigitalClassRoomManagement.Controller;
 import com.DigitalClassRoomManagement.Dto.AdminResponseDTO;
 import com.DigitalClassRoomManagement.Dto.userDto;
 import com.DigitalClassRoomManagement.Entity.UnAppproveAdmins;
-import com.DigitalClassRoomManagement.Entity.user;
+import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Exception.UserNotFoundException;
 import com.DigitalClassRoomManagement.Service.UserService;
 import com.DigitalClassRoomManagement.ServiceImpl.AdminServiceImpl;
@@ -34,7 +34,7 @@ public class UserController {
 
 
     @PostMapping("/registerUser")
-    public ResponseEntity<?> registeration(@RequestBody user user1)
+    public ResponseEntity<?> registeration(@RequestBody User user1)
     {
         try {
             userDto user2 = userService.registeration(user1);
@@ -48,7 +48,7 @@ public class UserController {
     public ResponseEntity<?> login(@RequestParam String email,@RequestParam String password)
     {
         try {
-            user user = userService.login(email, password);
+            User user = userService.login(email, password);
 
             String token = jwtService.generateToken(user.getEmail(), user.getRole());
 
