@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.repository.NoRepositoryBean;
 
 import java.time.LocalDate;
 
@@ -34,4 +33,6 @@ public class TeacherDto {
     private String gender;
     @Past(message = "Birth date should be from past")
     private LocalDate dateOfBirth;
+    private String assign_class;
+    private String assign_section;
 }

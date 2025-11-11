@@ -3,7 +3,9 @@ package com.DigitalClassRoomManagement;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
 @SpringBootApplication
+
 public class DigitalClassRoomManagementApplication {
 
 	public static void main(String[] args) {
