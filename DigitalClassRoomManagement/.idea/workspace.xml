@@ -4,9 +4,107 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a124b332-d0cf-4127-9556-26e04c0797e5" name="Changes" comment="I have added Subject Module">
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" afterDir="false" />
+    <list default="true" id="a124b332-d0cf-4127-9556-26e04c0797e5" name="Changes" comment="Changes in Subject functionality">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/MultimediaValidationClass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Config/StartupDataLoader.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/AdminController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/AdminSubjectController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/AttendanceController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/CalendarController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/DigitalBookController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/MultimediaContentController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/TeacherController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/AdminResponseDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/AttendanceDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/DigitalBookDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/MultimediaContentResponseDto$MultimediaContentResponseDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/MultimediaContentResponseDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/MultimediaMetaUpdateDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/SubjectDto$SubjectDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/SubjectDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/TeacherDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/UnApproveAdminsDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/AcademicCalendar$AcademicCalendarBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/AcademicCalendar.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Admin.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/AdminRole.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Attendance.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/AttendanceStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/DigitalBook.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Event$EventBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Event.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Holiday$HolidayBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Holiday.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/MarkBy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/MultimediaContent$MultimediaContentBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/MultimediaContent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Role.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Status.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Subject$SubjectBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Subject.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher$TeacherBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/UnAppproveAdmins.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/user.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/AttendanceNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/BadRequestException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/BookNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/GlobalExceptionHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/InvalidRequestException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/ResourceNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/SubjectNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/TeacherNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/UserNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/AcademicCalendarRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/AdminRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/AttendanceRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/DigitalBookRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/EventRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/HolidayRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/MultimediaContentRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/SubjectRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/TeacherRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/UnApproveAdminRepo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/UserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/AdminService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/AttendanceService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/CalendarService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/DigitalBookService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/MultimediaContentService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/SubjectService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/TeacherService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/AdminServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/AttendanceServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/CalendarServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/DigitalBookServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/MultimediaContentServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/SubjectServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/AdminDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/CalendarDto$CalendarDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/CalendarDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest$CreateAcademicCalenderRequestBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/CreateAcademicCalenderRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/EventDto$EventDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/EventDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/HolidayDto$HolidayDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/HolidayDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest$UpdateAcademicCalenderRequestBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/dto/UpdateAcademicCalenderRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/security/CustomUserDetailsService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/security/JwtFilter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/security/JwtService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/security/SecurityConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplicationTests.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,23 +156,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.DigitalClassRoomManagementApplication.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;011&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/91916/Downloads/DGCM/DigitalClassRoomManagement/DigitalClassRoomManagement&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.DigitalClassRoomManagementApplication.executor": "Debug",
+    "Maven.DigitalClassRoomManagement [clean].executor": "Run",
+    "Maven.DigitalClassRoomManagement [install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "011",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/91916/Downloads/DGCM/DigitalClassRoomManagement/DigitalClassRoomManagement",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.DigitalClassRoomManagement.Exception" />
@@ -141,7 +241,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762844670688</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Changes in Subject functionality">
+      <option name="closed" value="true" />
+      <created>1762861021011</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762861021011</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -157,6 +265,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="I have added Subject Module" />
-    <option name="LAST_COMMIT_MESSAGE" value="I have added Subject Module" />
+    <MESSAGE value="Changes in Subject functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes in Subject functionality" />
   </component>
 </project>
