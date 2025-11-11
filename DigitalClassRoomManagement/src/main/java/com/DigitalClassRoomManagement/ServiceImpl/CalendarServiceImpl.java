@@ -1,7 +1,7 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
 
-import com.DigitalClassRoomManagement.dto.*;
+import com.DigitalClassRoomManagement.Dto.*;
 import com.DigitalClassRoomManagement.Entity.*;
 import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Service.CalendarService;

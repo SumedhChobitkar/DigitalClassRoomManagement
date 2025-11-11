@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+//sa login -> admin regiter
 @Configuration
 public class StartupDataLoader {
 
@@ -16,7 +17,6 @@ public class StartupDataLoader {
         return args -> {
             String email = "admin@classroom.com";
 
-            // Check if Admin already exists
             if (userRepository.findByEmail(email).isPresent()) {
                 System.out.println("✅ Admin user already exists.");
                 return;
@@ -26,7 +26,7 @@ public class StartupDataLoader {
             admin.setName("System Admin");
             admin.setEmail(email);
             admin.setPassword(passwordEncoder.encode("Admin@123"));
-            admin.setRole(Role.ADMIN); // Available roles: ADMIN, TEACHER, STUDENT, PARENT
+            admin.setRole(Role.ADMIN);
             admin.setLanguagePreference("ENGLISH");
 
             userRepository.save(admin);
