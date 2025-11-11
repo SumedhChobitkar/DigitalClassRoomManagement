@@ -1,8 +1,10 @@
 package com.DigitalClassRoomManagement.Controller;
 
+import com.DigitalClassRoomManagement.Dto.UnApproveAdminsDto;
 import com.DigitalClassRoomManagement.Entity.Admin;
+import com.DigitalClassRoomManagement.Entity.UnAppproveAdmins;
 import com.DigitalClassRoomManagement.Service.AdminService;
-import com.DigitalClassRoomManagement.dto.AdminDTO;
+import com.DigitalClassRoomManagement.Dto.AdminDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,14 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+
+
+    @PostMapping("/register")
+    public UnAppproveAdmins unApproveAdminsRegister(@RequestBody UnApproveAdminsDto tempAdmin){
+        System.out.println("The req reached here");
+        return adminService.unApproveAdminsRegister(tempAdmin);
+    }
 
 
     @PostMapping("/create")

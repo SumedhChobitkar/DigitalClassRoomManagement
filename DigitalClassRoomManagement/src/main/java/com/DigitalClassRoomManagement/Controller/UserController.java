@@ -1,9 +1,12 @@
 package com.DigitalClassRoomManagement.Controller;
 
+import com.DigitalClassRoomManagement.Dto.AdminResponseDTO;
 import com.DigitalClassRoomManagement.Dto.userDto;
-import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Entity.UnAppproveAdmins;
+import com.DigitalClassRoomManagement.Entity.user;
 import com.DigitalClassRoomManagement.Exception.UserNotFoundException;
 import com.DigitalClassRoomManagement.Service.UserService;
+import com.DigitalClassRoomManagement.ServiceImpl.AdminServiceImpl;
 import com.DigitalClassRoomManagement.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,10 +26,15 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private AdminServiceImpl adminService;
+
+    @Autowired
     private JwtService jwtService;
 
+
+
     @PostMapping("/registerUser")
-    public ResponseEntity<?> registeration(@RequestBody User user1)
+    public ResponseEntity<?> registeration(@RequestBody user user1)
     {
         try {
             userDto user2 = userService.registeration(user1);
@@ -40,7 +48,7 @@ public class UserController {
     public ResponseEntity<?> login(@RequestParam String email,@RequestParam String password)
     {
         try {
-            User user = userService.login(email, password);
+            user user = userService.login(email, password);
 
             String token = jwtService.generateToken(user.getEmail(), user.getRole());
 
@@ -67,6 +75,16 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DATA NOT FOUND");
         }
+    }
+
+    @GetMapping("/getAllUnapprovedAdmins")
+    public List<AdminResponseDTO> getAllUnApproveAdmins(){
+        return adminService.getAllUnApproveAdmins();
+    }
+
+    @GetMapping("/makeAdmin/{id}")
+    public String makeAdmin(@PathVariable Long id){
+        return adminService.makeAdmin(id);
     }
 
     @GetMapping("/getById/{id}")

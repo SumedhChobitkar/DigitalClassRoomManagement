@@ -34,7 +34,7 @@
 		</dependency>
 
 		<!-- Bean Validation (for @NotBlank, @Pattern, etc.) -->
-
+		<dependency>
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>

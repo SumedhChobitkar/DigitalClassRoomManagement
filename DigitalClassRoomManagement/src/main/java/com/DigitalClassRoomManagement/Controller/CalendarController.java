@@ -2,7 +2,7 @@ package com.DigitalClassRoomManagement.Controller;
 
 
 import com.DigitalClassRoomManagement.Repository.AdminRepository;
-import com.DigitalClassRoomManagement.dto.*;
+import com.DigitalClassRoomManagement.Dto.*;
 import com.DigitalClassRoomManagement.Entity.*;
 import com.DigitalClassRoomManagement.Service.CalendarService;
 import lombok.RequiredArgsConstructor;
