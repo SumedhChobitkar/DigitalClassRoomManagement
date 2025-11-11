@@ -1,4 +1,4 @@
-package com.DigitalClassRoomManagement.dto;
+package com.DigitalClassRoomManagement.Dto;
 
 import lombok.*;
 import java.time.LocalDate;
