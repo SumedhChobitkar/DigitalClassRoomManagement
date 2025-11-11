@@ -6,12 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a124b332-d0cf-4127-9556-26e04c0797e5" name="Changes" comment="I have added Subject Module">
       <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/TeacherDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/TeacherDto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -123,7 +121,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762844088250</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="I have added Subject Module">
+      <option name="closed" value="true" />
+      <created>1762844527883</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1762844527883</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
