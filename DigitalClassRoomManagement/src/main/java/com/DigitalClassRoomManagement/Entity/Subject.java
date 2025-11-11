@@ -1,7 +1,6 @@
 package com.DigitalClassRoomManagement.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -48,9 +47,6 @@ public class Subject {
     private BigDecimal maxMarks;
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-
-
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }

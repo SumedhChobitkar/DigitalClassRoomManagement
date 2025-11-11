@@ -1,7 +1,7 @@
 package com.DigitalClassRoomManagement.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+
 import lombok.*;
 
 @Data

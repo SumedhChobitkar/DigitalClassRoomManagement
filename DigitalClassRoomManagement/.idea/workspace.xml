@@ -4,74 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a124b332-d0cf-4127-9556-26e04c0797e5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+    <list default="true" id="a124b332-d0cf-4127-9556-26e04c0797e5" name="Changes" comment="I have added Subject Module">
       <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/AdminSubjectController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/SubjectDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/SubjectNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/SubjectRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/SubjectService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/SubjectServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/MultimediaValidationClass.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/AdminSubjectController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/MultimediaContentController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/MultimediaContentResponseDto$MultimediaContentResponseDtoBuilder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/MultimediaContentResponseDto.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/MultimediaMetaUpdateDto.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/SubjectDto$SubjectDtoBuilder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/SubjectDto.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/MultimediaContent$MultimediaContentBuilder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/MultimediaContent.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Subject$SubjectBuilder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Subject.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher$TeacherBuilder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/BadRequestException.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/SubjectNotFoundException.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/MultimediaContentRepository.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/SubjectRepository.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/MultimediaContentService.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/SubjectService.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/MultimediaContentServiceImpl.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/SubjectServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Config/StartupDataLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Dto/TeacherDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Teacher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/user.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/AttendanceRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/TeacherRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/security/CustomUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/Subject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DigitalClassRoomManagement/Entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/CommonUtil/ValidationClass.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Config/StartupDataLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Config/StartupDataLoader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Controller/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/DigitalClassRoomManagementApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/TeacherDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/TeacherDto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Dto/userDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/Teacher.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/user.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Entity/user.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/GlobalExceptionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/ResourceNotFoundException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Exception/ResourceNotFoundException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/AttendanceRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/AttendanceRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/TeacherRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/TeacherRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Repository/UserRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/Service/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/TeacherServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/ServiceImpl/UserServiceimpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/security/CustomUserDetailsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/DigitalClassRoomManagement/security/CustomUserDetailsService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,6 +49,9 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/pom.xml" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -171,6 +115,15 @@
       <option name="presentableId" value="Default" />
       <updated>1762506179159</updated>
     </task>
+    <task id="LOCAL-00001" summary="I have added Subject Module">
+      <option name="closed" value="true" />
+      <created>1762844088250</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1762844088250</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -183,5 +136,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="I have added Subject Module" />
+    <option name="LAST_COMMIT_MESSAGE" value="I have added Subject Module" />
   </component>
 </project>
