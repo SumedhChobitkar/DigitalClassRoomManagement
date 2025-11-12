@@ -1,9 +1,7 @@
 package com.DigitalClassRoomManagement.Dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +23,7 @@ public class TeacherDto {
     private String lastName;
     @NotBlank(message="Email can not be blank")
     @Email(message = "Kindly provide valid email id")
+    @Column(nullable = false,unique = true)
     private String email;
     @NotBlank(message = "Phone number cannot be empty")
     @Pattern(regexp = "^[6-9]\\d{9}$", message = "Phone number must be 10 digits and start with 6, 7, 8, or 9")
@@ -33,5 +32,6 @@ public class TeacherDto {
     private Integer experienceYears;
     private String gender;
     @Past(message = "Birth date should be from past")
+    @NotNull(message = "Date of birth must be provided")
     private LocalDate dateOfBirth;
 }

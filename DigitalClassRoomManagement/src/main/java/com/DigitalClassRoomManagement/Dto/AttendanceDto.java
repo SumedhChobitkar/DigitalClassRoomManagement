@@ -1,7 +1,9 @@
 package com.DigitalClassRoomManagement.Dto;
 
-import com.DigitalClassRoomManagement.Entity.AttendanceStatus;
-import com.DigitalClassRoomManagement.Entity.MarkBy;
+import com.DigitalClassRoomManagement.Enum.AttendanceStatus;
+import com.DigitalClassRoomManagement.Enum.MarkBy;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +17,8 @@ public class AttendanceDto {
     private LocalDateTime joinTime;
     private LocalDateTime exitTime;
     private Long durationMinutes;
+    @Enumerated(EnumType.STRING)
     private AttendanceStatus status;
+    @Enumerated(EnumType.STRING)
     private MarkBy markedBy;
 }

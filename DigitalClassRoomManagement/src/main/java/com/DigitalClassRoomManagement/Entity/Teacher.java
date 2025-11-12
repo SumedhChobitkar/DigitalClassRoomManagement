@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="Teacher")
+@Table(name="Teacher", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

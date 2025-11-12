@@ -1,5 +1,7 @@
 package com.DigitalClassRoomManagement.Entity;
 
+import com.DigitalClassRoomManagement.Enum.AttendanceStatus;
+import com.DigitalClassRoomManagement.Enum.MarkBy;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

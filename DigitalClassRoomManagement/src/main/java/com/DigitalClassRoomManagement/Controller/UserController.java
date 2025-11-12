@@ -1,7 +1,9 @@
 package com.DigitalClassRoomManagement.Controller;
 
-import com.DigitalClassRoomManagement.Dto.userDto;
-import com.DigitalClassRoomManagement.Entity.user;
+import com.DigitalClassRoomManagement.Dto.UserDto;
+
+import com.DigitalClassRoomManagement.Entity.User;
+
 import com.DigitalClassRoomManagement.Exception.UserNotFoundException;
 import com.DigitalClassRoomManagement.Service.UserService;
 import com.DigitalClassRoomManagement.security.JwtService;
@@ -26,10 +28,10 @@ public class UserController {
     private JwtService jwtService;
 
     @PostMapping("/registerUser")
-    public ResponseEntity<?> registeration(@RequestBody user user1)
+    public ResponseEntity<?> registeration(@RequestBody User user1)
     {
         try {
-            userDto user2 = userService.registeration(user1);
+            UserDto user2 = userService.registeration(user1);
             return ResponseEntity.status(HttpStatus.CREATED).body(user2);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Email Already Exist");
@@ -40,7 +42,7 @@ public class UserController {
     public ResponseEntity<?> login(@RequestParam String email,@RequestParam String password)
     {
         try {
-            user user = userService.login(email, password);
+            User user = userService.login(email, password);
 
             String token = jwtService.generateToken(user.getEmail(), user.getRole());
 
@@ -62,7 +64,7 @@ public class UserController {
     public ResponseEntity<?> getAllUser()
     {
         try {
-            List<userDto> u = userService.getAll();
+            List<UserDto> u = userService.getAll();
             return ResponseEntity.ok(u);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DATA NOT FOUND");
@@ -73,7 +75,7 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable Long id)
     {
         try {
-            userDto u = userService.getUserById(id);
+            UserDto u = userService.getUserById(id);
             return ResponseEntity.ok(u);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID NOT FOUND");

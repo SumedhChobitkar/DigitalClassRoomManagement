@@ -1,5 +1,7 @@
 package com.DigitalClassRoomManagement.Entity;
 
+import com.DigitalClassRoomManagement.Enum.AdminRole;
+import com.DigitalClassRoomManagement.Enum.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -2,7 +2,7 @@ package com.DigitalClassRoomManagement.Controller;
 
 import com.DigitalClassRoomManagement.Entity.Admin;
 import com.DigitalClassRoomManagement.Service.AdminService;
-import com.DigitalClassRoomManagement.dto.AdminDTO;
+import com.DigitalClassRoomManagement.Dto.AdminDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

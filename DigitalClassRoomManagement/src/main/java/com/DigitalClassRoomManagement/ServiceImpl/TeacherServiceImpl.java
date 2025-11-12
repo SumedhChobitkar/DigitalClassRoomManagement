@@ -23,6 +23,12 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public String addTeacher(TeacherDto dto) {
         log.info("Adding new teacher with email: {}", dto.getEmail());
+        if (repo.existsByEmail(dto.getEmail())) {
+            throw new IllegalArgumentException("A teacher with this email already exists: " + dto.getEmail());
+        }
+        if (repo.existsByPhone(dto.getPhone())) {
+            throw new IllegalArgumentException("A teacher with this phone number already exists: " + dto.getPhone());
+        }
         Teacher teacher = new Teacher();
         teacher.setEmail(dto.getEmail());
         teacher.setGender(dto.getGender());

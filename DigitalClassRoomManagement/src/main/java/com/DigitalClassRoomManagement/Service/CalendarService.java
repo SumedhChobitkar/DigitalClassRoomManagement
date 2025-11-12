@@ -1,6 +1,6 @@
 package com.DigitalClassRoomManagement.Service;
 
-import com.DigitalClassRoomManagement.dto.*;
+import com.DigitalClassRoomManagement.Dto.*;
 import com.DigitalClassRoomManagement.Entity.Event;
 import com.DigitalClassRoomManagement.Entity.Holiday;
 
