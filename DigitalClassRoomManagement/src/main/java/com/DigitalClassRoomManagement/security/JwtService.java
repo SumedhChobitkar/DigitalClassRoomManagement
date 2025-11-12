@@ -1,6 +1,6 @@
 package com.DigitalClassRoomManagement.security;
 
-import com.DigitalClassRoomManagement.Entity.Role;
+import com.DigitalClassRoomManagement.Enum.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;

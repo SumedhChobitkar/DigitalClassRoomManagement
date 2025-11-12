@@ -1,10 +1,10 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
+import com.DigitalClassRoomManagement.Dto.AdminDTO;
 import com.DigitalClassRoomManagement.Entity.Admin;
 import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Repository.AdminRepository;
 import com.DigitalClassRoomManagement.Service.AdminService;
-import com.DigitalClassRoomManagement.dto.AdminDTO;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

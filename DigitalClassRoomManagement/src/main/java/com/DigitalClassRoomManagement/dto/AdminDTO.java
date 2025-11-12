@@ -1,12 +1,17 @@
-package com.DigitalClassRoomManagement.dto;
+package com.DigitalClassRoomManagement.Dto;
 
-import com.DigitalClassRoomManagement.Entity.AdminRole;
-import com.DigitalClassRoomManagement.Entity.Status;
+
+import com.DigitalClassRoomManagement.Enum.AdminRole;
+import com.DigitalClassRoomManagement.Enum.Status;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 public class AdminDTO {
     private Long adminId;
     private String password;
+    @Enumerated(EnumType.STRING)
     private AdminRole role;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private String username;
 
