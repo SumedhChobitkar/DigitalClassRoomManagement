@@ -1,7 +1,7 @@
 package com.DigitalClassRoomManagement.Dto;
 
+import com.DigitalClassRoomManagement.Entity.MarkBy;
 import com.DigitalClassRoomManagement.Enum.AttendanceStatus;
-import com.DigitalClassRoomManagement.Enum.MarkBy;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
