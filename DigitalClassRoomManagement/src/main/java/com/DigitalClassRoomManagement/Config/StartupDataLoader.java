@@ -1,6 +1,5 @@
 package com.DigitalClassRoomManagement.Config;
 
-
 import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.Role;
 import com.DigitalClassRoomManagement.Repository.UserRepository;
@@ -24,7 +23,9 @@ public class StartupDataLoader {
             }
 
             User admin = new User();
-            admin.setName("System Admin");
+            admin.setUsername("admin");
+            admin.setFirstname("System Admin");
+            admin.setLastname("Admin LastName");
             admin.setEmail(email);
             admin.setPassword(passwordEncoder.encode("Admin@123"));
             admin.setRole(Role.ADMIN); // Available roles: ADMIN, TEACHER, STUDENT, PARENT
