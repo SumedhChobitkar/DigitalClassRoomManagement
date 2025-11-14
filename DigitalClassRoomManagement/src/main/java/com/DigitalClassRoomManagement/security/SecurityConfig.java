@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/digitalClassroom/login", "/api/digitalClassroom/registerUser","/api/digitalClassroom/getAll","/api/digitalClassroom/getById/{id}").permitAll()
+                        .requestMatchers("/api/digitalClassroom/login", "/api/digitalClassroom/registerUser","/api/digitalClassroom/getAll","/api/digitalClassroom/getById/{id}","/api/digitalClassroom/forgot-password","/api/digitalClassroom/verify-otp","/api/digitalClassroom/reset-password").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
