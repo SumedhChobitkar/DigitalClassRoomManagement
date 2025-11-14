@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 @Data
 public class UserDto {
     private Long userId;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String email;
-    private String username;
+    private String userName;
     private Status status;
     private LocalDateTime lastLogin;
     private String otp;
