@@ -23,9 +23,9 @@ public class StartupDataLoader {
             }
 
             User admin = new User();
-            admin.setUsername("admin");
-            admin.setFirstname("System Admin");
-            admin.setLastname("Admin LastName");
+            admin.setUserName("admin");
+            admin.setFirstName("System Admin");
+            admin.setLastName("Admin LastName");
             admin.setEmail(email);
             admin.setPassword(passwordEncoder.encode("Admin@123"));
             admin.setRole(Role.ADMIN); // Available roles: ADMIN, TEACHER, STUDENT, PARENT

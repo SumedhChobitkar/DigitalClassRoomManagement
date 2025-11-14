@@ -149,7 +149,7 @@ public class UserServiceimpl implements UserService {
 
     public static void validation(User user1) {
 
-        if (user1.getFirstname() == null || !ValidationClass.NAME_PATTERN.matcher(user1.getFirstname()).matches()) {
+        if (user1.getFirstName() == null || !ValidationClass.NAME_PATTERN.matcher(user1.getFirstName()).matches()) {
             throw new IllegalArgumentException("Invalid Name: Must start with uppercase and contain only letters, spaces, or dots.");
         }
 
@@ -173,12 +173,12 @@ public class UserServiceimpl implements UserService {
     private UserDto toDto(User u) {
         UserDto dto = new UserDto();
         dto.setUserId(u.getUserId());
-        dto.setFirstname(u.getFirstname());
-        dto.setLastname(u.getLastname());
+        dto.setFirstName(u.getFirstName());
+        dto.setLastName(u.getLastName());
         dto.setEmail(u.getEmail());
         dto.setRole(u.getRole());
         dto.setCreatedAt(u.getCreatedAt());
-        dto.setUsername(u.getUsername());
+        dto.setUserName(u.getUserName());
         dto.setLanguagePreference(u.getLanguagePreference());
         return dto;
     }
@@ -186,12 +186,12 @@ public class UserServiceimpl implements UserService {
     private User toEntity(UserDto dto) {
         User u = new User();
         u.setUserId(dto.getUserId());
-        u.setFirstname(dto.getFirstname());
-        u.setLastname(dto.getLastname());
+        u.setFirstName(dto.getFirstName());
+        u.setLastName(dto.getLastName());
         u.setEmail(dto.getEmail());
         u.setRole(dto.getRole());
         u.setCreatedAt(dto.getCreatedAt());
-        u.setUsername(dto.getUsername());
+        u.setUserName(dto.getUserName());
         u.setLanguagePreference(dto.getLanguagePreference());
         return u;
     }

@@ -22,10 +22,10 @@ public class User {
     @NotBlank(message = "Username is required")
     @Size(min = 4, max = 50, message = "Username must be between 4 to 50 characters")
     @Column(unique = true, nullable = false)
-    private String username;
+    private String userName;
 
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
 
