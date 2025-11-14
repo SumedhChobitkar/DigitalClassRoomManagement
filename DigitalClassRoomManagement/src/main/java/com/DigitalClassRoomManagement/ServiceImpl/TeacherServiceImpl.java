@@ -2,8 +2,11 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Entity.Teacher;
+import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
 import com.DigitalClassRoomManagement.Repository.TeacherRepository;
+import com.DigitalClassRoomManagement.Repository.UserRepository;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +22,15 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Autowired
     private TeacherRepository repo;
+    @Autowired
+    private UserRepository urepo;
 
     @Override
     public String addTeacher(TeacherDto dto) {
         log.info("Adding new teacher with email: {}", dto.getEmail());
+        User user = urepo.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + dto.getEmail()));
+
         if (repo.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("A teacher with this email already exists: " + dto.getEmail());
         }
@@ -38,10 +46,11 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setQualification(dto.getQualification());
         teacher.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));
         teacher.setExperienceYears(dto.getExperienceYears());
-
+        teacher.setUser(user);
+        teacher.setStatus(TeacherStatus.PENDING);
         Teacher savedTeacher = repo.save(teacher);
         log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
-        return "New Teacher Added Successfully with ID: " + savedTeacher.getId();
+        return "Teacher registration submitted. Pending for approval. " + savedTeacher.getId();
     }
 
     @Override
