@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.List;  //This import is required
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.time.LocalDate;
@@ -34,4 +35,6 @@ public class TeacherDto {
     private String gender;
     @Past(message = "Birth date should be from past")
     private LocalDate dateOfBirth;
+    private List<Long> assignedClassIds; // optional: store only class IDs
+
 }

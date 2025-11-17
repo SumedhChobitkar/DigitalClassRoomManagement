@@ -1,7 +1,7 @@
 package com.DigitalClassRoomManagement.Service;
 
 import com.DigitalClassRoomManagement.Entity.Admin;
-import com.DigitalClassRoomManagement.dto.AdminDTO;
+import com.DigitalClassRoomManagement.Dto.AdminDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
