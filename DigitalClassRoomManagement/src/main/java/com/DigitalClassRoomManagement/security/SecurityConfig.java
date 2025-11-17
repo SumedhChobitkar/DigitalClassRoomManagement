@@ -31,7 +31,27 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/digitalClassroom/login", "/api/digitalClassroom/registerUser","/api/digitalClassroom/getAll","/api/digitalClassroom/getById/{id}").permitAll()
+                        .requestMatchers(
+                                "/api/exam/saveExam",
+                                "/api/exam/UpdateByExamId/{examId}",
+                                "/api/exam/GetByExamId/{id}",
+                                "/api/getByTeacher/{teacherId}",
+                                "/api/exam/GetAllExam",
+                                "/api/exam/DeleteByExamId/{id}"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                "/api/teacher/add",
+                                "/api/teacher/getAll",
+                                "/api/teacher/getById",
+                                "/api/teacher/update",
+                                "/api/teacher/delete"
+                        ).permitAll()
+
+
                         .anyRequest().authenticated()
+
+
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
