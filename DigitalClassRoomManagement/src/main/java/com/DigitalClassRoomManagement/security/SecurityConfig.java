@@ -30,8 +30,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/digitalClassroom/login", "/api/digitalClassroom/registerUser","/api/digitalClassroom/getAll","/api/digitalClassroom/getById/{id}").permitAll()
                         .requestMatchers(
+                                          //User
+                                         "/api/digitalClassroom/login", 
+                                         "/api/digitalClassroom/registerUser",
+                                         "/api/digitalClassroom/getAll",
+                                         "/api/digitalClassroom/getById/{id}",
+                        
                             // Exam 
                                 "/api/exam/saveExam",
                                 "/api/exam/UpdateByExamId/{examId}",
