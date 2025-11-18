@@ -25,8 +25,8 @@ public class CalendarController {
     private AdminRepository adminrepo;
 
     @PostMapping("/create/{id}")
-    public ResponseEntity<CalendarDto> createCalendar(
-            @RequestBody CreateAcademicCalenderRequest request,
+    public ResponseEntity<com.DigitalClassRoomManagement.Dto.CalendarDto> createCalendar(
+            @RequestBody com.DigitalClassRoomManagement.Dto.CreateAcademicCalenderRequest request,
             @PathVariable Long id) {
         Optional<Admin> dummyAdmin = adminrepo.findById(id);
         if(!dummyAdmin.isPresent()){
@@ -37,7 +37,7 @@ public class CalendarController {
     }
 
     @PostMapping("/{calendarId}/holiday")
-    public ResponseEntity<HolidayDto> addHoliday(@PathVariable Long calendarId, @RequestBody Holiday holiday) {
+    public ResponseEntity<com.DigitalClassRoomManagement.Dto.HolidayDto> addHoliday(@PathVariable Long calendarId, @RequestBody Holiday holiday) {
         return ResponseEntity.ok(calendarService.addHoliday(calendarId, holiday));
     }
 
@@ -59,12 +59,12 @@ public class CalendarController {
     @PutMapping("/{calendarId}")
     public ResponseEntity<CalendarDto> updateCalendar(
             @PathVariable Long calendarId,
-            @RequestBody UpdateAcademicCalenderRequest request) {
+            @RequestBody com.DigitalClassRoomManagement.Dto.UpdateAcademicCalenderRequest request) {
         return ResponseEntity.ok(calendarService.updateAcademicCalender(calendarId, request));
     }
 
     @GetMapping
-    public ResponseEntity<List<CalendarDto>> getAllCalendars() {
+    public ResponseEntity<List<com.DigitalClassRoomManagement.Dto.CalendarDto>> getAllCalendars() {
         return ResponseEntity.ok(calendarService.getAcademicCalenders());
     }
 

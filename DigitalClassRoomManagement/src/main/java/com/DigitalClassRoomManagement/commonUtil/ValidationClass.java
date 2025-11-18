@@ -24,5 +24,40 @@ public class ValidationClass {
     public static final Pattern FILE_TYPE_PATTERN = Pattern.compile(".*\\.(pdf)$");
     public static final long MAX_FILE_SIZE = 50 * 1024 * 1024;
 
+
+    //SCHOOL CLASS VALIDATIONS
+
+    /**
+     * CLASS_NAME_PATTERN
+     * Example valid names: "Class 1", "Grade 10", "Science A"
+     * Rules: Must start with a letter, may include digits/spaces, 2–50 chars
+     */
+    public static final Pattern CLASS_NAME_PATTERN =
+            Pattern.compile("^[A-Za-z][A-Za-z0-9 ]{1,49}$");
+
+    /**
+     * CLASS_DESCRIPTION_PATTERN
+     * Example valid: "Primary Section for Science", "Senior batch 2025"
+     * Rules: Alphabets, digits, spaces, punctuation .,- allowed; max 200 chars
+     */
+    public static final Pattern CLASS_DESCRIPTION_PATTERN =
+            Pattern.compile("^[A-Za-z0-9 ,.-]{2,200}$");
+
+    /**
+     * SECTION_NAME_PATTERN
+     * Optional (for future use if you re-enable Section entity)
+     * Example valid: "A", "Section B", "Blue House"
+     */
+    public static final Pattern SECTION_NAME_PATTERN =
+            Pattern.compile("^[A-Za-z0-9 ]{1,20}$");
+
+    /**
+     * TEACHER_ASSIGN_ROLE_PATTERN
+     * Ensures that only valid roles can be linked as class teachers.
+     * Allowed: TEACHER, PRINCIPAL (optional future)
+     */
+    public static final Pattern TEACHER_ASSIGN_ROLE_PATTERN =
+            Pattern.compile("^(TEACHER|PRINCIPAL)$");
+
 }
 

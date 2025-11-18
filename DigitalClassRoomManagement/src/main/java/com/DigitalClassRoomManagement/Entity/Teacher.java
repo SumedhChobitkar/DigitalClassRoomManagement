@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Entity;
 
+
 import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -8,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -15,6 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name="Teacher", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class Teacher {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -75,5 +80,15 @@ public class Teacher {
 //
 //    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<PTM> ptms;
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "teacher_assigned_classes",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "class_id")
+    )
+    @JsonIgnore
+    private List<SchoolClass> assignedClass = new ArrayList<>();
 
 }
