@@ -6,9 +6,14 @@ import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
 import com.DigitalClassRoomManagement.Entity.SchoolClass;
 import com.DigitalClassRoomManagement.Entity.Teacher;
 import com.DigitalClassRoomManagement.Exception.SchoolClassNotFoundException;
+
+import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Enum.TeacherStatus;
+
 import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
 import com.DigitalClassRoomManagement.Repository.SchoolClassRepository;
 import com.DigitalClassRoomManagement.Repository.TeacherRepository;
+import com.DigitalClassRoomManagement.Repository.UserRepository;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +27,21 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TeacherServiceImpl implements TeacherService {
 
-    private final TeacherRepository repo;
-    private final SchoolClassRepository classRepo;
+    private static final Logger log = LoggerFactory.getLogger(TeacherServiceImpl.class);
+
+    @Autowired
+    private TeacherRepository repo;
+    @Autowired
+    private UserRepository urepo;
+  @Autowired
+   private  SchoolClassRepository classRepo;
+
 
     // CREATE
     @Override
     @Transactional
     public String addTeacher(TeacherDto dto) {
+
         try {
             log.info("Adding new teacher with email: {}", dto.getEmail());
 
@@ -49,6 +62,32 @@ public class TeacherServiceImpl implements TeacherService {
             log.error("Error while adding teacher: {}", e.getMessage(), e);
             throw new RuntimeException("Add Teacher Failed: " + e.getMessage());
         }
+
+        log.info("Adding new teacher with email: {}", dto.getEmail());
+        User user = urepo.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + dto.getEmail()));
+
+        if (repo.existsByEmail(dto.getEmail())) {
+            throw new IllegalArgumentException("A teacher with this email already exists: " + dto.getEmail());
+        }
+        if (repo.existsByPhone(dto.getPhone())) {
+            throw new IllegalArgumentException("A teacher with this phone number already exists: " + dto.getPhone());
+        }
+        Teacher teacher = new Teacher();
+        teacher.setEmail(dto.getEmail());
+        teacher.setGender(dto.getGender());
+        teacher.setPhone(dto.getPhone());
+        teacher.setFirstName(dto.getFirstName());
+        teacher.setLastName(dto.getLastName());
+        teacher.setQualification(dto.getQualification());
+        teacher.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));
+        teacher.setExperienceYears(dto.getExperienceYears());
+        teacher.setUser(user);
+        teacher.setStatus(TeacherStatus.PENDING);
+        Teacher savedTeacher = repo.save(teacher);
+        log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
+        return "Teacher registration submitted. Pending for approval. " + savedTeacher.getId();
+
     }
 
     // READ (Entity)

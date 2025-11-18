@@ -35,14 +35,19 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-
-                        // Public endpoints
                         .requestMatchers(
-                                "/api/digitalClassroom/login",
-                                "/api/digitalClassroom/registerUser",
-                                "/api/digitalClassroom/getAll",
-                                "/api/digitalClassroom/getById/**"
-                        ).permitAll()
+                          // User
+                          "/api/digitalClassroom/login", 
+                                         "/api/digitalClassroom/registerUser",
+                                         "/api/digitalClassroom/getAll",
+                                         "/api/digitalClassroom/getById/{id}",
+                                         "/api/digitalClassroom/forgot-password",
+                                         "/api/digitalClassroom/verify-otp",
+                                         "/api/digitalClassroom/reset-password").permitAll()
+
+
+                        
+                       
 
                         // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
@@ -74,6 +79,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/classes/getTeachersOfClass/*/teachers").hasAnyRole("ADMIN", "TEACHER")
 
                         // All other requests require authentication
+
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
