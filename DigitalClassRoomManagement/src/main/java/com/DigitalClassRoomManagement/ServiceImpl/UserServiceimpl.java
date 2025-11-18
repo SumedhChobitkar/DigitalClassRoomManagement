@@ -9,11 +9,15 @@ import com.DigitalClassRoomManagement.commonUtil.ValidationClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +28,9 @@ public class UserServiceimpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceimpl.class);
 
@@ -38,7 +45,7 @@ public class UserServiceimpl implements UserService {
             }
 
             user1.setPassword(passwordEncoder.encode(user1.getPassword()));
-
+            user1.setCreatedAt(LocalDateTime.now());
             User savedUser = userRepository.save(user1);
 
             return toDto(savedUser);
@@ -55,6 +62,8 @@ public class UserServiceimpl implements UserService {
             if (optional.isPresent()) {
                 User u = optional.get();
                 if (passwordEncoder.matches(password, u.getPassword())) {
+                    u.setLastLogin(LocalDateTime.now());
+                    userRepository.save(u);
                     return u;
                 } else {
                     throw new UserNotFoundException("Password not match");
@@ -93,9 +102,54 @@ public class UserServiceimpl implements UserService {
         }
     }
 
+    @Override
+    public String forgotPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        String otp = String.valueOf(100000 + new Random().nextInt(900000));
+        user.setOtp(otp);
+        user.setOtpExpiry(LocalDateTime.now().plusMinutes(5));
+        userRepository.save(user);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("Your OTP for Password Reset");
+        message.setText("Your OTP is: " + otp + "\nIt is valid for 5 minutes.");
+        mailSender.send(message);
+
+        return "OTP sent to your email!";
+    }
+
+    @Override
+    public boolean verifyOtp(String email, String otp) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        return user.getOtp() != null && user.getOtp().equals(otp)
+                && user.getOtpExpiry().isAfter(LocalDateTime.now());
+    }
+
+    @Override
+    public String resetPassword(String email, String newPassword, String confirmPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        if (!newPassword.equals(confirmPassword)) {
+            throw new RuntimeException("New password and confirm password do not match!");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setOtp(null);
+        user.setOtpExpiry(null);
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
+        return "Password updated successfully!";
+    }
+
     public static void validation(User user1) {
 
-        if (user1.getName() == null || !ValidationClass.NAME_PATTERN.matcher(user1.getName()).matches()) {
+        if (user1.getFirstName() == null || !ValidationClass.NAME_PATTERN.matcher(user1.getFirstName()).matches()) {
             throw new IllegalArgumentException("Invalid Name: Must start with uppercase and contain only letters, spaces, or dots.");
         }
 
@@ -119,9 +173,12 @@ public class UserServiceimpl implements UserService {
     private UserDto toDto(User u) {
         UserDto dto = new UserDto();
         dto.setUserId(u.getUserId());
-        dto.setName(u.getName());
+        dto.setFirstName(u.getFirstName());
+        dto.setLastName(u.getLastName());
         dto.setEmail(u.getEmail());
         dto.setRole(u.getRole());
+        dto.setCreatedAt(u.getCreatedAt());
+        dto.setUserName(u.getUserName());
         dto.setLanguagePreference(u.getLanguagePreference());
         return dto;
     }
@@ -129,9 +186,12 @@ public class UserServiceimpl implements UserService {
     private User toEntity(UserDto dto) {
         User u = new User();
         u.setUserId(dto.getUserId());
-        u.setName(dto.getName());
+        u.setFirstName(dto.getFirstName());
+        u.setLastName(dto.getLastName());
         u.setEmail(dto.getEmail());
         u.setRole(dto.getRole());
+        u.setCreatedAt(dto.getCreatedAt());
+        u.setUserName(dto.getUserName());
         u.setLanguagePreference(dto.getLanguagePreference());
         return u;
     }

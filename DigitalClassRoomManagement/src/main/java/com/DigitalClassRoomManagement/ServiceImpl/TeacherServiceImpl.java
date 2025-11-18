@@ -1,28 +1,72 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
+import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
+import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
+import com.DigitalClassRoomManagement.Entity.SchoolClass;
 import com.DigitalClassRoomManagement.Entity.Teacher;
-import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
-import com.DigitalClassRoomManagement.Repository.TeacherRepository;
-import com.DigitalClassRoomManagement.Service.TeacherService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.DigitalClassRoomManagement.Exception.SchoolClassNotFoundException;
 
-import java.util.List;
+import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Enum.TeacherStatus;
+
+import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
+import com.DigitalClassRoomManagement.Repository.SchoolClassRepository;
+import com.DigitalClassRoomManagement.Repository.TeacherRepository;
+import com.DigitalClassRoomManagement.Repository.UserRepository;
+import com.DigitalClassRoomManagement.Service.TeacherService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class TeacherServiceImpl implements TeacherService {
 
     private static final Logger log = LoggerFactory.getLogger(TeacherServiceImpl.class);
 
     @Autowired
     private TeacherRepository repo;
+    @Autowired
+    private UserRepository urepo;
+  @Autowired
+   private  SchoolClassRepository classRepo;
 
+
+    // CREATE
     @Override
+    @Transactional
     public String addTeacher(TeacherDto dto) {
+
+        try {
+            log.info("Adding new teacher with email: {}", dto.getEmail());
+
+            Teacher teacher = new Teacher();
+            teacher.setEmail(dto.getEmail());
+            teacher.setGender(dto.getGender());
+            teacher.setPhone(dto.getPhone());
+            teacher.setFirstName(dto.getFirstName());
+            teacher.setLastName(dto.getLastName());
+            teacher.setQualification(dto.getQualification());
+            teacher.setDateOfBirth(dto.getDateOfBirth() != null ? dto.getDateOfBirth().toString() : null);
+            teacher.setExperienceYears(dto.getExperienceYears());
+
+            Teacher saved = repo.save(teacher);
+            return "New Teacher Added Successfully with ID: " + saved.getId();
+
+        } catch (Exception e) {
+            log.error("Error while adding teacher: {}", e.getMessage(), e);
+            throw new RuntimeException("Add Teacher Failed: " + e.getMessage());
+        }
+
         log.info("Adding new teacher with email: {}", dto.getEmail());
+        User user = urepo.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + dto.getEmail()));
+
         if (repo.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("A teacher with this email already exists: " + dto.getEmail());
         }
@@ -38,39 +82,80 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setQualification(dto.getQualification());
         teacher.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));
         teacher.setExperienceYears(dto.getExperienceYears());
-
+        teacher.setUser(user);
+        teacher.setStatus(TeacherStatus.PENDING);
         Teacher savedTeacher = repo.save(teacher);
         log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
-        return "New Teacher Added Successfully with ID: " + savedTeacher.getId();
+        return "Teacher registration submitted. Pending for approval. " + savedTeacher.getId();
+
     }
 
+    // READ (Entity)
     @Override
+    @Transactional
     public List<Teacher> getAllTeacher() {
-        log.info("Fetching all teacher records from database...");
-        List<Teacher> teachers = repo.findAll();
-        log.info("Total teachers found: {}", teachers.size());
-        return teachers;
+        try {
+            log.info("Fetching all teachers...");
+            return repo.findAll();
+        } catch (Exception e) {
+            log.error("Error fetching teachers: {}", e.getMessage(), e);
+            throw new RuntimeException("Get All Teachers Failed: " + e.getMessage());
+        }
     }
 
+    // READ (DTO) – FIX FOR LazyInitializationException
     @Override
+    @Transactional
+    public List<TeacherResponseDto> getAllTeacherDtos() {
+        try {
+            log.info("Fetching all teachers (DTO mode)");
+
+            return repo.findAll()
+                    .stream()
+                    .map(t -> new TeacherResponseDto(
+                            t.getId(),
+                            t.getFirstName(),
+                            t.getLastName(),
+                            t.getEmail(),
+                            t.getPhone(),
+                            t.getGender(),
+                            t.getQualification(),
+                            t.getExperienceYears(),
+                            t.getDateOfBirth(),
+                            t.getAssignedClass() == null ? Collections.emptyList()
+                                    : t.getAssignedClass()
+                                    .stream()
+                                    .map(SchoolClass::getClassId)
+                                    .collect(Collectors.toList())
+                    ))
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Error fetching teacher DTOs: {}", e.getMessage(), e);
+            throw new RuntimeException("Get All Teachers DTO Failed: " + e.getMessage());
+        }
+    }
+
+    // GET BY ID
+    @Override
+    @Transactional
     public Teacher getTeacherById(Long id) {
-        log.info("Fetching teacher details for ID: {}", id);
-        return repo.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Teacher not found with ID: {}", id);
-                    return new TeacherNotFoundException("Teacher not found with ID: " + id);
-                });
+        try {
+            return repo.findById(id)
+                    .orElseThrow(() -> new TeacherNotFoundException(id));
+        } catch (Exception e) {
+            log.error("Error getting teacher by ID {} -> {}", id, e.getMessage(), e);
+            throw e;
+        }
     }
 
+    // UPDATE
     @Override
+    @Transactional
     public String updateTeacherInfo(Long id, TeacherDto dto) {
-        log.info("Updating teacher information for ID: {}", id);
         try {
             Teacher existing = repo.findById(id)
-                    .orElseThrow(() -> {
-                        log.error("Teacher not found with ID: {}", id);
-                        return new TeacherNotFoundException("Teacher not found with ID: " + id);
-                    });
+                    .orElseThrow(() -> new TeacherNotFoundException(id));
 
             existing.setEmail(dto.getEmail());
             existing.setGender(dto.getGender());
@@ -78,39 +163,140 @@ public class TeacherServiceImpl implements TeacherService {
             existing.setFirstName(dto.getFirstName());
             existing.setLastName(dto.getLastName());
             existing.setQualification(dto.getQualification());
-            existing.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));
+            existing.setDateOfBirth(dto.getDateOfBirth() != null ? dto.getDateOfBirth().toString() : null);
             existing.setExperienceYears(dto.getExperienceYears());
 
             repo.save(existing);
-            log.info("Teacher information updated successfully for ID: {}", id);
             return "Updation successful";
-        } catch (TeacherNotFoundException tx) {
-            log.warn("Attempted to update non-existing teacher with ID: {}", id);
-            throw tx;
+
         } catch (Exception e) {
-            log.error("Error occurred while updating teacher with ID: {} - {}", id, e.getMessage(), e);
-            throw new RuntimeException("Updation failed: " + e.getMessage());
+            log.error("Error updating teacher {} -> {}", id, e.getMessage(), e);
+            throw new RuntimeException("Update Failed: " + e.getMessage());
         }
     }
 
+    // DELETE
     @Override
+    @Transactional
     public String deleteTeacherById(Long id) {
-        log.info("Attempting to delete teacher with ID: {}", id);
         try {
             Teacher existing = repo.findById(id)
-                    .orElseThrow(() -> {
-                        log.error("Teacher not found with ID: {}", id);
-                        return new TeacherNotFoundException("Teacher not found with ID: " + id);
-                    });
+                    .orElseThrow(() -> new TeacherNotFoundException(id));
+
             repo.delete(existing);
-            log.info("Teacher deleted successfully with ID: {}", id);
-            return "Teacher information deleted successfully with ID: " + id;
-        } catch (TeacherNotFoundException tx) {
-            log.warn("Attempted to delete non-existing teacher with ID: {}", id);
-            throw tx;
+
+            return "Teacher deleted successfully with ID: " + id;
+
         } catch (Exception e) {
-            log.error("Error occurred while deleting teacher with ID: {} - {}", id, e.getMessage(), e);
-            throw new RuntimeException("Deletion failed: " + e.getMessage());
+            log.error("Error deleting teacher {} -> {}", id, e.getMessage(), e);
+            throw new RuntimeException("Delete Failed: " + e.getMessage());
+        }
+    }
+
+    // ASSIGN CLASS
+    @Override
+    @Transactional
+    public String assignClassToTeacher(Long teacherId, Long classId) {
+        try {
+            Teacher teacher = repo.findById(teacherId)
+                    .orElseThrow(() -> new TeacherNotFoundException(teacherId));
+
+            SchoolClass schoolClass = classRepo.findById(classId)
+                    .orElseThrow(() -> new SchoolClassNotFoundException(classId));
+
+            if (teacher.getAssignedClass().stream().noneMatch(c -> Objects.equals(c.getClassId(), classId))) {
+                teacher.getAssignedClass().add(schoolClass);
+            }
+
+            repo.save(teacher);
+            return "Class assigned to teacher successfully";
+
+        } catch (Exception e) {
+            log.error("Error assigning class {} to teacher {} -> {}", classId, teacherId, e.getMessage(), e);
+            throw new RuntimeException("Assign Failed: " + e.getMessage());
+        }
+    }
+
+    // UNASSIGN CLASS
+    @Override
+    @Transactional
+    public String unassignClassFromTeacher(Long teacherId, Long classId) {
+        try {
+            Teacher teacher = repo.findById(teacherId)
+                    .orElseThrow(() -> new TeacherNotFoundException(teacherId));
+
+            teacher.getAssignedClass().removeIf(c -> Objects.equals(c.getClassId(), classId));
+            repo.save(teacher);
+
+            return "Class unassigned from teacher successfully";
+
+        } catch (Exception e) {
+            log.error("Error unassigning class {} from teacher {} -> {}", classId, teacherId, e.getMessage(), e);
+            throw new RuntimeException("Unassign Failed: " + e.getMessage());
+        }
+    }
+
+    // GET CLASSES OF TEACHER
+    @Override
+    @Transactional
+    public List<SchoolClassResponseDto> getClassesOfTeacher(Long teacherId) {
+        try {
+            Teacher teacher = repo.findById(teacherId)
+                    .orElseThrow(() -> new TeacherNotFoundException(teacherId));
+
+            return teacher.getAssignedClass().stream()
+                    .map(c -> new SchoolClassResponseDto(
+                            c.getClassId(),
+                            c.getClassName(),
+                            c.getDescription(),
+                            c.getCreatedAt(),
+                            c.getUpdatedAt(),
+                            c.getTeachers() == null
+                                    ? Collections.emptyList()
+                                    : c.getTeachers().stream().map(Teacher::getId).collect(Collectors.toList())
+                    ))
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Error fetching classes of teacher {} -> {}", teacherId, e.getMessage(), e);
+            throw new RuntimeException("Fetch Classes Failed: " + e.getMessage());
+        }
+    }
+
+    // GET TEACHERS OF CLASS (MODIFIED) -> NOW RETURNS DTOS AND USES FIND-BY-ID-WITH-TEACHERS
+    @Override
+    @Transactional(readOnly = true)
+    public List<TeacherResponseDto> getTeachersOfClass(Long classId) {
+        try {
+            log.info("Fetching teachers for class id: {}", classId);
+
+            SchoolClass schoolClass = classRepo.findByIdWithTeachers(classId)
+                    .orElseThrow(() -> new SchoolClassNotFoundException(classId));
+
+            List<Teacher> teachers = schoolClass.getTeachers() == null ? Collections.emptyList() : schoolClass.getTeachers();
+
+            return teachers.stream()
+                    .map(t -> {
+                        TeacherResponseDto dto = new TeacherResponseDto();
+                        dto.setId(t.getId());
+                        dto.setFirstName(t.getFirstName());
+                        dto.setLastName(t.getLastName());
+                        dto.setEmail(t.getEmail());
+                        dto.setPhone(t.getPhone());
+                        dto.setGender(t.getGender());
+                        dto.setQualification(t.getQualification());
+                        dto.setExperienceYears(t.getExperienceYears());
+                        dto.setDateOfBirth(t.getDateOfBirth());
+                        List<Long> assigned = t.getAssignedClass() == null ? Collections.emptyList()
+                                : t.getAssignedClass().stream().map(SchoolClass::getClassId).collect(Collectors.toList());
+                        dto.setAssignedClassIds(assigned);
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Error fetching teachers of class {} -> {}", classId, e.getMessage(), e);
+            throw new RuntimeException("Fetch Teachers Failed: " + e.getMessage());
         }
     }
 }
