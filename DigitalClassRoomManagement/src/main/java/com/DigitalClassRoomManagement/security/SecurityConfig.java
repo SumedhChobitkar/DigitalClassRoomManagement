@@ -43,7 +43,26 @@ public class SecurityConfig {
                                          "/api/digitalClassroom/getById/{id}",
                                          "/api/digitalClassroom/forgot-password",
                                          "/api/digitalClassroom/verify-otp",
-                                         "/api/digitalClassroom/reset-password").permitAll()
+                                         "/api/digitalClassroom/reset-password",
+                                //Exam
+                                "/api/exam/saveExam",
+                                "/api/exam/UpdateByExamId/{examId}",
+                                "/api/exam/GetByExamId/{id}",
+                                "/api/getByTeacher/{teacherId}",
+                                "/api/exam/GetAllExam",
+                                "/api/exam/DeleteByExamId/{id}",
+                                // Teacher
+
+                                "/api/teacher/add",
+
+                                "/api/teacher/getAll",
+
+                                "/api/teacher/getById",
+
+                                "/api/teacher/update",
+
+                                "/api/teacher/delete"
+                        ).permitAll()
 
 
                         
