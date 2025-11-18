@@ -20,7 +20,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     Optional<Teacher> findByIdWithClasses(Long id);
 
 
-public interface TeacherRepository extends JpaRepository<Teacher,Long> {
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
     List<Teacher> findByStatus(TeacherStatus status);
