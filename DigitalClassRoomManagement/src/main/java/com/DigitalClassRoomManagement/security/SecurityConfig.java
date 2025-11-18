@@ -32,23 +32,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/digitalClassroom/login", "/api/digitalClassroom/registerUser","/api/digitalClassroom/getAll","/api/digitalClassroom/getById/{id}").permitAll()
                         .requestMatchers(
+                            // Exam 
                                 "/api/exam/saveExam",
                                 "/api/exam/UpdateByExamId/{examId}",
                                 "/api/exam/GetByExamId/{id}",
                                 "/api/getByTeacher/{teacherId}",
                                 "/api/exam/GetAllExam",
-                                "/api/exam/DeleteByExamId/{id}"
-                        ).permitAll()
-
-                        .requestMatchers(
-                                "/api/teacher/add",
+                                "/api/exam/DeleteByExamId/{id}",
+                            // Teacher 
+                            "/api/teacher/add",
                                 "/api/teacher/getAll",
                                 "/api/teacher/getById",
                                 "/api/teacher/update",
                                 "/api/teacher/delete"
                         ).permitAll()
-
-
                         .anyRequest().authenticated()
 
 
