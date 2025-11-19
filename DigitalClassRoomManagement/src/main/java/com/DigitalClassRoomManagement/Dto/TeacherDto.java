@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.List;  //This import is required
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.time.LocalDate;
@@ -37,6 +38,10 @@ public class TeacherDto {
     @Past(message = "Birth date should be from past")
     @NotNull(message = "Date of birth must be provided")
     private LocalDate dateOfBirth;
+
+    private List<Long> assignedClassIds; // optional: store only class IDs
+
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -85,4 +90,5 @@ public class TeacherDto {
 //
 //    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<PTM> ptms;
+
 }

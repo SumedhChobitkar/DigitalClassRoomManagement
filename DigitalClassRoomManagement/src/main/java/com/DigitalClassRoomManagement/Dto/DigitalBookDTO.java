@@ -1,4 +1,4 @@
-package com.DigitalClassRoomManagement.dto;
+package com.DigitalClassRoomManagement.Dto;
 
 //import jakarta.validation.constraints.NotBlank;
 //import jakarta.validation.constraints.NotNull;
