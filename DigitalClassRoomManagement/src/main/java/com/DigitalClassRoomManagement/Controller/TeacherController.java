@@ -7,10 +7,12 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/teacher")
@@ -19,33 +21,92 @@ public class TeacherController {
     @Autowired
     private TeacherService service;
     private static final Logger log= LoggerFactory.getLogger(TeacherController.class);
-    @PostMapping("/add")
-    public ResponseEntity<String> addTeacher(@Valid  @RequestBody TeacherDto dto){
+    @PostMapping("/addTeacher")
+    public ResponseEntity<String> addTeacher(@Valid @RequestBody TeacherDto dto) {
         log.info("Received request to register new teacher");
-       return ResponseEntity.ok(service.addTeacher(dto));
+
+        try {
+            String response = service.addTeacher(dto);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error while adding teacher : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to add teacher: " + e.getMessage());
+        }
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<Teacher>>getAllTeacher(){
-        log.info("Fetching Information ");
-        return ResponseEntity.ok(service.getAllTeacher());
+    @GetMapping("/getAllTeachers")
+    public ResponseEntity<?> getAllTeacher() {
+        log.info("Fetching all teachers");
+
+        try {
+            return ResponseEntity.ok(service.getAllTeacher());
+
+        } catch (Exception e) {
+            log.error("Error fetching all teachers: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch teachers: " + e.getMessage());
+        }
     }
 
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<Teacher>  getTeacherById(@PathVariable  Long id){
-        log.info("Fetching Information for Id : "+id);
-        return ResponseEntity.ok(service.getTeacherById(id));
+    @GetMapping("/getTeacherById/{id}")
+    public ResponseEntity<?> getTeacherById(@PathVariable Long id) {
+        log.info("Fetching teacher info for Id : {}", id);
+
+        try {
+            Teacher t = service.getTeacherById(id);
+            return ResponseEntity.ok(t);
+
+        } catch (NoSuchElementException e) {
+            log.warn("Teacher not found for Id: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Teacher not found for Id: " + id);
+
+        } catch (Exception e) {
+            log.error("Error fetching teacher by id: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch teacher: " + e.getMessage());
+        }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateTeacherInfo(@PathVariable Long id, @Valid @RequestBody TeacherDto dto){
-        log.info("Updating Information for Id : "+id);
-        return ResponseEntity.ok(service.updateTeacherInfo(id, dto));
+    @PutMapping("/updateTeacherById/{id}")
+    public ResponseEntity<String> updateTeacherInfo(@PathVariable Long id, @Valid @RequestBody TeacherDto dto) {
+        log.info("Updating teacher info for Id : {}", id);
+
+        try {
+            String response = service.updateTeacherInfo(id, dto);
+            return ResponseEntity.ok(response);
+
+        } catch (NoSuchElementException e) {
+            log.warn("Teacher not found for update, Id: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Teacher not found for Id: " + id);
+
+        } catch (Exception e) {
+            log.error("Error updating teacher info: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update teacher: " + e.getMessage());
+        }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> updateTeacherInfo(@PathVariable Long id){
-        log.info("Updating Information for Id : "+id);
-        return ResponseEntity.ok(service.deleteTeacherById(id));
+    @DeleteMapping("/deleteTeacherById/{id}")
+    public ResponseEntity<String> deleteTeacher(@PathVariable Long id) {
+        log.info("Deleting teacher for Id : {}", id);
+
+        try {
+            String response = service.deleteTeacherById(id);
+            return ResponseEntity.ok(response);
+
+        } catch (NoSuchElementException e) {
+            log.warn("Teacher not found for deletion, Id: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Teacher not found for Id: " + id);
+
+        } catch (Exception e) {
+            log.error("Error deleting teacher: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to delete teacher: " + e.getMessage());
+        }
     }
 }
