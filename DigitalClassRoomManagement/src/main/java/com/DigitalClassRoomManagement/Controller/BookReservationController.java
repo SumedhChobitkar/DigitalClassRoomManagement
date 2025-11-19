@@ -16,6 +16,8 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/book_reservation")
+@CrossOrigin("*")
+
 public class BookReservationController {
     private final static Logger log= LoggerFactory.getLogger(BookReservationController.class);
 
