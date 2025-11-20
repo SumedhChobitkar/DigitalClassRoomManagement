@@ -16,7 +16,9 @@ import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Repository.UserRepository;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+
 public class TeacherServiceImpl implements TeacherService {
 
     private static final Logger log = LoggerFactory.getLogger(TeacherServiceImpl.class);
@@ -33,8 +35,8 @@ public class TeacherServiceImpl implements TeacherService {
     private TeacherRepository repo;
     @Autowired
     private UserRepository urepo;
-  @Autowired
-   private  SchoolClassRepository classRepo;
+    @Autowired
+    private  SchoolClassRepository classRepo;
 
 
     // CREATE
@@ -43,37 +45,13 @@ public class TeacherServiceImpl implements TeacherService {
     public String addTeacher(TeacherDto dto) {
 
         try {
-            log.info("Adding new teacher with email: {}", dto.getEmail());
-
-            Teacher teacher = new Teacher();
-            teacher.setEmail(dto.getEmail());
-            teacher.setGender(dto.getGender());
-            teacher.setPhone(dto.getPhone());
-            teacher.setFirstName(dto.getFirstName());
-            teacher.setLastName(dto.getLastName());
-            teacher.setQualification(dto.getQualification());
-            teacher.setDateOfBirth(dto.getDateOfBirth() != null ? dto.getDateOfBirth().toString() : null);
-            teacher.setExperienceYears(dto.getExperienceYears());
-
-            Teacher saved = repo.save(teacher);
-            return "New Teacher Added Successfully with ID: " + saved.getId();
-
-        } catch (Exception e) {
-            log.error("Error while adding teacher: {}", e.getMessage(), e);
-            throw new RuntimeException("Add Teacher Failed: " + e.getMessage());
-        }
-
-        log.info("Adding new teacher with email: {}", dto.getEmail());
-        User user = urepo.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + dto.getEmail()));
-
-        if (repo.existsByEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("A teacher with this email already exists: " + dto.getEmail());
-        }
-        if (repo.existsByPhone(dto.getPhone())) {
-            throw new IllegalArgumentException("A teacher with this phone number already exists: " + dto.getPhone());
-        }
-        Teacher teacher = new Teacher();
+            if (repo.existsByEmail(dto.getEmail())) {
+                throw new IllegalArgumentException("A teacher with this email already exists: " + dto.getEmail());
+            }
+            if (repo.existsByPhone(dto.getPhone())) {
+                throw new IllegalArgumentException("A teacher with this phone number already exists: " + dto.getPhone());
+            }
+             Teacher teacher = new Teacher();
         teacher.setEmail(dto.getEmail());
         teacher.setGender(dto.getGender());
         teacher.setPhone(dto.getPhone());
@@ -82,12 +60,18 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setQualification(dto.getQualification());
         teacher.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));
         teacher.setExperienceYears(dto.getExperienceYears());
+            User user = urepo.findByEmail(dto.getEmail())
+                    .orElseThrow(() -> new RuntimeException("User not found with email: " + dto.getEmail()));
         teacher.setUser(user);
         teacher.setStatus(TeacherStatus.PENDING);
         Teacher savedTeacher = repo.save(teacher);
         log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
         return "Teacher registration submitted. Pending for approval. " + savedTeacher.getId();
 
+        } catch (Exception e) {
+            log.error("Error while adding teacher: {}", e.getMessage(), e);
+            throw new RuntimeException("Add Teacher Failed: " + e.getMessage());
+        }
     }
 
     // READ (Entity)
@@ -299,4 +283,6 @@ public class TeacherServiceImpl implements TeacherService {
             throw new RuntimeException("Fetch Teachers Failed: " + e.getMessage());
         }
     }
+
+
 }
