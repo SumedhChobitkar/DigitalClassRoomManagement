@@ -37,7 +37,7 @@ public class UserServiceimpl implements UserService {
     @Override
     public UserDto registeration(User user1) {
         try {
-            validation(user1);
+//            validation(user1);
 
             Optional<User> existingUser = userRepository.findByEmail(user1.getEmail());
             if (existingUser.isPresent()) {

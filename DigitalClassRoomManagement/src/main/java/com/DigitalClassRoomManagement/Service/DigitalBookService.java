@@ -1,6 +1,6 @@
 package com.DigitalClassRoomManagement.Service;
 
-import com.DigitalClassRoomManagement.dto.DigitalBookDTO;
+import com.DigitalClassRoomManagement.Dto.DigitalBookDTO;
 import com.DigitalClassRoomManagement.Entity.DigitalBook;
 
 import java.util.List;
