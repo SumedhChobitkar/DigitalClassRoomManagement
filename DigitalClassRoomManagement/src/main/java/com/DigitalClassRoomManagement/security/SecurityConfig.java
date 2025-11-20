@@ -61,7 +61,20 @@ public class SecurityConfig {
 
                                 "/api/teacher/update",
 
-                                "/api/teacher/delete"
+                                "/api/teacher/delete",
+
+
+                                //Assignment
+                                        "/api/assignments/create",
+                                        "/api/assignments/updateAssignmentById/{id}",
+                                        "/api/assignments/getAllAssignments",
+                                        "/api/assignments/getAssignmentById/{id}",
+                                        "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
+                                        "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                        "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}}"
+
+
                         ).permitAll()
 
 
