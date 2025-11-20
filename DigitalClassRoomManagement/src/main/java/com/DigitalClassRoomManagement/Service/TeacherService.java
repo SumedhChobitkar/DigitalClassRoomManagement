@@ -38,4 +38,6 @@ public interface TeacherService {
      * Controller (SchoolClassController#getTeachersOfClass) expects DTOs to serialize safely.
      */
     List<TeacherResponseDto> getTeachersOfClass(Long classId);
+
+
 }

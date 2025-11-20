@@ -44,9 +44,6 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/swagger-config/**"
                                 // allow the custom path too:-
-
-                        ).permitAll()
-                        .requestMatchers(
                           // User
                           "/api/digitalClassroom/login", 
                                          "/api/digitalClassroom/registerUser",
@@ -72,10 +69,23 @@ public class SecurityConfig {
 
                                 "/api/teacher/update",
 
-                                "/api/teacher/delete"
+                                "/api/teacher/delete",
+
+
+                                //Assignment
+                                        "/api/assignments/create",
+                                        "/api/assignments/updateAssignmentById/{id}",
+                                        "/api/assignments/getAllAssignments",
+                                        "/api/assignments/getAssignmentById/{id}",
+                                        "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
+                                        "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                        "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}}"
+
 
                         ).permitAll()
 
+           
 
                                 // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
