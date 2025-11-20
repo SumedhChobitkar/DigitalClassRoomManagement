@@ -35,6 +35,17 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
+                        // Swagger URLs (new custom + default paths)
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/webjars/**",
+                                "/swagger-resources/**",
+                                "/swagger-config/**"
+                                // allow the custom path too:-
+
+                        ).permitAll()
                         .requestMatchers(
                           // User
                           "/api/digitalClassroom/login", 
@@ -62,13 +73,11 @@ public class SecurityConfig {
                                 "/api/teacher/update",
 
                                 "/api/teacher/delete"
+
                         ).permitAll()
 
 
-                        
-                       
-
-                        // Teacher endpoints
+                                // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/teacher/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/teacher/delete/**").hasRole("ADMIN")

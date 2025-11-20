@@ -23,5 +23,8 @@ public class UserDto {
     private Role role;
     private String languagePreference;
 
+
+
+
 }
 
