@@ -24,6 +24,12 @@ public class ValidationClass {
     public static final Pattern FILE_TYPE_PATTERN = Pattern.compile(".*\\.(pdf)$");
     public static final long MAX_FILE_SIZE = 50 * 1024 * 1024;
 
+    // StudyMaterial//
+   // public static final Pattern TITLE_PATTERN = Pattern.compile("^[A-Z][a-zA-Z0-9 ]*$");
+    public static final String[] VALID_TYPES = {"Notes", "Worksheet", "LessonPlan"};
+    public static final Pattern FILE_URL_PATTERN = Pattern.compile(".*\\.(pdf|docx|pptx)$");
+   // public static final long MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
+
 
     //SCHOOL CLASS VALIDATIONS
 
