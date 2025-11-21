@@ -1,6 +1,7 @@
 package com.DigitalClassRoomManagement.Service;
 
 import com.DigitalClassRoomManagement.Dto.*;
+import com.DigitalClassRoomManagement.Entity.AcademicCalendar;
 import com.DigitalClassRoomManagement.Entity.Event;
 import com.DigitalClassRoomManagement.Entity.Holiday;
 
@@ -25,4 +26,27 @@ public interface CalendarService {
     CalendarDto updateAcademicCalender(Long calendarId, UpdateAcademicCalenderRequest request);
     List<CalendarDto> getAcademicCalenders();
     CalendarDto getAcademicCalender(Long calendarId);
+
+    public AcademicCalendar createAdminAcademicCalendar(AcademicCalendar calendar);
+    public List<AcademicCalendar> getAdminAcademicCalendar();
+    public AcademicCalendar getAcademicCalendarById(Long id);
+
+    public List<Holiday> getAdminHoldiay();
+    public Holiday getAdminHolidayById(Long id);
+    public Holiday addAdminHoliday(Holiday holiday);
+    public Holiday updateAdminHoliday(Long id,HolidayDto holiday);
+    public String deleteAdminHoliday(Long id);
+
+    List<Event> getAdminEvent();
+    Event getAdminEventById(Long id);
+    Event addAdminEvent(Event event);
+    Event updateAdminEvent(Long id, EventDto eventDto);
+    String deleteAdminEvent(Long id);
+
+    List<Holiday> viewStudentCalendarHoliday();
+    public List<Event> viewStudentCalendarEvents();
+
+    List<Holiday>  viewTeacherCalendarHoliday();
+    public List<Event> viewTeacherCalendarEvents();
+
 }
