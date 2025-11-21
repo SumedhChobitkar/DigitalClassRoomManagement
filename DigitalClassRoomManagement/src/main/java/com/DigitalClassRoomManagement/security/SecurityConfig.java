@@ -80,7 +80,7 @@ public class SecurityConfig {
                                         "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
                                         "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
                                         "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
-                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}}"
+                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}"
 
 
                         ).permitAll()

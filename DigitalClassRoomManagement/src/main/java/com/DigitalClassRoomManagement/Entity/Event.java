@@ -1,4 +1,5 @@
 package com.DigitalClassRoomManagement.Entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name = "calendar_id")
+    @JsonBackReference(value = "calendar-event")
     private AcademicCalendar calendar;
 }
 
