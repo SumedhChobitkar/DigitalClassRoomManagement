@@ -73,7 +73,7 @@ public class SecurityConfig {
 
 
                                 // Subject Related
-                                "/api/subject/**"
+                                "/api/subject/**",
 
 
                                 "/api/teacher/delete",

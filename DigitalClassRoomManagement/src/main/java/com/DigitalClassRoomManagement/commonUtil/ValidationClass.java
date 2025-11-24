@@ -33,6 +33,24 @@ public class ValidationClass {
     public static final Pattern FILE_URL_PATTERN = Pattern.compile(".*\\.(pdf|docx|pptx)$");
     // public static final long MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
 
+    // Section Related
+    public static final Pattern SECTION_NAME_PATTERN = Pattern.compile("^[A-Za-z][A-Za-z0-9 ]*$");
+    public static final Pattern SCHOOL_CLASS_PATTERN = Pattern.compile("^[A-Za-z0-9]+$");
+    public static final int MIN_CAPACITY = 1;
+    public static final int MAX_CAPACITY = 200;
+    public static final int SECTION_NAME_MAX_LENGTH = 50;
+
+    // Timetable Related
+    public static final Pattern TIMETABLE_CLASS_PATTERN = Pattern.compile("^[A-Za-z0-9 ]{1,20}$");
+    public static final Pattern DAY_OF_WEEK_PATTERN = Pattern.compile("^(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)$");
+    public static final Pattern DATE_PATTERN = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+    // Format: YYYY-MM-DD
+    public static final Pattern TIME_PATTERN = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}$");
+    // Format: YYYY-MM-DDTHH:MM
+    public static final int MIN_PERIOD_MINUTES = 20;      // Minimum lecture duration = 20 minutes
+    public static final int MAX_PERIOD_MINUTES = 180;     // Maximum lecture duration = 3 hours
+    public static final int MAX_TIMETABLE_ENTRIES_PER_DAY = 12;
+
 
     //SCHOOL CLASS VALIDATIONS
 
