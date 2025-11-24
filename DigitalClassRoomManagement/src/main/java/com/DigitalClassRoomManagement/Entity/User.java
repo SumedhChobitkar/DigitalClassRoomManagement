@@ -18,10 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
-
-    @NotBlank(message = "Username is required")
-    @Size(min = 4, max = 50, message = "Username must be between 4 to 50 characters")
-    @Column(unique = true, nullable = false)
+    
     private String userName;
 
     private String firstName;
@@ -36,7 +33,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Status status;//ACTIVE,INACTIVE
+    private Status status;//APPROVED,UNAPPROVED
 
     private LocalDateTime lastLogin;
 

@@ -46,6 +46,14 @@ public class SecurityConfig {
 
                                 // allow the custom path too:-
                           // User
+                          "/api/user/login",
+                                         "/api/user/registerUser",
+                                         "/api/user/getAll",
+                                         "/api/user/getById/{id}",
+                                         "/api/user/forgot-password",
+                                         "/api/user/verify-otp",
+                                         "/api/user/reset-password",
+                                "/api/user/logout/{id}",
                           "/api/digitalClassroom/login",
                                          "/api/digitalClassroom/registerUser",
                                          "/api/digitalClassroom/getAll",
@@ -116,11 +124,25 @@ public class SecurityConfig {
                         ).permitAll()
 
 
+                        //Admin
+                        .requestMatchers("/api/admin/update/status/{id}","/api/admin/get/unapproved/statusrequest","/api/admin/get/approved/statusrequest","api/admin/create").permitAll()
+
+                        //SuperAdmin
+                        .requestMatchers("/api/superAdmin/get/unapproved/statusrequest","/api/superAdmin/get/approved/statusrequest","/api/superAdmin/update/status/{id}").permitAll()
+
+                        // Teacher endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/teacher/addTeacher").hasRole("ADMIN")
 
                                 // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/teacher/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/teacher/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/api/teacher/update/status/{id}").permitAll()
+                        .requestMatchers("/api/teacher/get/unapproved/statusrequest").permitAll()
+                        .requestMatchers("/api/teacher/get/approved/statusrequest").permitAll()
+
+                        //Approved and Unapproved status
+                        .requestMatchers("/api/teacher/get/unapproved/statusrequest","/api/teacher/update/status/{id}","/api/teacher/get/approved/statusrequest").permitAll()
 
                         // Read teacher -> ADMIN or TEACHER
                         .requestMatchers(HttpMethod.GET, "/api/teacher/getAll").hasAnyRole("ADMIN", "TEACHER")

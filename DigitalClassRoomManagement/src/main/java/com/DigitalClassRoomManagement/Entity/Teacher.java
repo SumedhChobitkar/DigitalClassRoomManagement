@@ -30,6 +30,7 @@ public class Teacher {
     private String phone;
     private String qualification;
     private Integer experienceYears;
+    private String adminMailId;
     private String gender;
     private String dateOfBirth;
     @OneToOne(fetch = FetchType.LAZY)

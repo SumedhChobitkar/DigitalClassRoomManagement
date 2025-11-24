@@ -9,8 +9,10 @@ import com.DigitalClassRoomManagement.Exception.ParentNotFoundException;
 import com.DigitalClassRoomManagement.Repository.ParentRepository;
 import com.DigitalClassRoomManagement.Repository.StudentRepository;
 import com.DigitalClassRoomManagement.Repository.UserRepository;
+import com.DigitalClassRoomManagement.Service.EmailSenderService;
 import com.DigitalClassRoomManagement.Service.ParentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -34,6 +36,12 @@ public class ParentServiceImpl implements ParentService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     // Regex validation patterns
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z ]{2,50}$");
@@ -59,6 +67,14 @@ public class ParentServiceImpl implements ParentService {
             parent.setUsers(existingUser);
             parent.setStudent(existingStudent);
 
+            String toEmail =parent.getTeacherMailId() ;
+            String subject = "No Reply";
+
+            String body = "Dear " + "Principal"+ "," + "\n\nI hope this message finds you well. " +
+                    "\nYou have new request from " + parent.getName() + "." +"Please check your Dashboard."+
+                    "\nIf you have any related queries, feel free to reach out to us." + "\n\n"
+                    + "Best Regards," + "\n" + "HR Team." + "\n\n\nThis is an auto-generated mail.";
+            emailSenderService.sendEmail(toEmail,subject,body);
             // ✅ Save the parent
             Parent savedParent = parentRepository.save(parent);
             logger.info("Parent created successfully with ID: " + savedParent.getParentId());
