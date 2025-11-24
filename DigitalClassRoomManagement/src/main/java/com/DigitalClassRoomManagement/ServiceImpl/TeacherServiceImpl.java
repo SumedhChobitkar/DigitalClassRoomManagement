@@ -1,5 +1,4 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
-
 import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
@@ -50,7 +49,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     // CREATE
     @Override
+
     @Transactional
+
     public String addTeacher(TeacherDto dto) {
 
         try {
@@ -92,6 +93,8 @@ public class TeacherServiceImpl implements TeacherService {
             throw new RuntimeException("Add Teacher Failed: " + e.getMessage());
         }
     }
+
+
 
     // READ (Entity)
     @Override
@@ -362,3 +365,4 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
 }
+

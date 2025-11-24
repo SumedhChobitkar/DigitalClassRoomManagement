@@ -2,6 +2,8 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Service.CalendarService;
 import com.DigitalClassRoomManagement.Dto.*;
 import com.DigitalClassRoomManagement.Entity.*;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +37,14 @@ public class CalendarServiceImpl implements CalendarService {
 
     @Override
     public HolidayDto addHoliday(Long calendarId, Holiday holiday) {
-        AcademicCalendar calendar = calendarRepo.findById(calendarId).orElseThrow();
-        holiday.setCalendar(calendar);
-        holidayRepo.save(holiday);
-        return mapHolidayToDto(holiday);
+        try {
+            AcademicCalendar calendar = calendarRepo.findById(calendarId).orElseThrow();
+            holiday.setCalendar(calendar);
+            holidayRepo.save(holiday);
+            return mapHolidayToDto(holiday);
+        }catch(RuntimeException e){
+            throw new RuntimeException("Something went wrong");
+        }
     }
 
     @Override
@@ -150,5 +157,149 @@ public class CalendarServiceImpl implements CalendarService {
                 .holidayDate(h.getHolidayDate())
                 .description(h.getDescription())
                 .build();
+    }
+
+    @Override
+    public AcademicCalendar createAdminAcademicCalendar(AcademicCalendar calendar){
+        try {
+            if (calendar.getHolidays() != null) {
+                for (Holiday h : calendar.getHolidays()) {
+                    h.setCalendar(calendar);
+                }
+            }
+            if (calendar.getEvents() != null) {
+                for (Event e : calendar.getEvents()) {
+                    e.setCalendar(calendar);
+                }
+            }
+            return calendarRepo.save(calendar);
+        }catch(RuntimeException e){
+            throw new RuntimeException("Something went wrong");
+        }
+    }
+
+    @Override
+    public List<AcademicCalendar> getAdminAcademicCalendar(){
+        return calendarRepo.findAll();
+    }
+
+    @Override
+    public AcademicCalendar getAcademicCalendarById(Long id) {
+        Optional<AcademicCalendar> a1 = calendarRepo.findById(id);
+        if (a1.isPresent()) {
+            return a1.get();
+        }
+        throw new ResourceNotFoundException("Cannot find the calendar with the given ID");
+    }
+
+    @Override
+    public List<Holiday> getAdminHoldiay(){
+        return holidayRepo.findAll();
+    }
+
+    @Override
+    public Holiday getAdminHolidayById(Long id) throws ResourceNotFoundException {
+        Optional<Holiday> holiday1=holidayRepo.findById(id);
+        if(holiday1.isPresent()){
+            return holiday1.get();
+        }
+        throw new ResourceNotFoundException("Cannot find the holiday with the given ID");
+    }
+
+    @Override
+    public Holiday addAdminHoliday(Holiday holiday){
+      try{
+          return holidayRepo.save(holiday);
+      }catch(RuntimeException e){
+            throw new RuntimeException("Something went wrong");
+        }
+    }
+
+    @Override
+    public Holiday updateAdminHoliday(Long id,HolidayDto holiday) throws ResourceNotFoundException{
+        Optional<Holiday> holiday1=holidayRepo.findById(id);
+        if(holiday1.isPresent()){
+            Holiday h1=holiday1.get();
+            h1.setDescription(holiday.getDescription());
+            h1.setHolidayDate(holiday.getHolidayDate());
+            h1.setHolidayName(holiday.getHolidayName());
+            holidayRepo.save(h1);
+            return h1;
+        }
+        throw new ResourceNotFoundException("Cannot find the holiday with the given ID");
+    }
+
+    @Override
+    public String deleteAdminHoliday(Long id) throws ResourceNotFoundException {
+        Optional<Holiday> holiday1=holidayRepo.findById(id);
+        if(holiday1.isPresent()) {
+            com.DigitalClassRoomManagement.Entity.AcademicCalendar ac = holiday1.get().getCalendar();
+            calendarRepo.deleteById(ac.getId());
+            holidayRepo.deleteById(id);
+            return "Holiday Deleted SuccessFully";
+        }
+        throw new ResourceNotFoundException("Cannot find the holiday with the given ID");
+    }
+
+    @Override
+    public List<Event> getAdminEvent() {
+        return eventRepo.findAll();
+    }
+
+    @Override
+    public Event getAdminEventById(Long id) throws ResourceNotFoundException {
+        return eventRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find the event with the given ID"));
+    }
+
+    @Override
+    public Event addAdminEvent(Event event) {
+        try {
+            return eventRepo.save(event);
+        }catch(RuntimeException e){
+            throw new RuntimeException("Something went wrong");
+        }
+    }
+
+    @Override
+    public Event updateAdminEvent(Long id, EventDto eventDto) throws ResourceNotFoundException {
+        Event existing = eventRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find the event with the given ID"));
+
+        existing.setEventName(eventDto.getEventName());
+        existing.setDescription(eventDto.getDescription());
+        existing.setEventDate(eventDto.getEventDate());
+
+        return eventRepo.save(existing);
+    }
+
+    @Override
+    public String deleteAdminEvent(Long id) throws ResourceNotFoundException {
+        Event event = eventRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find the event with the given ID"));
+
+        eventRepo.delete(event);
+
+
+        return "Event deleted successfully";
+    }
+
+    @Override
+    public  List<Holiday> viewStudentCalendarHoliday(){
+        return holidayRepo.findAll();
+    }
+
+    @Override
+    public List<Event> viewStudentCalendarEvents(){
+        return eventRepo.findAll();
+    }
+    @Override
+    public  List<Holiday> viewTeacherCalendarHoliday(){
+        return holidayRepo.findAll();
+    }
+
+    @Override
+    public List<Event> viewTeacherCalendarEvents(){
+        return eventRepo.findAll();
     }
 }

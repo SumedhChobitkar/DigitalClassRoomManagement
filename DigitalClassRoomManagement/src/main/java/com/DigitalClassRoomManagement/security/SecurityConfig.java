@@ -35,7 +35,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
+                        // Swagger URLs (new custom + default paths)
                         .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/webjars/**",
+                                "/swagger-resources/**",
+                                "/swagger-config/**",
+
+                                // allow the custom path too:-
                           // User
                           "/api/user/login",
                                          "/api/user/registerUser",
@@ -45,6 +54,13 @@ public class SecurityConfig {
                                          "/api/user/verify-otp",
                                          "/api/user/reset-password",
                                 "/api/user/logout/{id}",
+                          "/api/digitalClassroom/login",
+                                         "/api/digitalClassroom/registerUser",
+                                         "/api/digitalClassroom/getAll",
+                                         "/api/digitalClassroom/getById/{id}",
+                                         "/api/digitalClassroom/forgot-password",
+                                         "/api/digitalClassroom/verify-otp",
+                                         "/api/digitalClassroom/reset-password",
                                 //Exam
                                 "/api/exam/saveExam",
                                 "/api/exam/UpdateByExamId/{examId}",
@@ -54,13 +70,57 @@ public class SecurityConfig {
                                 "/api/exam/DeleteByExamId/{id}",
                                 // Teacher
 
+                                "/api/teacher/add",
                                 "/api/teacher/getAll",
-
                                 "/api/teacher/getById",
-
                                 "/api/teacher/update",
+                                "/api/teacher/delete",
 
-                                "/api/teacher/delete"
+                                // Student Related
+                                "/api/students/saveStudent",
+
+
+                                // Subject Related
+                                "/api/subject/**",
+
+
+                                "/api/teacher/delete",
+
+
+                                //Assignment
+                                        "/api/assignments/create",
+                                        "/api/assignments/updateAssignmentById/{id}",
+                                        "/api/assignments/getAllAssignments",
+                                        "/api/assignments/getAssignmentById/{id}",
+                                        "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
+                                        "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                        "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}",
+
+                                // Homework
+                                "/api/homeworks/saveHomework",
+                                "/api/homeworks/getHomeworkById/{id}",
+                                "/api/homeworks/getAllHomework",
+                                "/api/homeworks/updateHomeworkById/{id}",
+                                "/api/homeworks/deleteHomeworkById/{id}",
+
+                                // AuditLog
+                                "/api/auditlogs/saveAuditlog",
+                                "/api/auditlogs/getAuditlogById/{id}",
+                                "/api/auditlogs/getAllAuditlogs",
+                                "/api/auditlogs/updateAuditlogById/{id}",
+                                "/api/auditlogs/deleteAuditlogById/{id}",
+
+
+                                //LibraryMember
+                                  "/api/Librarymembers/saveLibraryMember",
+                                "/api/Librarymembers/getByIdLibraryMember/{id}",
+                                  "/api/Librarymembers/getAllLibraryMembers",
+                                "/api/Librarymembers/updateLibraryMemberById/{id}",
+                                "/api/Librarymembers/deleteLibraryMemberyById/{id}"
+
+
+
                         ).permitAll()
 
 
@@ -72,6 +132,9 @@ public class SecurityConfig {
 
                         // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/addTeacher").hasRole("ADMIN")
+
+                                // Teacher endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/teacher/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/teacher/delete/**").hasRole("ADMIN")
                         .requestMatchers("/api/teacher/update/status/{id}").permitAll()
@@ -107,6 +170,26 @@ public class SecurityConfig {
 
                         // All other requests require authentication
 
+                        // HOMEWORK MANAGEMENT
+                        .requestMatchers(HttpMethod.POST, "/api/homeworks/saveHomework").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/homeworks/updateHomeworkById/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/homeworks/deleteHomeworkById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/homeworks/getHomeworkById/**").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/homeworks/getAllHomework").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+
+                        // AuditLog endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/auditlogs/saveAuditlog").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/auditlogs/updateAuditlogById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/auditlogs/deleteAuditlogById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/auditlogs/getAuditlogById/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/auditlogs/getAllAuditlogs").hasAnyRole("ADMIN", "TEACHER")
+
+                        // LibraryMember endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/Librarymembers/saveLibraryMember").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/Librarymembers/updateLibraryMemberById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/Librarymembers/deleteLibraryMemberById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getByIdLibraryMember/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getAllLibraryMembers").hasAnyRole("ADMIN", "TEACHER")
 
                         .anyRequest().authenticated()
                 )

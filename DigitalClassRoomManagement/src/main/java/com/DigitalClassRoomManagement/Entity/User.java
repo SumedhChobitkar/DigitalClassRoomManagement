@@ -16,7 +16,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Long userId;
     
     private String userName;
@@ -24,6 +24,12 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    private Role role; // ADMIN, PRINCIPAL, TEACHER, STUDENT, PARENT
+    private String languagePreference;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Teacher teacher;
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -39,7 +45,4 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @Enumerated(EnumType.STRING)
-    private Role role; // ADMIN, PRINCIPAL, TEACHER, STUDENT, PARENT
-    private String languagePreference;
 }
