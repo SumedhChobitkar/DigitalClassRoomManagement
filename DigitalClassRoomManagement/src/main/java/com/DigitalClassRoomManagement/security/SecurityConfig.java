@@ -42,7 +42,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/webjars/**",
                                 "/swagger-resources/**",
-                                "/swagger-config/**"
+                                "/swagger-config/**",
                                 // allow the custom path too:-
                           // User
                           "/api/digitalClassroom/login", 
@@ -72,7 +72,7 @@ public class SecurityConfig {
 
 
                                 // Subject Related
-                                "/api/subject/**"
+                                "/api/subject/**",
 
 
                                 "/api/teacher/delete",
