@@ -14,4 +14,6 @@ public interface UserService {
     String forgotPassword(String email);
     boolean verifyOtp(String email, String otp);
     String resetPassword(String email, String newPassword, String confirmPassword);
+    String logout(Long userId);
+
 }

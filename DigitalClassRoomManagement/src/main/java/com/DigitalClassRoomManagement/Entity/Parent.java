@@ -38,6 +38,8 @@ public class Parent {
 
     private String address;
 
+    private String teacherMailId;
+
     @OneToOne
     @JoinColumn(name = "student_id", referencedColumnName = "studentRegId")
     private Student student;

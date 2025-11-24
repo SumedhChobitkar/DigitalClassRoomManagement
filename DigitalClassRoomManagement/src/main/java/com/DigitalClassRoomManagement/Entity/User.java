@@ -18,7 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Long userId;
-
+    
     private String userName;
 
     private String firstName;
@@ -27,7 +27,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Status status;//ACTIVE,INACTIVE
+    private Status status;//APPROVED,UNAPPROVED
 
     private LocalDateTime lastLogin;
 

@@ -2,8 +2,10 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Entity.Student;
 import com.DigitalClassRoomManagement.Repository.StudentRepository;
+import com.DigitalClassRoomManagement.Service.EmailSenderService;
 import com.DigitalClassRoomManagement.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -24,13 +26,29 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
     // ✅ Save a new student
     @Override
     public Student saveStudent(Student student) {
         try {
             validateStudent(student);
             logger.info("Saving new student with Roll No: " + student.getRollNumber());
+
+            String toEmail =student.getTeacherMailId() ;
+            String subject = "No Reply";
+
+            String body = "Dear " + "Principal"+ "," + "\n\nI hope this message finds you well. " +
+                    "\nYou have new request from " + student.getFirstName() + "." +"Please check your Dashboard."+
+                    "\nIf you have any related queries, feel free to reach out to us." + "\n\n"
+                    + "Best Regards," + "\n" + "HR Team." + "\n\n\nThis is an auto-generated mail.";
+            emailSenderService.sendEmail(toEmail,subject,body);
             return studentRepository.save(student);
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error saving student: " + e.getMessage(), e);
             throw new RuntimeException("Failed to save student. Please check input data: " + e.getMessage());

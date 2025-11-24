@@ -5,6 +5,8 @@ import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
 import com.DigitalClassRoomManagement.Entity.SchoolClass;
 import com.DigitalClassRoomManagement.Entity.Teacher;
+import com.DigitalClassRoomManagement.Enum.Role;
+import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Exception.SchoolClassNotFoundException;
 
 import com.DigitalClassRoomManagement.Entity.User;
@@ -14,11 +16,13 @@ import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
 import com.DigitalClassRoomManagement.Repository.SchoolClassRepository;
 import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Repository.UserRepository;
+import com.DigitalClassRoomManagement.Service.EmailSenderService;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
@@ -38,6 +42,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private  SchoolClassRepository classRepo;
 
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     // CREATE
     @Override
@@ -64,7 +73,17 @@ public class TeacherServiceImpl implements TeacherService {
                     .orElseThrow(() -> new RuntimeException("User not found with email: " + dto.getEmail()));
         teacher.setUser(user);
         teacher.setStatus(TeacherStatus.PENDING);
+
+            String toEmail =dto.getAdminMailId() ;
+            String subject = "No Reply";
+
+            String body = "Dear " + "Principal"+ "," + "\n\nI hope this message finds you well. " +
+                    "\nYou have new request from " + dto.getFirstName() + "." +"Please check your Dashboard."+
+                    "\nIf you have any related queries, feel free to reach out to us." + "\n\n"
+                    + "Best Regards," + "\n" + "HR Team." + "\n\n\nThis is an auto-generated mail.";
+
         Teacher savedTeacher = repo.save(teacher);
+            emailSenderService.sendEmail(toEmail,subject,body);
         log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
         return "Teacher registration submitted. Pending for approval. " + savedTeacher.getId();
 
@@ -284,5 +303,62 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
 
+
+    @Override
+    public List<User> getUnapprovedStatusRequest( )
+    {
+        try
+        {
+            List<User> ad = urepo.findAll();
+            List<User> unapprovedStudent = ad.stream()
+                    .filter(a -> a.getStatus() == Status.UNAPPROVED  && a.getRole()== Role.STUDENT || a.getRole()==Role.PARENT )
+                    .toList();
+
+            return unapprovedStudent;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+
+    @Override
+    public List<User> getapprovedStatusRequest( )
+    {
+        try
+        {
+            List<User> ad = urepo.findAll();
+            List<User> approvedStudent = ad.stream()
+                    .filter(a -> a.getStatus() == Status.APPROVED  && a.getRole()== Role.STUDENT || a.getRole()==Role.PARENT)
+                    .toList();
+            return approvedStudent;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+    @Override
+    public User updateStatus(Long id, Status status)
+    {
+        try
+        {
+            Optional<User> u=urepo.findById(id);
+            if(u.isPresent())
+            {
+                User u1=u.get();
+                if(u1.getStatus()==status)
+                {
+                    throw new RuntimeException("Already Done");
+                }else {
+                    u1.setStatus(status);
+                    return urepo.save(u1);
+                }
+            }
+            throw new RuntimeException("UserNotFoud");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

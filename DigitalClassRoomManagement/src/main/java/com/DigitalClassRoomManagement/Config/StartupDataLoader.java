@@ -2,6 +2,7 @@ package com.DigitalClassRoomManagement.Config;
 
 import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.Role;
+import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ public class StartupDataLoader {
             admin.setFirstName("System Admin");
             admin.setLastName("Admin LastName");
             admin.setEmail(email);
+            admin.setStatus(Status.APPROVED);
             admin.setPassword(passwordEncoder.encode("Admin@123"));
             admin.setRole(Role.ADMIN); // Available roles: ADMIN, TEACHER, STUDENT, PARENT
             admin.setLanguagePreference("ENGLISH");
