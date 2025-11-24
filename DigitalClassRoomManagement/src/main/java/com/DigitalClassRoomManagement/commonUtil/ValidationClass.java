@@ -54,8 +54,8 @@ public class ValidationClass {
      * Optional (for future use if you re-enable Section entity)
      * Example valid: "A", "Section B", "Blue House"
      */
-    public static final Pattern SECTION_NAME_PATTERN =
-            Pattern.compile("^[A-Za-z0-9 ]{1,20}$");
+    //public static final Pattern SECTION_NAME_PATTERN =
+     //       Pattern.compile("^[A-Za-z0-9 ]{1,20}$");
 
     /**
      * TEACHER_ASSIGN_ROLE_PATTERN
