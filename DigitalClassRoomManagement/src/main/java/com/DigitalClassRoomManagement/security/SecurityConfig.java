@@ -43,9 +43,10 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/swagger-resources/**",
                                 "/swagger-config/**",
+
                                 // allow the custom path too:-
                           // User
-                          "/api/digitalClassroom/login", 
+                          "/api/digitalClassroom/login",
                                          "/api/digitalClassroom/registerUser",
                                          "/api/digitalClassroom/getAll",
                                          "/api/digitalClassroom/getById/{id}",
@@ -86,12 +87,35 @@ public class SecurityConfig {
                                         "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
                                         "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
                                         "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
-                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}"
+                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}",
+
+                                // Homework
+                                "/api/homeworks/saveHomework",
+                                "/api/homeworks/getHomeworkById/{id}",
+                                "/api/homeworks/getAllHomework",
+                                "/api/homeworks/updateHomeworkById/{id}",
+                                "/api/homeworks/deleteHomeworkById/{id}",
+
+                                // AuditLog
+                                "/api/auditlogs/saveAuditlog",
+                                "/api/auditlogs/getAuditlogById/{id}",
+                                "/api/auditlogs/getAllAuditlogs",
+                                "/api/auditlogs/updateAuditlogById/{id}",
+                                "/api/auditlogs/deleteAuditlogById/{id}",
+
+
+                                //LibraryMember
+                                  "/api/Librarymembers/saveLibraryMember",
+                                "/api/Librarymembers/getByIdLibraryMember/{id}",
+                                  "/api/Librarymembers/getAllLibraryMembers",
+                                "/api/Librarymembers/updateLibraryMemberById/{id}",
+                                "/api/Librarymembers/deleteLibraryMemberyById/{id}"
+
 
 
                         ).permitAll()
 
-           
+
 
                                 // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
@@ -124,6 +148,26 @@ public class SecurityConfig {
 
                         // All other requests require authentication
 
+                        // HOMEWORK MANAGEMENT
+                        .requestMatchers(HttpMethod.POST, "/api/homeworks/saveHomework").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/homeworks/updateHomeworkById/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/homeworks/deleteHomeworkById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/homeworks/getHomeworkById/**").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/homeworks/getAllHomework").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+
+                        // AuditLog endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/auditlogs/saveAuditlog").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/auditlogs/updateAuditlogById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/auditlogs/deleteAuditlogById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/auditlogs/getAuditlogById/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/auditlogs/getAllAuditlogs").hasAnyRole("ADMIN", "TEACHER")
+
+                        // LibraryMember endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/Librarymembers/saveLibraryMember").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/Librarymembers/updateLibraryMemberById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/Librarymembers/deleteLibraryMemberById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getByIdLibraryMember/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getAllLibraryMembers").hasAnyRole("ADMIN", "TEACHER")
 
                         .anyRequest().authenticated()
                 )
