@@ -35,7 +35,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
+                        // Swagger URLs (new custom + default paths)
                         .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/webjars/**",
+                                "/swagger-resources/**",
+                                "/swagger-config/**"
+                                // allow the custom path too:-
                           // User
                           "/api/digitalClassroom/login", 
                                          "/api/digitalClassroom/registerUser",
@@ -67,38 +75,25 @@ public class SecurityConfig {
                                 "/api/subject/**"
 
 
+                                "/api/teacher/delete",
+
+
+                                //Assignment
+                                        "/api/assignments/create",
+                                        "/api/assignments/updateAssignmentById/{id}",
+                                        "/api/assignments/getAllAssignments",
+                                        "/api/assignments/getAssignmentById/{id}",
+                                        "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
+                                        "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                        "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}"
+
+
                         ).permitAll()
 
+           
 
-
-
-                        //Section Related
-                        .requestMatchers(HttpMethod.POST, "/api/sections/AddSection").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/sections/getAllSections").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.GET, "/api/sections/getSectionById/{id}").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.PUT, "/api/sections/update/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/sections/by-teacher/{teacherId}").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/sections/delete/{id}").hasRole("ADMIN")
-
-                        //Timetable Related
-                        .requestMatchers(HttpMethod.POST, "/api/timetable/createTimetable").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/timetable/get/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/timetable/getAll").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/timetable/update/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/timetable/delete/{id}").hasRole("ADMIN")
-
-                        //TeacherTimetable Related
-                        .requestMatchers(HttpMethod.GET, "/api/teacherTimetable/{teacherId}/timetable").hasRole("TEACHER")
-                        .requestMatchers(HttpMethod.GET,"/api/teacherTimetable/{teacherId}/sections").hasRole("TEACHER")
-
-                        //StudentTimetable Related
-                        .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/timetable").hasRole("STUDENT")
-                        .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/section").hasRole("STUDENT")
-
-
-                        //Teacher Related
-                        .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
-                        // Teacher endpoints
+                                // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/teacher/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/teacher/delete/**").hasRole("ADMIN")
