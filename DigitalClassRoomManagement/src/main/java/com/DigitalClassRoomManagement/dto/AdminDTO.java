@@ -1,57 +1,35 @@
 package com.DigitalClassRoomManagement.Dto;
 
 
-import com.DigitalClassRoomManagement.Enum.AdminRole;
+import com.DigitalClassRoomManagement.Enum.Role;
 import com.DigitalClassRoomManagement.Enum.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class AdminDTO {
+    @Id
     private Long adminId;
+
+    private String firstName;
+
     private String password;
+    private String lastName;
+    private String email;
+    private String phone;
+    private String qualification;
+    private Integer experienceYears;
+
+    private String gender;
+    private String dateOfBirth;
+
     @Enumerated(EnumType.STRING)
-    private AdminRole role;
+    private Role role;
+
     @Enumerated(EnumType.STRING)
     private Status status;
-    private String username;
-
-    public Long getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(Long adminId) {
-        this.adminId = adminId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public AdminRole getRole() {
-        return role;
-    }
-
-    public void setRole(AdminRole role) {
-        this.role = role;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 }
