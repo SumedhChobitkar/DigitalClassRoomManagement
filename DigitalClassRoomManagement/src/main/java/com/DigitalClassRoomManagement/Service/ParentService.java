@@ -12,4 +12,5 @@ public interface ParentService {
     List<Parent> getAllParents();
     Parent updateParent(Long id, Parent parent);
     void deleteParent(Long id);
+    String linkParentToStudent(Long parentId, Long studentId, String relationship);
 }

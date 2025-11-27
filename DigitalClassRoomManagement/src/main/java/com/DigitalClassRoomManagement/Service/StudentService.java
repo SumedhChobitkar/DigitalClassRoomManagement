@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Service;
 
+import com.DigitalClassRoomManagement.Dto.StudentDTO;
 import com.DigitalClassRoomManagement.Entity.Student;
 
 import java.util.List;
@@ -18,5 +19,12 @@ import java.util.Optional;
 
         void deleteStudent(Long id);
 
+        List<Student> getStudentsByClass(String className);
 
-}
+       // StudentDTO.EnrollmentRequest.StudentCreateResponse enrollStudent(Long studentId, StudentDTO.EnrollmentRequest request);
+       StudentDTO.StudentCreateResponse enrollStudent(Long studentId, StudentDTO.EnrollmentRequest request);
+
+
+
+
+    }
