@@ -103,7 +103,7 @@ public class AssignmentController {
 
 
     // GET ASSIGNMENTS BY TEACHER ID
-    @GetMapping("/getAssignmentsByTeacherId/{teacherId}")
+    @GetMapping("/getAllAssignmentsByTeacherId/{teacherId}")
     public ResponseEntity<?> getAssignmentsByTeacherId(@PathVariable Long teacherId) {
 
         log.info("API - Get Assignments by Teacher ID: {}", teacherId);
@@ -120,7 +120,7 @@ public class AssignmentController {
     }
 
     // GET ASSIGNMENT BY ID + TEACHER ID
-    @GetMapping("/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}")
+    @GetMapping("/getAssignmentsByIdAndTeacherId/{id}")
     public ResponseEntity<?> getAssignmentByIdAndTeacherId(
             @PathVariable Long assignmentId,
             @PathVariable Long teacherId) {
@@ -139,7 +139,7 @@ public class AssignmentController {
     }
 
     // DELETE ASSIGNMENT BY ID + TEACHER ID
-    @DeleteMapping("/deleteAssignmentsByAssignmentIdAndTeacherId/{assignmentId}/{teacherId}")
+    @DeleteMapping("/deleteAssignmentByIdAndTeacherId/{Id}")
     public ResponseEntity<?> deleteAssignmentByIdAndTeacherId(
             @PathVariable Long assignmentId,
             @PathVariable Long teacherId) {
@@ -159,7 +159,7 @@ public class AssignmentController {
     }
 
     // -------------------- GET FILE BY ASSIGNMENT ID -------------------------
-    @GetMapping("/getAssignmentsFileByAssignmentId/{assignmentId}")
+    @GetMapping("/getAssignmentsFileByAssignmentId/{Id}")
     public ResponseEntity<?> getFileByAssignmentId(@PathVariable Long assignmentId) {
 
         log.info("API - Download file for assignment ID: {}", assignmentId);

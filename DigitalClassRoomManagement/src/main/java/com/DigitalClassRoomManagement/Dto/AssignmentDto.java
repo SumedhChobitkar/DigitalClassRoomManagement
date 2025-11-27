@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.time.LocalDateTime;
@@ -26,6 +27,10 @@ public class AssignmentDto {
 //    private String fileName;     //  "assignment1.pdf"
 //    private String fileType;     //  "application/pdf"
     private String fileData;     //  "uploaded"
+
+
+    // file upload with @ModelAttribute
+    private MultipartFile file;
 
     @NotNull(message = "Due date cannot be null")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
