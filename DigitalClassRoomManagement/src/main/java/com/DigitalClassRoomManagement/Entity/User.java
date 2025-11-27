@@ -2,6 +2,7 @@ package com.DigitalClassRoomManagement.Entity;
 
 import com.DigitalClassRoomManagement.Enum.Role;
 import com.DigitalClassRoomManagement.Enum.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -44,5 +45,10 @@ public class User {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private Parent parent;
+
 
 }

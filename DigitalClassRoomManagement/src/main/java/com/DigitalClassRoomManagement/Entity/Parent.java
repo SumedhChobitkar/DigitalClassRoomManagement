@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Entity;
 
+import com.DigitalClassRoomManagement.Enum.Relationship;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -23,10 +24,14 @@ public class Parent {
     private Long parentId;
 
     // One-to-One relationship with User entity
-    @OneToOne
+   /* @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     @JsonManagedReference(value = "user-parent")
-    private User users;
+    private User users;*/
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(nullable = false)
     private String name;

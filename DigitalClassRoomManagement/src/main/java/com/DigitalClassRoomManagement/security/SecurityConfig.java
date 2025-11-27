@@ -97,6 +97,7 @@ public class SecurityConfig {
                                         "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
                                         "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}",
 
+
                                 // Homework
                                 "/api/homeworks/saveHomework",
                                 "/api/homeworks/getHomeworkById/{id}",
@@ -117,7 +118,13 @@ public class SecurityConfig {
                                 "/api/Librarymembers/getByIdLibraryMember/{id}",
                                   "/api/Librarymembers/getAllLibraryMembers",
                                 "/api/Librarymembers/updateLibraryMemberById/{id}",
-                                "/api/Librarymembers/deleteLibraryMemberyById/{id}"
+                                "/api/Librarymembers/deleteLibraryMemberyById/{id}",
+
+                                //Student
+                                "/api/students/**",
+
+                                //parent
+                                "/api/parents/**"
 
 
 
