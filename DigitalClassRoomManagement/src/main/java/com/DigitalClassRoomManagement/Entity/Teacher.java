@@ -102,4 +102,7 @@ public class Teacher {
     @JsonIgnore
     private List<SchoolClass> assignedClass = new ArrayList<>();
 
+
+
+
 }

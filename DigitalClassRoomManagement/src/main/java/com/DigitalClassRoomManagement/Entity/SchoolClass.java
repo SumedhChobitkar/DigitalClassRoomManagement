@@ -45,7 +45,7 @@ public class SchoolClass {
     private List<Section> sections = new ArrayList<>();
 
     // Reverse mapping
-    @ManyToMany(mappedBy = "assignedClass", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "assignedClass", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Teacher> teachers = new ArrayList<>();
 

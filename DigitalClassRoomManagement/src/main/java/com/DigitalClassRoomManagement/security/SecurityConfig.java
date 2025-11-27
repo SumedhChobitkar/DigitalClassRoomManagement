@@ -71,10 +71,11 @@ public class SecurityConfig {
                                 // Teacher
 
                                 "/api/teacher/add",
-                                "/api/teacher/getAll",
-                                "/api/teacher/getById",
-                                "/api/teacher/update",
-                                "/api/teacher/delete",
+                                "/api/teacher/getAllTeachers",
+                                "/api/teacher/getTeacherById/{id}",
+                                "/api/teacher/updateTeacherById/{id}",
+                                "/api/teacher/deleteTeacherById/{id}",
+
 
                                 // Student Related
                                 "/api/students/saveStudent",
