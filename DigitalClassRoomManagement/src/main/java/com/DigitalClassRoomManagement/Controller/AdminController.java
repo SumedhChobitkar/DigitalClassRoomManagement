@@ -2,6 +2,8 @@ package com.DigitalClassRoomManagement.Controller;
 
 import com.DigitalClassRoomManagement.Entity.Admin;
 import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
+import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Service.AdminService;
 import com.DigitalClassRoomManagement.Dto.AdminDTO;
 import jakarta.validation.Valid;
@@ -57,6 +59,40 @@ public class AdminController {
        }
         catch(ResourceNotFoundException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get/unapproved/statusrequest")
+    public ResponseEntity<List<?>>getUnapprovedStatusRequest()
+    {
+        try
+        {
+            return ResponseEntity.ok(adminService.getUnapprovedStatusRequest());
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @GetMapping("/get/approved/statusrequest")
+    public ResponseEntity<List<?>>getapprovedStatusRequest()
+    {
+        try
+        {
+            return ResponseEntity.ok(adminService.getapprovedStatusRequest());
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @PutMapping("/update/status/{id}")
+    public ResponseEntity<?> updateStatus(@PathVariable Long id,@RequestParam Status status)
+    {
+        try
+        {
+            User ad=adminService.updateStatus(id,status);
+            return ResponseEntity.status(HttpStatus.OK).body("Status Changed");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not Changed");
         }
     }
 }

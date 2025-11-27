@@ -59,6 +59,7 @@ public class Student {
 
     private String lastName;
 
+    private String teacherMailId;
     //  Email
     //@Column(nullable = false, unique = true)
     //@NotBlank(message = "Email is required")

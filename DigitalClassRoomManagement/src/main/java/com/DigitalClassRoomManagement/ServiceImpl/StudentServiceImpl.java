@@ -1,11 +1,12 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
+import com.DigitalClassRoomManagement.Dto.StudentDTO;
 import com.DigitalClassRoomManagement.Entity.Student;
+import com.DigitalClassRoomManagement.Exception.StudentNotFoundException;
 import com.DigitalClassRoomManagement.Repository.StudentRepository;
 import com.DigitalClassRoomManagement.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +14,10 @@ import java.util.regex.Pattern;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 import static com.DigitalClassRoomManagement.commonUtil.ValidationClass.*;
 
-@CrossOrigin(origins = "*")
+
 @Service
 public class StudentServiceImpl implements StudentService {
 
@@ -24,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    // ✅ Save a new student
+    // Save a new student
     @Override
     public Student saveStudent(Student student) {
         try {
@@ -37,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    // ✅ Get all students
+    // Get all students
     @Override
     public List<Student> getAllStudents() {
         try {
@@ -51,7 +53,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    // ✅ Get student by ID
+    // Get student by ID
     @Override
     public Optional<Student> getStudentById(Long id) {
         try {
@@ -59,11 +61,11 @@ public class StudentServiceImpl implements StudentService {
             return studentRepository.findById(id);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error fetching student: " + e.getMessage(), e);
-            throw new RuntimeException("Unable to retrieve student with ID: " + id);
+            throw new StudentNotFoundException("Unable to retrieve student with ID: " + id);
         }
     }
 
-    // ✅ Update student details
+    // Update student details
     @Override
     public Student updateStudent(Long id, Student updatedStudent) {
         try {
@@ -78,74 +80,143 @@ public class StudentServiceImpl implements StudentService {
                 student.setAcademicYear(updatedStudent.getAcademicYear());
                 student.setEmail(updatedStudent.getEmail());
                 return studentRepository.save(student);
-            }).orElseThrow(() -> new RuntimeException("Student not found with ID: " + id));
 
+            }).orElseThrow(() ->
+                    new StudentNotFoundException("Student not found with ID: " + id)
+            );
+
+        } catch (StudentNotFoundException ex) {
+            throw ex;
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error updating student: " + e.getMessage(), e);
             throw new RuntimeException("Unable to update student with ID: " + id + ". " + e.getMessage());
         }
     }
 
-    // ✅ Delete student by ID
+    // Delete student by ID
     @Override
     public void deleteStudent(Long id) {
         try {
             if (!studentRepository.existsById(id)) {
-                throw new RuntimeException("Student not found with ID: " + id);
+                throw new StudentNotFoundException("Student not found with ID: " + id);
             }
             logger.info("Deleting student with ID: " + id);
             studentRepository.deleteById(id);
             logger.info("Student deleted successfully with ID: " + id);
+        } catch (StudentNotFoundException ex) {
+            throw ex;
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error deleting student: " + e.getMessage(), e);
             throw new RuntimeException("Unable to delete student with ID: " + id);
         }
     }
 
-    // ✅ Validation logic
-    private void validateStudent(Student student) {
-        // Roll Number
-        if (student.getRollNumber() == null || !Pattern.compile("^[A-Za-z0-9]{2,20}$")
-                .matcher(student.getRollNumber()).matches()) {
-            throw new IllegalArgumentException("Invalid Roll Number. It must be alphanumeric (2–20 characters).");
-        }
-
-        // Admission Number
-        if (student.getAdmissionNumber() == null || !Pattern.compile("^[A-Za-z0-9-]{2,20}$")
-                .matcher(student.getAdmissionNumber()).matches()) {
-            throw new IllegalArgumentException("Invalid Admission Number. It must be alphanumeric or contain hyphen (2–20 characters).");
-        }
-
-        // First Name
-        if (student.getFirstName() == null || student.getFirstName().trim().isEmpty()) {
-            throw new IllegalArgumentException("First Name is required.");
-        }
-        if (!NAME_PATTERN.matcher(student.getFirstName()).matches()) {
-            throw new IllegalArgumentException("Invalid First Name. It must start with a capital letter and contain only alphabets.");
-        }
-
-        // Last Name
-        if (student.getLastName() == null || student.getLastName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Last Name is required.");
-        }
-        if (!NAME_PATTERN.matcher(student.getLastName()).matches()) {
-            throw new IllegalArgumentException("Invalid Last Name. It must start with a capital letter and contain only alphabets.");
-        }
-
-        // Academic Year
-        if (student.getAcademicYear() == null || student.getAcademicYear().trim().isEmpty()) {
-            throw new IllegalArgumentException("Academic Year is required.");
-        }
-        if (!Pattern.compile("^(\\d{4})-(\\d{4})$").matcher(student.getAcademicYear()).matches()) {
-            throw new IllegalArgumentException("Invalid Academic Year. Format should be YYYY-YYYY (e.g., 2024-2025).");
-        }
-
-        // Email
-        if (student.getEmail() == null || student.getEmail().trim().isEmpty()) {
-            throw new IllegalArgumentException("Email is required.");
-        }
-        if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
-            throw new IllegalArgumentException("Invalid Email format.");
+    //  Get students by class/academic year
+    @Override
+    public List<Student> getStudentsByClass(String className) {
+        try {
+            logger.info("Fetching students for class/academic year: " + className);
+            return studentRepository.findByAcademicYear(className);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error fetching students by class: " + e.getMessage(), e);
+            throw new RuntimeException("Unable to fetch students for class: " + className);
         }
     }
+
+/*    @Override
+    public StudentDTO.EnrollmentRequest.StudentCreateResponse enrollStudent(Long studentId, StudentDTO.EnrollmentRequest request) {
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId));
+
+        // update academic information
+        student.setAcademicYear(request.getAcademicYear());
+        student.setStandard(request.getStandard());
+        student.setDivision(request.getDivision());
+
+        studentRepository.save(student);
+
+        return new StudentDTO.EnrollmentRequest.StudentCreateResponse("SUCCESS",
+                "Student enrolled successfully for academic year " + request.getAcademicYear());
+    }*/
+
+
+    @Override
+    public StudentDTO.StudentCreateResponse enrollStudent(Long studentId, StudentDTO.EnrollmentRequest request) {
+        logger.log(Level.INFO, "Service: Starting enrollment process for student ID {0}", studentId);
+        try {
+            // Fetch student
+            Student student = studentRepository.findById(studentId)
+                    .orElseThrow(() -> {
+                        logger.log(Level.WARNING, "Student not found with ID {0}", studentId);
+                        return new RuntimeException("Student not found with ID: " + studentId);
+                    });
+            // Update fields
+            logger.log(Level.INFO, "Service: Updating student details for ID {0}", studentId);
+            student.setAdmissionNumber(request.getAdmissionNumber());
+            student.setRollNumber(request.getRollNo());
+            studentRepository.save(student);
+            logger.log(Level.INFO, "Service: Enrollment successful for student ID {0}", studentId);
+            return new StudentDTO.StudentCreateResponse(
+                    "SUCCESS",
+                    "Student enrolled successfully"
+            );
+        } catch (RuntimeException e) {
+            logger.log(Level.SEVERE,
+                    String.format("Service Error: Enrollment failed for student ID %s: %s", studentId, e.getMessage()));
+            throw e;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE,
+                    String.format("Service Error: Unexpected exception for student ID %s: %s", studentId, e.getMessage()),
+                    e);
+            throw new RuntimeException("Internal error during enrollment");
+        }
+    }
+
+
+
+// Validation logic
+private void validateStudent(Student student) {
+
+    if (student.getRollNumber() == null || !Pattern.compile("^[A-Za-z0-9]{2,20}$")
+            .matcher(student.getRollNumber()).matches()) {
+        throw new IllegalArgumentException("Invalid Roll Number. It must be alphanumeric (2–20 characters).");
+    }
+
+    if (student.getAdmissionNumber() == null || !Pattern.compile("^[A-Za-z0-9-]{2,20}$")
+            .matcher(student.getAdmissionNumber()).matches()) {
+        throw new IllegalArgumentException("Invalid Admission Number. It must be alphanumeric or contain hyphen (2–20 characters).");
+    }
+
+    if (student.getFirstName() == null || student.getFirstName().trim().isEmpty()) {
+        throw new IllegalArgumentException("First Name is required.");
+    }
+    if (!NAME_PATTERN.matcher(student.getFirstName()).matches()) {
+        throw new IllegalArgumentException("Invalid First Name. Must start with a capital letter & contain only letters.");
+    }
+
+    if (student.getLastName() == null || student.getLastName().trim().isEmpty()) {
+        throw new IllegalArgumentException("Last Name is required.");
+    }
+    if (!NAME_PATTERN.matcher(student.getLastName()).matches()) {
+        throw new IllegalArgumentException("Invalid Last Name. Must start with a capital letter & contain only letters.");
+    }
+
+    if (student.getAcademicYear() == null || student.getAcademicYear().trim().isEmpty()) {
+        throw new IllegalArgumentException("Academic Year is required.");
+    }
+    if (!Pattern.compile("^(\\d{4})-(\\d{4})$").matcher(student.getAcademicYear()).matches()) {
+        throw new IllegalArgumentException("Invalid Academic Year. Format: YYYY-YYYY");
+    }
+
+    if (student.getEmail() == null || student.getEmail().trim().isEmpty()) {
+        throw new IllegalArgumentException("Email is required.");
+    }
+    if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
+        throw new IllegalArgumentException("Invalid Email format.");
+    }
 }
+}
+
+
+

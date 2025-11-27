@@ -2,6 +2,7 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.UserDto;
 import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Exception.UserNotFoundException;
 import com.DigitalClassRoomManagement.Repository.UserRepository;
 import com.DigitalClassRoomManagement.Service.UserService;
@@ -37,7 +38,7 @@ public class UserServiceimpl implements UserService {
     @Override
     public UserDto registeration(User user1) {
         try {
-//            validation(user1);
+            validation(user1);
 
             Optional<User> existingUser = userRepository.findByEmail(user1.getEmail());
             if (existingUser.isPresent()) {
@@ -46,6 +47,7 @@ public class UserServiceimpl implements UserService {
 
             user1.setPassword(passwordEncoder.encode(user1.getPassword()));
             user1.setCreatedAt(LocalDateTime.now());
+            user1.setStatus(Status.UNAPPROVED);
             User savedUser = userRepository.save(user1);
 
             return toDto(savedUser);
@@ -59,16 +61,26 @@ public class UserServiceimpl implements UserService {
     public User login(String email, String password) {
         try {
             Optional<User> optional = userRepository.findByEmail(email);
-            if (optional.isPresent()) {
-                User u = optional.get();
-                if (passwordEncoder.matches(password, u.getPassword())) {
-                    u.setLastLogin(LocalDateTime.now());
-                    userRepository.save(u);
-                    return u;
-                } else {
+            if(optional.isPresent())
+            {
+                User u=optional.get();
+                if(passwordEncoder.matches(password,u.getPassword()))
+                {
+                    if(u.getStatus()==Status.APPROVED)
+                    {
+                        u.setLastLogin(LocalDateTime.now());
+                        userRepository.save(u);
+                        return u;
+                    }
+                    else {
+                        throw new RuntimeException("You are not Approved by Admin");
+                    }
+                }
+                else {
                     throw new UserNotFoundException("Password not match");
                 }
-            } else {
+            }
+            else {
                 throw new IllegalArgumentException("Email does not exist");
             }
         } catch (Exception e) {
@@ -145,6 +157,19 @@ public class UserServiceimpl implements UserService {
         user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
         return "Password updated successfully!";
+    }
+
+    @Override
+    public String logout(Long userId) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+            return "Logout successful!";
+        } catch (Exception e) {
+            logger.error("Logout Error: " + e.getMessage());
+            throw e;
+        }
     }
 
     public static void validation(User user1) {

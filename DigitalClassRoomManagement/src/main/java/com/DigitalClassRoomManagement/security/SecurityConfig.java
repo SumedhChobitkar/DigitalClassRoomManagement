@@ -42,10 +42,19 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/webjars/**",
                                 "/swagger-resources/**",
-                                "/swagger-config/**"
+                                "/swagger-config/**",
+
                                 // allow the custom path too:-
                           // User
-                          "/api/digitalClassroom/login", 
+                          "/api/user/login",
+                                         "/api/user/registerUser",
+                                         "/api/user/getAll",
+                                         "/api/user/getById/{id}",
+                                         "/api/user/forgot-password",
+                                         "/api/user/verify-otp",
+                                         "/api/user/reset-password",
+                                "/api/user/logout/{id}",
+                          "/api/digitalClassroom/login",
                                          "/api/digitalClassroom/registerUser",
                                          "/api/digitalClassroom/getAll",
                                          "/api/digitalClassroom/getById/{id}",
@@ -62,12 +71,18 @@ public class SecurityConfig {
                                 // Teacher
 
                                 "/api/teacher/add",
-
                                 "/api/teacher/getAll",
-
                                 "/api/teacher/getById",
-
                                 "/api/teacher/update",
+                                "/api/teacher/delete",
+
+                                // Student Related
+                                "/api/students/saveStudent",
+
+
+                                // Subject Related
+                                "/api/subject/**",
+
 
                                 "/api/teacher/delete",
 
@@ -80,17 +95,87 @@ public class SecurityConfig {
                                         "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
                                         "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
                                         "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
-                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}"
+                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}",
+
+
+                                // Homework
+                                "/api/homeworks/saveHomework",
+                                "/api/homeworks/getHomeworkById/{id}",
+                                "/api/homeworks/getAllHomework",
+                                "/api/homeworks/updateHomeworkById/{id}",
+                                "/api/homeworks/deleteHomeworkById/{id}",
+
+                                // AuditLog
+                                "/api/auditlogs/saveAuditlog",
+                                "/api/auditlogs/getAuditlogById/{id}",
+                                "/api/auditlogs/getAllAuditlogs",
+                                "/api/auditlogs/updateAuditlogById/{id}",
+                                "/api/auditlogs/deleteAuditlogById/{id}",
+
+
+                                //LibraryMember
+                                  "/api/Librarymembers/saveLibraryMember",
+                                "/api/Librarymembers/getByIdLibraryMember/{id}",
+                                  "/api/Librarymembers/getAllLibraryMembers",
+                                "/api/Librarymembers/updateLibraryMemberById/{id}",
+                                "/api/Librarymembers/deleteLibraryMemberyById/{id}",
+
+                                //Student
+                                "/api/students/**",
+
+                                //parent
+                                "/api/parents/**"
+
 
 
                         ).permitAll()
 
-           
 
-                                // Teacher endpoints
+                        //Section Related
+                        .requestMatchers(HttpMethod.POST, "/api/sections/AddSection").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/sections/getAllSections").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/sections/getSectionById/{id}").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/sections/update/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/sections/by-teacher/{teacherId}").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/sections/delete/{id}").hasRole("ADMIN")
+                        //Admin
+                        .requestMatchers("/api/admin/update/status/{id}","/api/admin/get/unapproved/statusrequest","/api/admin/get/approved/statusrequest","api/admin/create").permitAll()
+
+                        //SuperAdmin
+                        .requestMatchers("/api/superAdmin/get/unapproved/statusrequest","/api/superAdmin/get/approved/statusrequest","/api/superAdmin/update/status/{id}").permitAll()
+
+                        // Teacher endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/teacher/addTeacher").hasRole("ADMIN")
+
+                        //Timetable Related
+                        .requestMatchers(HttpMethod.POST, "/api/timetable/createTimetable").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/timetable/get/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/timetable/getAll").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/timetable/update/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/timetable/delete/{id}").hasRole("ADMIN")
+
+                        //TeacherTimetable Related
+                        .requestMatchers(HttpMethod.GET, "/api/teacherTimetable/{teacherId}/timetable").hasRole("TEACHER")
+                        .requestMatchers(HttpMethod.GET,"/api/teacherTimetable/{teacherId}/sections").hasRole("TEACHER")
+
+                        //StudentTimetable Related
+                        .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/timetable").hasRole("STUDENT")
+                        .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/section").hasRole("STUDENT")
+
+
+
+
+
+                        // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/teacher/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/teacher/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/api/teacher/update/status/{id}").permitAll()
+                        .requestMatchers("/api/teacher/get/unapproved/statusrequest").permitAll()
+                        .requestMatchers("/api/teacher/get/approved/statusrequest").permitAll()
+
+                        //Approved and Unapproved status
+                        .requestMatchers("/api/teacher/get/unapproved/statusrequest","/api/teacher/update/status/{id}","/api/teacher/get/approved/statusrequest").permitAll()
 
                         // Read teacher -> ADMIN or TEACHER
                         .requestMatchers(HttpMethod.GET, "/api/teacher/getAll").hasAnyRole("ADMIN", "TEACHER")
@@ -118,6 +203,26 @@ public class SecurityConfig {
 
                         // All other requests require authentication
 
+                        // HOMEWORK MANAGEMENT
+                        .requestMatchers(HttpMethod.POST, "/api/homeworks/saveHomework").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/homeworks/updateHomeworkById/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/homeworks/deleteHomeworkById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/homeworks/getHomeworkById/**").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/homeworks/getAllHomework").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+
+                        // AuditLog endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/auditlogs/saveAuditlog").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/auditlogs/updateAuditlogById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/auditlogs/deleteAuditlogById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/auditlogs/getAuditlogById/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/auditlogs/getAllAuditlogs").hasAnyRole("ADMIN", "TEACHER")
+
+                        // LibraryMember endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/Librarymembers/saveLibraryMember").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/Librarymembers/updateLibraryMemberById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/Librarymembers/deleteLibraryMemberById/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getByIdLibraryMember/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getAllLibraryMembers").hasAnyRole("ADMIN", "TEACHER")
 
                         .anyRequest().authenticated()
                 )

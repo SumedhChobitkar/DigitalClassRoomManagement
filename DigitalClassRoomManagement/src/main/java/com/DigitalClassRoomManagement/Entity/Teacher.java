@@ -30,6 +30,7 @@ public class Teacher {
     private String phone;
     private String qualification;
     private Integer experienceYears;
+    private String adminMailId;
     private String gender;
     private String dateOfBirth;
     @OneToOne(fetch = FetchType.LAZY)
@@ -39,6 +40,16 @@ public class Teacher {
 
     @Enumerated(EnumType.STRING)
     private TeacherStatus status;
+
+    @ManyToMany
+    @JoinTable(
+            name = "teacher_section",
+            joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "section_id", referencedColumnName = "sectionId")
+    )
+    @JsonIgnore
+    private List<Section> assignedSections = new ArrayList<>();
+
 
 
 //    @ManyToMany

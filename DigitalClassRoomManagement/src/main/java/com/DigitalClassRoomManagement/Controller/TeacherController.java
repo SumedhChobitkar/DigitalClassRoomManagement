@@ -2,6 +2,8 @@ package com.DigitalClassRoomManagement.Controller;
 
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Entity.Teacher;
+import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -110,5 +112,39 @@ public class TeacherController {
         }
     }
 
+
+    @GetMapping("/get/unapproved/statusrequest")
+    public ResponseEntity<List<?>>getUnapprovedStatusRequest()
+    {
+        try
+        {
+            return ResponseEntity.ok(service.getUnapprovedStatusRequest());
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @GetMapping("/get/approved/statusrequest")
+    public ResponseEntity<List<?>>getapprovedStatusRequest()
+    {
+        try
+        {
+            return ResponseEntity.ok(service.getapprovedStatusRequest());
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @PutMapping("/update/status/{id}")
+    public ResponseEntity<?> updateStatus(@PathVariable Long id,@RequestParam Status status)
+    {
+        try
+        {
+            User ad=service.updateStatus(id,status);
+            return ResponseEntity.status(HttpStatus.OK).body("Status Changed");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not Changed");
+        }
+    }
 
 }
