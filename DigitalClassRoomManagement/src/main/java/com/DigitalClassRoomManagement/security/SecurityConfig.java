@@ -131,6 +131,13 @@ public class SecurityConfig {
                         ).permitAll()
 
 
+                        //Section Related
+                        .requestMatchers(HttpMethod.POST, "/api/sections/AddSection").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/sections/getAllSections").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/sections/getSectionById/{id}").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/sections/update/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/sections/by-teacher/{teacherId}").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/sections/delete/{id}").hasRole("ADMIN")
                         //Admin
                         .requestMatchers("/api/admin/update/status/{id}","/api/admin/get/unapproved/statusrequest","/api/admin/get/approved/statusrequest","api/admin/create").permitAll()
 
@@ -140,7 +147,26 @@ public class SecurityConfig {
                         // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/addTeacher").hasRole("ADMIN")
 
-                                // Teacher endpoints
+                        //Timetable Related
+                        .requestMatchers(HttpMethod.POST, "/api/timetable/createTimetable").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/timetable/get/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/timetable/getAll").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/timetable/update/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/timetable/delete/{id}").hasRole("ADMIN")
+
+                        //TeacherTimetable Related
+                        .requestMatchers(HttpMethod.GET, "/api/teacherTimetable/{teacherId}/timetable").hasRole("TEACHER")
+                        .requestMatchers(HttpMethod.GET,"/api/teacherTimetable/{teacherId}/sections").hasRole("TEACHER")
+
+                        //StudentTimetable Related
+                        .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/timetable").hasRole("STUDENT")
+                        .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/section").hasRole("STUDENT")
+
+
+
+
+
+                        // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/teacher/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/teacher/delete/**").hasRole("ADMIN")
