@@ -145,5 +145,27 @@ public class ValidationClass {
         if (totalIssuedBooks != null && totalIssuedBooks < 0)
             throw new IllegalArgumentException("Total issued books cannot be negative.");
     }
+
+    //  STUDENT Validations
+    public static final Pattern ROLL_NUMBER_PATTERN = Pattern.compile("^[A-Za-z0-9]{2,20}$");
+    public static final Pattern ADMISSION_NUMBER_PATTERN = Pattern.compile("^[A-Za-z0-9-]{2,20}$");
+    public static final Pattern ACADEMIC_YEAR_PATTERN = Pattern.compile("^\\d{4}-\\d{4}$");
+    public static final Pattern MOBILE_PATTERN = Pattern.compile("^[6-9]\\d{9}$");
+    public static final Pattern GENDER_PATTERN = Pattern.compile("^(Male|Female|Other)$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern PINCODE_PATTERN = Pattern.compile("^\\d{6}$");
+    public static final Pattern CITY_STATE_COUNTRY_PATTERN = Pattern.compile("^[A-Za-z ]{2,50}$");
+
+
+    //  PARENT Validations
+    public static final Pattern PARENT_NAME_PATTERN = Pattern.compile("^[A-Z][a-zA-Z .]{1,49}$");
+    public static final Pattern RELATION_PATTERN = Pattern.compile("^(Father|Mother|Guardian|Other)$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern PARENT_EMAIL_PATTERN = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$");
+    public static final Pattern PARENT_MOBILE_PATTERN = Pattern.compile("^[6-9]\\d{9}$");
+    public static final Pattern ADDRESS_PATTERN = Pattern.compile("^[A-Za-z0-9 ,.\\-#/]{5,200}$");
+    public static final Pattern OCCUPATION_PATTERN = Pattern.compile("^[A-Za-z ]{2,50}$");
+    public static final Pattern INCOME_PATTERN = Pattern.compile("^\\d{1,10}(\\.\\d{1,2})?$");
+
+
+
 }
 
