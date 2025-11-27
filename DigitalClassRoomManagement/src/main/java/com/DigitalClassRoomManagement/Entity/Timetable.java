@@ -6,7 +6,10 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.DayOfWeek;
+import com.DigitalClassRoomManagement.Enum.DayOfWeek;
+//import java.time.DayOfWeek;
+
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -40,7 +43,7 @@ public class Timetable {
     @JoinColumn(name = "teacherId", nullable = false)
     private Teacher teacher;
 
-    @NotNull(message = "Day of week is required")
+//    @NotNull(message = "Day of week is required")
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
