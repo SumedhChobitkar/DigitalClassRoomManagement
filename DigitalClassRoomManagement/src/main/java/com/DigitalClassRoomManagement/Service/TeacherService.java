@@ -1,6 +1,7 @@
 // file: com/DigitalClassRoomManagement/Service/TeacherService.java
 package com.DigitalClassRoomManagement.Service;
 
+import com.DigitalClassRoomManagement.Dto.AssignTeacherRequestDto;
 import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
@@ -45,4 +46,7 @@ public interface TeacherService {
     public List<User> getapprovedStatusRequest();
     public User updateStatus(Long id, Status status);
 
+    String assignTeacher(Long classId, Long sectionId, AssignTeacherRequestDto dto);
+    List<Teacher> getTeacherByClassId(Long classId);
+    List<Teacher> getTeacherBySectionId(Long sectionId);
 }
