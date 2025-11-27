@@ -2,6 +2,7 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 
 import com.DigitalClassRoomManagement.Entity.Admin;
+import com.DigitalClassRoomManagement.Enum.Role;
 import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Repository.AdminRepository;
 import com.DigitalClassRoomManagement.Service.AdminService;
@@ -44,31 +45,71 @@ public class AdminServiceImpl implements AdminService {
     }
     @Override
     public String updateById(Long id, @Valid AdminDTO adminDTO) {
-        Optional<Admin> dummyAdmin = adminRepo.findById(id);
-        if(!dummyAdmin.isPresent()){
-            logger.error("Cannot find the user with "+id +" id");
-            throw new ResourceNotFoundException("Cannot find the given Admin with ID: " + id);
+        Admin admin = adminRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find the Admin with ID: " + id));
+
+        if (adminDTO.getFirstName() != null && !adminDTO.getFirstName().isBlank()) {
+            admin.setFirstName(adminDTO.getFirstName());
         }
-        Admin admin = dummyAdmin.get();
-        if (adminDTO.getUsername() != null && !adminDTO.getUsername().isBlank()) {
-            admin.setUsername(adminDTO.getUsername());
+
+
+        if (adminDTO.getLastName() != null && !adminDTO.getLastName().isBlank()) {
+            admin.setLastName(adminDTO.getLastName());
         }
+
+
+        if (adminDTO.getEmail() != null && !adminDTO.getEmail().isBlank()) {
+            admin.setEmail(adminDTO.getEmail());
+        }
+
+
+        if (adminDTO.getPhone() != null && !adminDTO.getPhone().isBlank()) {
+            admin.setPhone(adminDTO.getPhone());
+        }
+
+
+        if (adminDTO.getQualification() != null && !adminDTO.getQualification().isBlank()) {
+            admin.setQualification(adminDTO.getQualification());
+        }
+
+
+        if (adminDTO.getExperienceYears() != null) {
+            admin.setExperienceYears(adminDTO.getExperienceYears());
+        }
+
+
+        if (adminDTO.getGender() != null && !adminDTO.getGender().isBlank()) {
+            admin.setGender(adminDTO.getGender());
+        }
+
+
+        if (adminDTO.getDateOfBirth() != null && !adminDTO.getDateOfBirth().isBlank()) {
+            admin.setDateOfBirth(adminDTO.getDateOfBirth());
+        }
+
+
         if (adminDTO.getPassword() != null && !adminDTO.getPassword().isBlank()) {
             admin.setPassword(adminDTO.getPassword());
         }
+
+
         if (adminDTO.getRole() != null) {
             admin.setRole(adminDTO.getRole());
         }
+
+
         if (adminDTO.getStatus() != null) {
             admin.setStatus(adminDTO.getStatus());
         }
 
         adminRepo.save(admin);
+
         return "Admin updated successfully";
     }
 
     @Override
     public String GetData(@Valid Admin admin) {
+        admin.setRole(Role.ADMIN);
         adminRepo.save(admin);
         return "Data saved successfully";
     }
