@@ -46,6 +46,14 @@ public class SecurityConfig {
 
                                 // allow the custom path too:-
                           // User
+                          "/api/user/login",
+                                         "/api/user/registerUser",
+                                         "/api/user/getAll",
+                                         "/api/user/getById/{id}",
+                                         "/api/user/forgot-password",
+                                         "/api/user/verify-otp",
+                                         "/api/user/reset-password",
+                                "/api/user/logout/{id}",
                           "/api/digitalClassroom/login",
                                          "/api/digitalClassroom/registerUser",
                                          "/api/digitalClassroom/getAll",
@@ -89,6 +97,7 @@ public class SecurityConfig {
                                         "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
                                         "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}",
 
+
                                 // Homework
                                 "/api/homeworks/saveHomework",
                                 "/api/homeworks/getHomeworkById/{id}",
@@ -109,7 +118,13 @@ public class SecurityConfig {
                                 "/api/Librarymembers/getByIdLibraryMember/{id}",
                                   "/api/Librarymembers/getAllLibraryMembers",
                                 "/api/Librarymembers/updateLibraryMemberById/{id}",
-                                "/api/Librarymembers/deleteLibraryMemberyById/{id}"
+                                "/api/Librarymembers/deleteLibraryMemberyById/{id}",
+
+                                //Student
+                                "/api/students/**",
+
+                                //parent
+                                "/api/parents/**"
 
 
 
@@ -123,6 +138,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/sections/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/sections/by-teacher/{teacherId}").hasAnyRole("ADMIN", "TEACHER")
                         .requestMatchers(HttpMethod.DELETE, "/api/sections/delete/{id}").hasRole("ADMIN")
+                        //Admin
+                        .requestMatchers("/api/admin/update/status/{id}","/api/admin/get/unapproved/statusrequest","/api/admin/get/approved/statusrequest","api/admin/create").permitAll()
+
+                        //SuperAdmin
+                        .requestMatchers("/api/superAdmin/get/unapproved/statusrequest","/api/superAdmin/get/approved/statusrequest","/api/superAdmin/update/status/{id}").permitAll()
+
+                        // Teacher endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/teacher/addTeacher").hasRole("ADMIN")
 
                         //Timetable Related
                         .requestMatchers(HttpMethod.POST, "/api/timetable/createTimetable").hasRole("ADMIN")
@@ -147,6 +170,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/teacher/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/teacher/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/api/teacher/update/status/{id}").permitAll()
+                        .requestMatchers("/api/teacher/get/unapproved/statusrequest").permitAll()
+                        .requestMatchers("/api/teacher/get/approved/statusrequest").permitAll()
+
+                        //Approved and Unapproved status
+                        .requestMatchers("/api/teacher/get/unapproved/statusrequest","/api/teacher/update/status/{id}","/api/teacher/get/approved/statusrequest").permitAll()
 
                         // Read teacher -> ADMIN or TEACHER
                         .requestMatchers(HttpMethod.GET, "/api/teacher/getAll").hasAnyRole("ADMIN", "TEACHER")

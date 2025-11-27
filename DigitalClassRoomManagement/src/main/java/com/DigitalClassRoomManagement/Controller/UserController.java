@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/digitalClassroom")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
@@ -32,7 +32,7 @@ public class UserController {
             UserDto user2 = userService.registeration(user1);
             return ResponseEntity.status(HttpStatus.CREATED).body(user2);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Email Already Exist");
+            return ResponseEntity.internalServerError().body("Email Already Exist Or "+e.getMessage());
         }
     }
 
@@ -52,9 +52,9 @@ public class UserController {
         }
         catch (UserNotFoundException e)
         {
-            return ResponseEntity.badRequest().body("Password not Match");
+            return ResponseEntity.badRequest().body("Password not Match Or "+e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Email Not Exist");
+            return ResponseEntity.internalServerError().body("Email Not Exist Or "+e.getMessage());
         }
     }
 
@@ -65,7 +65,7 @@ public class UserController {
             List<UserDto> u = userService.getAll();
             return ResponseEntity.ok(u);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DATA NOT FOUND");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DATA NOT FOUND Or"+e.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class UserController {
             UserDto u = userService.getUserById(id);
             return ResponseEntity.ok(u);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID NOT FOUND");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID NOT FOUND Or "+e.getMessage());
         }
     }
 
@@ -116,4 +116,15 @@ public class UserController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
+    @PutMapping("/logout/{id}")
+    public ResponseEntity<?> logout(@PathVariable Long id) {
+        try {
+            String msg = userService.logout(id);
+            return ResponseEntity.ok(msg);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }

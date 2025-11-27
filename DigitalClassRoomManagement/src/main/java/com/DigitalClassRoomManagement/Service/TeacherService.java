@@ -5,6 +5,8 @@ import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
 import com.DigitalClassRoomManagement.Entity.Teacher;
+import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Enum.Status;
 
 import java.util.List;
 
@@ -39,5 +41,8 @@ public interface TeacherService {
      */
     List<TeacherResponseDto> getTeachersOfClass(Long classId);
 
+    public List<User> getUnapprovedStatusRequest();
+    public List<User> getapprovedStatusRequest();
+    public User updateStatus(Long id, Status status);
 
 }

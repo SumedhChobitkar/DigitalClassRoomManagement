@@ -1,6 +1,6 @@
 package com.DigitalClassRoomManagement.Enum;
 
 public enum Status {
-    ACTIVE,
-    OFFLINE
+    APPROVED,
+    UNAPPROVED
 }

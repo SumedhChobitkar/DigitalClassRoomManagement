@@ -32,6 +32,7 @@ public class TeacherDto {
     @NotBlank(message = "Phone number cannot be empty")
     @Pattern(regexp = "^[6-9]\\d{9}$", message = "Phone number must be 10 digits and start with 6, 7, 8, or 9")
     private String phone;
+    private String adminMailId;
     private String qualification;
     private Integer experienceYears;
     private String gender;
