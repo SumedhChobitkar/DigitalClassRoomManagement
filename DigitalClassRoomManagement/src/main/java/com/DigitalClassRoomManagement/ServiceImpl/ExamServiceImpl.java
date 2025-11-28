@@ -28,6 +28,7 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     private TeacherRepository teacherRepository;
 
+
     // ------------------- CREATE EXAM --------------------------
     @Override
     public ExamDto createExam(ExamDto examDto) {
@@ -114,6 +115,35 @@ public class ExamServiceImpl implements ExamService {
             throw new RuntimeException("Error fetching exams for teacher ID: " + teacherId, e);
         }
     }
+
+    @Override
+    public List<ExamDto> getExams(Long examId, Long teacherId) {
+        try {
+            List<Exam> exams = examRepository.findAll(); // Fetch all exams first
+
+            if (examId != null) {
+                exams = exams.stream()
+                        .filter(e -> e.getExamId().equals(examId))
+                        .collect(Collectors.toList());
+            }
+
+            if (teacherId != null) {
+                exams = exams.stream()
+                        .filter(e -> e.getTeacher() != null && e.getTeacher().getId().equals(teacherId))
+                        .collect(Collectors.toList());
+            }
+
+            return exams.stream()
+                    .map(this::mapToDto)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            // Log the error and throw a runtime exception or handle it as needed
+            log.error("Error fetching exams with examId: {} and teacherId: {}", examId, teacherId, e);
+            throw new RuntimeException("Failed to fetch exams: " + e.getMessage(), e);
+        }
+    }
+
 
 
     // ------------------- GET ALL EXAMS --------------------------
