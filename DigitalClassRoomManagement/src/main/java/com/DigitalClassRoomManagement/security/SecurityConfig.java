@@ -1,5 +1,4 @@
 package com.DigitalClassRoomManagement.security;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -70,6 +69,11 @@ public class SecurityConfig {
                                 "/api/exam/DeleteByExamId/{id}",
                                 // Teacher
 
+                                "/api/teacher/addTeacher",
+                                "/api/teacher/getAll",
+                                "/api/teacher/getById",
+                                "/api/teacher/update",
+                                "/api/teacher/delete",
                                 "/api/teacher/add",
                                 "/api/teacher/getAllTeachers",
                                 "/api/teacher/getTeacherById/{id}",
@@ -130,7 +134,35 @@ public class SecurityConfig {
                                 "/api/students/**",
 
                                 //parent
-                                "/api/parents/**"
+                                "/api/parents/**",
+
+
+                                //Result
+                                "/api/results/SaverResult",
+                                "/api/results/GetResult/{id}",
+                                "/api/results/getAllResult",
+                                "/api/results/UpdateResult/{id}",
+                                "api/results/DeleteById/{id}",
+                                "/api/results/top",
+
+
+                                //StudentExam
+                                "/api/exam/submit",
+                                "/api/exam/getAllExam",
+                                "/api/exam/result",
+
+
+                                //TeacherExam
+                                "/api/TeacherExam/{examId}/questions",
+                                "/api/TeacherExam/submissions",
+
+
+                                //Admin Exam
+                                "/api/Create-exam/CreateExam",
+                                "/api/Create-exam/getAll"
+
+
+
 
 
 
@@ -201,7 +233,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/classes/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/classes/delete/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/classes/getAll").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+                     .requestMatchers(HttpMethod.GET, "/api/classes/getAll").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
                         .requestMatchers(HttpMethod.GET, "/api/classes/getById/**").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
 
                         // Get teachers of class
@@ -263,3 +295,5 @@ public class SecurityConfig {
         return source;
     }
 }
+
+
