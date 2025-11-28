@@ -1,6 +1,7 @@
 package com.DigitalClassRoomManagement.Controller;
 
 import com.DigitalClassRoomManagement.Entity.Admin;
+import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Service.AdminService;
@@ -23,8 +24,12 @@ public class AdminController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createAdmin(@Valid @RequestBody Admin admin) {
-        String message = adminService.GetData(admin);
-        return new ResponseEntity<>(message, HttpStatus.CREATED);
+       try {
+           String message = adminService.GetData(admin);
+           return new ResponseEntity<>(message, HttpStatus.CREATED);
+       } catch (RuntimeException e) {
+           throw new RuntimeException(e);
+       }
     }
 
 
@@ -37,15 +42,24 @@ public class AdminController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
-        String message = adminService.deleteById(id);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        try {
+            String message = adminService.deleteById(id);
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }catch(ResourceNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateById(@PathVariable Long id, @Valid @RequestBody AdminDTO adminDTO) {
-        String message = adminService.updateById(id, adminDTO);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+       try {
+           String message = adminService.updateById(id, adminDTO);
+           return new ResponseEntity<>(message, HttpStatus.OK);
+       }
+        catch(ResourceNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/get/unapproved/statusrequest")

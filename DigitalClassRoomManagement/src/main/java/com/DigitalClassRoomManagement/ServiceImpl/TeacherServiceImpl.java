@@ -1,20 +1,18 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
+import com.DigitalClassRoomManagement.Dto.AssignTeacherRequestDto;
 import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
-import com.DigitalClassRoomManagement.Entity.SchoolClass;
-import com.DigitalClassRoomManagement.Entity.Teacher;
+import com.DigitalClassRoomManagement.Entity.*;
 import com.DigitalClassRoomManagement.Enum.Role;
 import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Exception.SchoolClassNotFoundException;
 
-import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 
+import com.DigitalClassRoomManagement.Exception.SectionNotFoundException;
 import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
-import com.DigitalClassRoomManagement.Repository.SchoolClassRepository;
-import com.DigitalClassRoomManagement.Repository.TeacherRepository;
-import com.DigitalClassRoomManagement.Repository.UserRepository;
+import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Service.EmailSenderService;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +38,12 @@ public class TeacherServiceImpl implements TeacherService {
     private UserRepository urepo;
     @Autowired
     private  SchoolClassRepository classRepo;
+
+    @Autowired
+    private SectionRepository sectionRepo;
+
+    @Autowired
+    private AssignTeacherRequestRepository assignRepo;
 
     @Autowired
     private EmailSenderService emailSenderService;
@@ -364,5 +368,94 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
 
+    @Override
+    public String assignTeacher(Long classId, Long sectionId, AssignTeacherRequestDto dto) {
+        SchoolClass schoolClass = classRepo.findById(classId)
+                .orElseThrow(() -> new SchoolClassNotFoundException(classId));
+
+        Section section = sectionRepo.findById(sectionId)
+                .orElseThrow(()-> new SectionNotFoundException("Section not found for Id:"+sectionId));
+        Teacher teacher = repo.findById(dto.getTeacherId())
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found for Id:"+dto.getTeacherId()));
+
+        // Create assignment entry
+        AssignTeacherRequest assignment = new AssignTeacherRequest();
+        assignment.setSchoolClass(schoolClass);
+        assignment.setSectionId(section);
+        assignment.setTeacher(teacher);
+
+        assignRepo.save(assignment);
+
+        return "Teacher assigned successfully to classID: "+classId+" with sectionID: "+sectionId;
+    }
+
+    @Override
+    @Transactional
+    public List<Teacher> getTeacherByClassId(Long classId) {
+        try {
+            SchoolClass schoolClass = classRepo.findById(classId)
+                    .orElseThrow(() -> new SchoolClassNotFoundException(classId));
+            List<Teacher> teachers = assignRepo.findTeachersByClassId(classId);
+
+            return teachers.stream()
+                    .map(t -> new Teacher(
+                            t.getId(),
+                            t.getFirstName(),
+                            t.getLastName(),
+                            t.getEmail(),
+                            t.getPhone(),
+                            t.getQualification(),
+                            t.getExperienceYears(),
+                            t.getAdminMailId(),
+                            t.getGender(),
+                            t.getDateOfBirth(),
+                            t.getUser(),
+                            t.getStatus(),
+                            t.getAssignedSections(),
+                            t.getAssignedClass()
+                    ))
+                    .toList();
+        } catch (Exception e) {
+            log.error("Error getting teacher for class ID {} -> {}", classId, e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    public List<Teacher> getTeacherBySectionId(Long sectionId) {
+        try {
+            Section section = sectionRepo.findById(sectionId)
+                    .orElseThrow(() -> new SectionNotFoundException("Section not found with ID " + sectionId));
+
+            List<Teacher> teachers = assignRepo.findTeachersBySectionId(sectionId);
+
+            return teachers.stream()
+                    .map(t -> new Teacher(
+                            t.getId(),
+                            t.getFirstName(),
+                            t.getLastName(),
+                            t.getEmail(),
+                            t.getPhone(),
+                            t.getQualification(),
+                            t.getExperienceYears(),
+                            t.getAdminMailId(),
+                            t.getGender(),
+                            t.getDateOfBirth(),
+                            t.getUser(),
+                            t.getStatus(),
+                            t.getAssignedSections(),
+                            t.getAssignedClass()
+                    ))
+                    .toList();
+        } catch (Exception e) {
+            log.error("Error getting teacher for section ID {} -> {}", sectionId, e.getMessage(), e);
+            throw e;
+        }
+    }
+
+
 }
+
+
+
 

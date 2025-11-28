@@ -38,43 +38,43 @@ public class TimetableServiceImpl implements TimetableService {
     private static final Logger logger = LoggerFactory.getLogger(TimetableServiceImpl.class);
 
 
-    @Override
-    public Timetable createTimetable(TimetableDTO dto) {
-        try {
-            log.info("Creating Timetable for classId: {}", dto.getClassId());
+@Override
+public Timetable createTimetable(TimetableDTO dto) {
+    try {
+        log.info("Creating Timetable for classId: {}", dto.getClassId());
 
-            // Fetch SchoolClass
-            SchoolClass schoolClass = schoolClassRepository.findById(dto.getClassId())
-                    .orElseThrow(() -> new RuntimeException("Class not found"));
+        SchoolClass schoolClass = schoolClassRepository.findById(dto.getClassId())
+                .orElseThrow(() -> new RuntimeException("Class not found"));
 
-            Section section = sectionRepository.findById(dto.getSectionId())
-                    .orElseThrow(() -> new RuntimeException("Section not found"));
+        Section section = sectionRepository.findById(dto.getSectionId())
+                .orElseThrow(() -> new RuntimeException("Section not found"));
 
-            Subject subject = subjectRepository.findById(dto.getSubjectId())
-                    .orElseThrow(() -> new RuntimeException("Subject not found"));
+        Subject subject = subjectRepository.findById(dto.getSubjectId())
+                .orElseThrow(() -> new RuntimeException("Subject not found"));
 
-            Teacher teacher = teacherRepository.findById(dto.getTeacherId())
-                    .orElseThrow(() -> new RuntimeException("Teacher not found"));
+        Teacher teacher = teacherRepository.findById(dto.getTeacherId())
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
 
-            Timetable timetable = Timetable.builder()
-                    .schoolClass(schoolClass)   // ✔ String ऐवजी Object
-                    .section(section)
-                    .subject(subject)
-                    .teacher(teacher)
-                    .dayOfWeek(dto.getDayOfWeek())
-                    .date(dto.getDate())
-                    .startTime(dto.getStartTime())
-                    .endTime(dto.getEndTime())
-                    .build();
+        Timetable timetable = Timetable.builder()
+                .schoolClass(schoolClass)
+                .section(section)
+                .subject(subject)
+                .teacher(teacher)
+                .dayOfWeek(dto.getDayOfWeek())
+                .date(dto.getDate())
+                .startTime(dto.getStartTime())
+                .endTime(dto.getEndTime())
+                .build();
 
-            validateTimetable(timetable);
-            return timetableRepository.save(timetable);
+        validateTimetable(timetable);
+        return timetableRepository.save(timetable);
 
-        } catch (Exception e) {
-            log.error("Error creating timetable: {}", e.getMessage());
-            throw new RuntimeException("Failed to create timetable");
-        }
+    } catch (Exception e) {
+        log.error("Error creating timetable: {}", e.getMessage());
+
+        throw new RuntimeException(e.getMessage());
     }
+}
 
 
     @Override
@@ -240,6 +240,25 @@ public class TimetableServiceImpl implements TimetableService {
                             ValidationClass.MIN_PERIOD_MINUTES + " to " +
                             ValidationClass.MAX_PERIOD_MINUTES + " minutes."
             );
+        }
+
+        List<Timetable> existing = timetableRepository
+                .findByTeacher_IdAndDayOfWeek(
+                        timetable.getTeacher().getId(),
+                        timetable.getDayOfWeek()
+                );
+
+        for (Timetable t : existing) {
+
+            boolean isOverlapping =
+                    timetable.getStartTime().isBefore(t.getEndTime()) &&
+                            timetable.getEndTime().isAfter(t.getStartTime());
+
+            if (isOverlapping) {
+                throw new IllegalArgumentException(
+                        "This teacher already has a lecture during this time."
+                );
+            }
         }
 
         // Validate Teacher
