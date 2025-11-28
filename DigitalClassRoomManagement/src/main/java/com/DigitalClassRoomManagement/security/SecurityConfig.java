@@ -102,6 +102,12 @@ public class SecurityConfig {
                                         "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
                                         "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}",
 
+                                //TeacherAssignmentSubmission
+                                "api/teacher/assignments/create",
+                                "api/teacher/assignments/updateAssignmentById/{id}",
+                                "api/teacher/assignments/getAllAssignments",
+                                "api/teacher/assignments/getAssignmentById/{id}",
+                                "api/teacher/assignments/deleteAssignmentById/{id",
 
                                 // Homework
                                 "/api/homeworks/saveHomework",
