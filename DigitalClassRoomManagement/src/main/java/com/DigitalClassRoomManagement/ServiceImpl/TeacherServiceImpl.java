@@ -6,6 +6,7 @@ import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
 import com.DigitalClassRoomManagement.Entity.*;
 import com.DigitalClassRoomManagement.Enum.Role;
 import com.DigitalClassRoomManagement.Enum.Status;
+import com.DigitalClassRoomManagement.Exception.InvalidImageFormatException;
 import com.DigitalClassRoomManagement.Exception.SchoolClassNotFoundException;
 
 import com.DigitalClassRoomManagement.Enum.TeacherStatus;
@@ -22,6 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,7 +77,7 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setFirstName(dto.getFirstName());
         teacher.setLastName(dto.getLastName());
         teacher.setQualification(dto.getQualification());
-        teacher.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));
+        teacher.setDateOfBirth(String.valueOf(LocalDate.parse(String.valueOf(dto.getDateOfBirth()))));
         teacher.setExperienceYears(dto.getExperienceYears());
             User user = urepo.findByEmail(dto.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found with email: " + dto.getEmail()));
@@ -391,30 +396,38 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public List<Teacher> getTeacherByClassId(Long classId) {
+    public List<TeacherDto> getTeacherByClassId(Long classId) {
         try {
             SchoolClass schoolClass = classRepo.findById(classId)
                     .orElseThrow(() -> new SchoolClassNotFoundException(classId));
             List<Teacher> teachers = assignRepo.findTeachersByClassId(classId);
 
             return teachers.stream()
-                    .map(t -> new Teacher(
+                    .map(t -> new TeacherDto(
                             t.getId(),
                             t.getFirstName(),
                             t.getLastName(),
                             t.getEmail(),
                             t.getPhone(),
+                            t.getAdminMailId(),
                             t.getQualification(),
                             t.getExperienceYears(),
-                            t.getAdminMailId(),
                             t.getGender(),
                             t.getDateOfBirth(),
                             t.getUser(),
                             t.getStatus(),
-                            t.getAssignedSections(),
-                            t.getAssignedClass()
+                            t.getProfilePicture(),
+
+                            t.getAssignedSections() != null
+                                    ? t.getAssignedSections().stream().map(sec -> sec.getSectionId()).toList()
+                                    : null,
+
+                            t.getAssignedClass() != null
+                                    ? t.getAssignedClass().stream().map(cls -> cls.getClassId()).toList()
+                                    : null
                     ))
-                    .toList();
+                    .collect(Collectors.toList());
+
         } catch (Exception e) {
             log.error("Error getting teacher for class ID {} -> {}", classId, e.getMessage(), e);
             throw e;
@@ -422,7 +435,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<Teacher> getTeacherBySectionId(Long sectionId) {
+    @Transactional
+    public List<TeacherDto> getTeacherBySectionId(Long sectionId) {
         try {
             Section section = sectionRepo.findById(sectionId)
                     .orElseThrow(() -> new SectionNotFoundException("Section not found with ID " + sectionId));
@@ -430,27 +444,71 @@ public class TeacherServiceImpl implements TeacherService {
             List<Teacher> teachers = assignRepo.findTeachersBySectionId(sectionId);
 
             return teachers.stream()
-                    .map(t -> new Teacher(
+                    .map(t -> new TeacherDto(
                             t.getId(),
                             t.getFirstName(),
                             t.getLastName(),
                             t.getEmail(),
                             t.getPhone(),
+                            t.getAdminMailId(),
                             t.getQualification(),
                             t.getExperienceYears(),
-                            t.getAdminMailId(),
                             t.getGender(),
                             t.getDateOfBirth(),
                             t.getUser(),
                             t.getStatus(),
-                            t.getAssignedSections(),
-                            t.getAssignedClass()
+                            t.getProfilePicture(),
+
+                            t.getAssignedSections() != null
+                                    ? t.getAssignedSections().stream().map(sec -> sec.getSectionId()).toList()
+                                    : null,
+
+                            t.getAssignedClass() != null
+                                    ? t.getAssignedClass().stream().map(cls -> cls.getClassId()).toList()
+                                    : null
                     ))
-                    .toList();
+                    .collect(Collectors.toList());
+
+
         } catch (Exception e) {
             log.error("Error getting teacher for section ID {} -> {}", sectionId, e.getMessage(), e);
             throw e;
         }
+    }
+
+    @Override
+    public void uploadProfilePicture(Long id, MultipartFile file) throws IOException {
+        Teacher teacher = repo.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found with id: " + id));
+
+        teacher.setProfilePicture(file.getBytes());
+        repo.save(teacher);
+    }
+
+    @Override
+    public void updateProfilePicture(Long id, MultipartFile file) throws IOException {
+        Teacher teacher = repo.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found with id: " + id));
+
+        teacher.setProfilePicture(file.getBytes());
+        repo.save(teacher);
+    }
+
+    @Override
+    public void deleteProfilePicture(Long id) {
+        Teacher teacher = repo.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found with id: " + id));
+
+        teacher.setProfilePicture(null);
+        repo.save(teacher);
+    }
+
+    @Override
+    public byte[] getProfilePicture(Long id) {
+        Teacher teacher = repo.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found with id: " + id));
+
+        return teacher.getProfilePicture();
     }
 
 

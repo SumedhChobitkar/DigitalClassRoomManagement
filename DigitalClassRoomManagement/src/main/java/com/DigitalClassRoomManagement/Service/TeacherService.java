@@ -8,7 +8,9 @@ import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
 import com.DigitalClassRoomManagement.Entity.Teacher;
 import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.Status;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TeacherService {
@@ -47,6 +49,15 @@ public interface TeacherService {
     public User updateStatus(Long id, Status status);
 
     String assignTeacher(Long classId, Long sectionId, AssignTeacherRequestDto dto);
-    List<Teacher> getTeacherByClassId(Long classId);
-    List<Teacher> getTeacherBySectionId(Long sectionId);
+    List<TeacherDto> getTeacherByClassId(Long classId);
+    List<TeacherDto> getTeacherBySectionId(Long sectionId);
+
+    //Teacher dashboard profile
+
+
+    void uploadProfilePicture(Long id, MultipartFile file) throws IOException;
+
+    void updateProfilePicture(Long id, MultipartFile file) throws IOException;
+    void deleteProfilePicture(Long id);
+    byte[] getProfilePicture(Long id);
 }

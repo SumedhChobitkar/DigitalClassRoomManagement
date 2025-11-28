@@ -167,7 +167,7 @@ public class TeacherController {
     @GetMapping("/getTeacherByClassId/{classId}")
     public ResponseEntity<?> getTeachersByClassId(@PathVariable Long classId) {
         try {
-            List<Teacher> teachers = service.getTeacherByClassId(classId);
+            List<TeacherDto> teachers = service.getTeacherByClassId(classId);
             return ResponseEntity.ok(teachers);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -180,7 +180,7 @@ public class TeacherController {
     @GetMapping("/getTeacherBySectionId/{sectionId}")
     public ResponseEntity<?> getTeachersBySectionId(@PathVariable Long sectionId) {
         try {
-            List<Teacher> teachers = service.getTeacherBySectionId(sectionId);
+            List<TeacherDto> teachers = service.getTeacherBySectionId(sectionId);
             return ResponseEntity.ok(teachers);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

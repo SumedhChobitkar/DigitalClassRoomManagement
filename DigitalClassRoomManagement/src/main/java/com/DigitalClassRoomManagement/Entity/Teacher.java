@@ -3,12 +3,14 @@ package com.DigitalClassRoomManagement.Entity;
 
 import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,11 @@ public class Teacher {
     @JsonIgnore
     private List<Section> assignedSections = new ArrayList<>();
 
+    @Lob
+    @Column(name = "profile_picture", columnDefinition = "LONGBLOB")
+    @Basic(fetch = FetchType.LAZY)
+    @Nullable
+    private byte[] profilePicture;
 
 
 //    @ManyToMany
