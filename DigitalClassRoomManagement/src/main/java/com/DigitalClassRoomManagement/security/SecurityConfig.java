@@ -79,6 +79,11 @@ public class SecurityConfig {
                                 "/api/teacher/getTeacherById/{id}",
                                 "/api/teacher/updateTeacherById/{id}",
                                 "/api/teacher/deleteTeacherById/{id}",
+                                //Teacher profile dashboard
+                                "/api/profile/dashboard/{id}/add-profile-picture",
+                                "/api/profile/dashboard/{id}/update-profile-picture",
+                                "/api/profile/dashboard/{id}/get-profile-picture",
+                                "/api/profile/dashboard/{id}/remove-profile-picture",
 
 
                                 // Student Related
