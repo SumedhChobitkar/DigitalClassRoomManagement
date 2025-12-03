@@ -1,15 +1,19 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
+import com.DigitalClassRoomManagement.Dto.LeaveRequestDto;
 import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
+import com.DigitalClassRoomManagement.Entity.LeaveRequest;
 import com.DigitalClassRoomManagement.Entity.SchoolClass;
 import com.DigitalClassRoomManagement.Entity.Teacher;
+import com.DigitalClassRoomManagement.Enum.LeaveRequestStatus;
 import com.DigitalClassRoomManagement.Exception.SchoolClassNotFoundException;
 
 import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 
 import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
+import com.DigitalClassRoomManagement.Repository.LeaveRequestRepository;
 import com.DigitalClassRoomManagement.Repository.SchoolClassRepository;
 import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Repository.UserRepository;
@@ -20,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,7 +42,8 @@ public class TeacherServiceImpl implements TeacherService {
     private UserRepository urepo;
     @Autowired
     private  SchoolClassRepository classRepo;
-
+@Autowired
+private LeaveRequestRepository leaveRequestRepository;
 
     // CREATE
     @Override
@@ -286,7 +293,98 @@ public class TeacherServiceImpl implements TeacherService {
             throw new RuntimeException("Fetch Teachers Failed: " + e.getMessage());
         }
     }
+    @Autowired
+    private UserRepository userRepository;
+    @Override
+    public LeaveRequest applyForLeave(LeaveRequestDto dto) {
+        try {
+            // Fetch Teacher User
+            User user = userRepository.findById(dto.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + dto.getUserId()));
+
+            // Build LeaveRequest from DTO
+            LeaveRequest leave = LeaveRequest.builder()
+                    .user(user)
+                    .leaveType(dto.getLeaveType())
+                    .fromDate(dto.getFromDate())
+                    .toDate(dto.getToDate())
+                    .reason(dto.getReason())
+                    .status(LeaveRequestStatus.PENDING)
+                    .appliedOn(LocalDate.now())
+                    .build();
+
+            // Save leave request
+            LeaveRequest saved = leaveRequestRepository.save(leave);
+
+            log.info("Teacher applied for leave. Leave ID: {}", saved.getLeaveId());
+            return saved;
+
+        } catch (Exception e) {
+            log.error("Error applying for teacher leave", e);
+            throw new RuntimeException("Failed to apply leave");
+        }
+    }
 
 
+    // Fetch student pending leaves
+    @Override
+    public List<LeaveRequest> viewStudentPendingLeaveRequests() {
+        try {
+            List<LeaveRequest> list =
+                    leaveRequestRepository.findByStatus(LeaveRequestStatus.PENDING);
+
+            log.info("Fetched {} pending student leave requests", list.size());
+            return list;
+
+        } catch (Exception e) {
+            log.error("Error fetching pending student leave requests", e);
+            throw new RuntimeException("Failed to fetch leave data");
+        }
+    }
+    //  Approve student leave
+    @Override
+    public LeaveRequest approveStudentLeaveRequest(Long leaveRequestId) {
+        try {
+            LeaveRequest request = leaveRequestRepository.findById(leaveRequestId)
+                    .orElseThrow(() -> new RuntimeException("Leave request not found"));
+
+            request.setStatus(LeaveRequestStatus.APPROVED);
+            request.setApprovalDate(LocalDate.now());
+
+            LeaveRequest updated = leaveRequestRepository.save(request);
+
+            log.info("Approved student leave request ID: {}", leaveRequestId);
+            return updated;
+
+        } catch (Exception e) {
+            log.error("Error approving leave {}", leaveRequestId, e);
+            throw e;
+        }
+    }
+
+    //  Reject student leave
+    @Override
+    public LeaveRequest rejectStudentLeaveRequest(Long leaveRequestId, String remarks) {
+        try {
+            LeaveRequest request = leaveRequestRepository.findById(leaveRequestId)
+                    .orElseThrow(() -> new RuntimeException("Leave request not found"));
+
+            request.setStatus(LeaveRequestStatus.REJECTED);
+            request.setRemarks(remarks);
+            request.setApprovalDate(LocalDate.now());
+
+            LeaveRequest updated = leaveRequestRepository.save(request);
+
+            log.info("Rejected student leave request ID: {}", leaveRequestId);
+            return updated;
+
+        } catch (Exception e) {
+            log.error("Error rejecting leave {}", leaveRequestId, e);
+            throw e;
+        }
+    }
 }
+
+
+
 

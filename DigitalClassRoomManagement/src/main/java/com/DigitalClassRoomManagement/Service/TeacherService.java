@@ -1,9 +1,11 @@
 // file: com/DigitalClassRoomManagement/Service/TeacherService.java
 package com.DigitalClassRoomManagement.Service;
 
+import com.DigitalClassRoomManagement.Dto.LeaveRequestDto;
 import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
+import com.DigitalClassRoomManagement.Entity.LeaveRequest;
 import com.DigitalClassRoomManagement.Entity.Teacher;
 
 import java.util.List;
@@ -38,6 +40,13 @@ public interface TeacherService {
      * Controller (SchoolClassController#getTeachersOfClass) expects DTOs to serialize safely.
      */
     List<TeacherResponseDto> getTeachersOfClass(Long classId);
+    // LeaveRequest applyForLeave(LeaveRequest leaveRequest);
+    LeaveRequest applyForLeave(LeaveRequestDto dto);
+    List<LeaveRequest> viewStudentPendingLeaveRequests();
+
+    LeaveRequest approveStudentLeaveRequest(Long leaveRequestId);
+
+    LeaveRequest rejectStudentLeaveRequest(Long leaveRequestId, String remarks);
 
 
 }
