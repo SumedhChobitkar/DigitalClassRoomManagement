@@ -165,7 +165,37 @@ public class ValidationClass {
     public static final Pattern OCCUPATION_PATTERN = Pattern.compile("^[A-Za-z ]{2,50}$");
     public static final Pattern INCOME_PATTERN = Pattern.compile("^\\d{1,10}(\\.\\d{1,2})?$");
 
+    public static void validateContactUs(String schoolName, String email, String phone, String address) {
 
+        // ---- School Name ----
+        if (schoolName == null || schoolName.trim().isEmpty())
+            throw new IllegalArgumentException("School name is required.");
 
+        if (!NAME_PATTERN.matcher(schoolName).matches())
+            throw new IllegalArgumentException("School name must start with a capital letter and contain only letters, spaces, or dots.");
+
+        // ---- Email ----
+        if (email == null || email.trim().isEmpty())
+            throw new IllegalArgumentException("Email is required.");
+
+        if (!EMAIL_PATTERN.matcher(email).matches())
+            throw new IllegalArgumentException("Invalid email format.");
+
+        // ---- Phone ----
+        if (phone == null || phone.trim().isEmpty())
+            throw new IllegalArgumentException("Phone number is required.");
+
+        if (!phone.matches("^[0-9]{10}$"))
+            throw new IllegalArgumentException("Phone number must be exactly 10 digits.");
+
+        // ---- Address ----
+        if (address == null || address.trim().isEmpty())
+            throw new IllegalArgumentException("Address cannot be empty.");
+
+        if (address.length() < 10 || address.length() > 2000)
+            throw new IllegalArgumentException("Address must be between 10 and 2000 characters.");
+    }
 }
+
+
 
