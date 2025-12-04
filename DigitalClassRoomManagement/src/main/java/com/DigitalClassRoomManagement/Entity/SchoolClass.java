@@ -40,16 +40,17 @@ public class SchoolClass {
     private LocalDateTime updatedAt;
 
     //Ignored Section mapping
-    // @OneToMany(mappedBy = "schoolClass", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    // @JsonIgnore
-    // public List<Object> sections = new ArrayList<>();
-
+    @OneToMany(mappedBy = "schoolClass", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Section> sections = new ArrayList<>();
 
     // Reverse mapping
-    @ManyToMany(mappedBy = "assignedClass", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "assignedClass", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Teacher> teachers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "schoolClass")
+    private List<Timetable> timetables;
 
     @PrePersist
     protected void onCreate() {

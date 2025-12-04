@@ -7,24 +7,38 @@ import com.DigitalClassRoomManagement.Entity.LeaveRequest;
 import com.DigitalClassRoomManagement.Entity.SchoolClass;
 import com.DigitalClassRoomManagement.Entity.Teacher;
 import com.DigitalClassRoomManagement.Enum.LeaveRequestStatus;
+import com.DigitalClassRoomManagement.Dto.AssignTeacherRequestDto;
+import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
+import com.DigitalClassRoomManagement.Dto.TeacherDto;
+import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
+import com.DigitalClassRoomManagement.Entity.*;
+import com.DigitalClassRoomManagement.Enum.Role;
+import com.DigitalClassRoomManagement.Enum.Status;
+import com.DigitalClassRoomManagement.Exception.InvalidImageFormatException;
 import com.DigitalClassRoomManagement.Exception.SchoolClassNotFoundException;
 
-import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 
+import com.DigitalClassRoomManagement.Exception.SectionNotFoundException;
 import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
 import com.DigitalClassRoomManagement.Repository.LeaveRequestRepository;
 import com.DigitalClassRoomManagement.Repository.SchoolClassRepository;
 import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Repository.UserRepository;
+import com.DigitalClassRoomManagement.Repository.*;
+import com.DigitalClassRoomManagement.Service.EmailSenderService;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,6 +58,18 @@ public class TeacherServiceImpl implements TeacherService {
     private  SchoolClassRepository classRepo;
 @Autowired
 private LeaveRequestRepository leaveRequestRepository;
+
+    @Autowired
+    private SectionRepository sectionRepo;
+
+    @Autowired
+    private AssignTeacherRequestRepository assignRepo;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     // CREATE
     @Override
@@ -66,13 +92,23 @@ private LeaveRequestRepository leaveRequestRepository;
         teacher.setFirstName(dto.getFirstName());
         teacher.setLastName(dto.getLastName());
         teacher.setQualification(dto.getQualification());
-        teacher.setDateOfBirth(String.valueOf(dto.getDateOfBirth()));
+        teacher.setDateOfBirth(String.valueOf(LocalDate.parse(String.valueOf(dto.getDateOfBirth()))));
         teacher.setExperienceYears(dto.getExperienceYears());
             User user = urepo.findByEmail(dto.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found with email: " + dto.getEmail()));
         teacher.setUser(user);
         teacher.setStatus(TeacherStatus.PENDING);
+
+            String toEmail =dto.getAdminMailId() ;
+            String subject = "No Reply";
+
+            String body = "Dear " + "Principal"+ "," + "\n\nI hope this message finds you well. " +
+                    "\nYou have new request from " + dto.getFirstName() + "." +"Please check your Dashboard."+
+                    "\nIf you have any related queries, feel free to reach out to us." + "\n\n"
+                    + "Best Regards," + "\n" + "HR Team." + "\n\n\nThis is an auto-generated mail.";
+
         Teacher savedTeacher = repo.save(teacher);
+            emailSenderService.sendEmail(toEmail,subject,body);
         log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
         return "Teacher registration submitted. Pending for approval. " + savedTeacher.getId();
 
@@ -383,6 +419,202 @@ private LeaveRequestRepository leaveRequestRepository;
             throw e;
         }
     }
+    @Override
+    public List<User> getUnapprovedStatusRequest( )
+    {
+        try
+        {
+            List<User> ad = urepo.findAll();
+            List<User> unapprovedStudent = ad.stream()
+                    .filter(a -> a.getStatus() == Status.UNAPPROVED  && a.getRole()== Role.STUDENT || a.getRole()==Role.PARENT )
+                    .toList();
+
+            return unapprovedStudent;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+
+    @Override
+    public List<User> getapprovedStatusRequest( )
+    {
+        try
+        {
+            List<User> ad = urepo.findAll();
+            List<User> approvedStudent = ad.stream()
+                    .filter(a -> a.getStatus() == Status.APPROVED  && a.getRole()== Role.STUDENT || a.getRole()==Role.PARENT)
+                    .toList();
+            return approvedStudent;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+    @Override
+    public User updateStatus(Long id, Status status)
+    {
+        try
+        {
+            Optional<User> u=urepo.findById(id);
+            if(u.isPresent())
+            {
+                User u1=u.get();
+                if(u1.getStatus()==status)
+                {
+                    throw new RuntimeException("Already Done");
+                }else {
+                    u1.setStatus(status);
+                    return urepo.save(u1);
+                }
+            }
+            throw new RuntimeException("UserNotFoud");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String assignTeacher(Long classId, Long sectionId, AssignTeacherRequestDto dto) {
+        SchoolClass schoolClass = classRepo.findById(classId)
+                .orElseThrow(() -> new SchoolClassNotFoundException(classId));
+
+        Section section = sectionRepo.findById(sectionId)
+                .orElseThrow(()-> new SectionNotFoundException("Section not found for Id:"+sectionId));
+        Teacher teacher = repo.findById(dto.getTeacherId())
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found for Id:"+dto.getTeacherId()));
+
+        // Create assignment entry
+        AssignTeacherRequest assignment = new AssignTeacherRequest();
+        assignment.setSchoolClass(schoolClass);
+        assignment.setSectionId(section);
+        assignment.setTeacher(teacher);
+
+        assignRepo.save(assignment);
+
+        return "Teacher assigned successfully to classID: "+classId+" with sectionID: "+sectionId;
+    }
+
+    @Override
+    @Transactional
+    public List<TeacherDto> getTeacherByClassId(Long classId) {
+        try {
+            SchoolClass schoolClass = classRepo.findById(classId)
+                    .orElseThrow(() -> new SchoolClassNotFoundException(classId));
+            List<Teacher> teachers = assignRepo.findTeachersByClassId(classId);
+
+            return teachers.stream()
+                    .map(t -> new TeacherDto(
+                            t.getId(),
+                            t.getFirstName(),
+                            t.getLastName(),
+                            t.getEmail(),
+                            t.getPhone(),
+                            t.getAdminMailId(),
+                            t.getQualification(),
+                            t.getExperienceYears(),
+                            t.getGender(),
+                            t.getDateOfBirth(),
+                            t.getUser(),
+                            t.getStatus(),
+                            t.getProfilePicture(),
+
+                            t.getAssignedSections() != null
+                                    ? t.getAssignedSections().stream().map(sec -> sec.getSectionId()).toList()
+                                    : null,
+
+                            t.getAssignedClass() != null
+                                    ? t.getAssignedClass().stream().map(cls -> cls.getClassId()).toList()
+                                    : null
+                    ))
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Error getting teacher for class ID {} -> {}", classId, e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<TeacherDto> getTeacherBySectionId(Long sectionId) {
+        try {
+            Section section = sectionRepo.findById(sectionId)
+                    .orElseThrow(() -> new SectionNotFoundException("Section not found with ID " + sectionId));
+
+            List<Teacher> teachers = assignRepo.findTeachersBySectionId(sectionId);
+
+            return teachers.stream()
+                    .map(t -> new TeacherDto(
+                            t.getId(),
+                            t.getFirstName(),
+                            t.getLastName(),
+                            t.getEmail(),
+                            t.getPhone(),
+                            t.getAdminMailId(),
+                            t.getQualification(),
+                            t.getExperienceYears(),
+                            t.getGender(),
+                            t.getDateOfBirth(),
+                            t.getUser(),
+                            t.getStatus(),
+                            t.getProfilePicture(),
+
+                            t.getAssignedSections() != null
+                                    ? t.getAssignedSections().stream().map(sec -> sec.getSectionId()).toList()
+                                    : null,
+
+                            t.getAssignedClass() != null
+                                    ? t.getAssignedClass().stream().map(cls -> cls.getClassId()).toList()
+                                    : null
+                    ))
+                    .collect(Collectors.toList());
+
+
+        } catch (Exception e) {
+            log.error("Error getting teacher for section ID {} -> {}", sectionId, e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    public void uploadProfilePicture(Long id, MultipartFile file) throws IOException {
+        Teacher teacher = repo.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found with id: " + id));
+
+        teacher.setProfilePicture(file.getBytes());
+        repo.save(teacher);
+    }
+
+    @Override
+    public void updateProfilePicture(Long id, MultipartFile file) throws IOException {
+        Teacher teacher = repo.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found with id: " + id));
+
+        teacher.setProfilePicture(file.getBytes());
+        repo.save(teacher);
+    }
+
+    @Override
+    public void deleteProfilePicture(Long id) {
+        Teacher teacher = repo.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found with id: " + id));
+
+        teacher.setProfilePicture(null);
+        repo.save(teacher);
+    }
+
+    @Override
+    public byte[] getProfilePicture(Long id) {
+        Teacher teacher = repo.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found with id: " + id));
+
+        return teacher.getProfilePicture();
+    }
+
+
 }
 
 

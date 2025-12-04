@@ -26,8 +26,7 @@ public class SchoolClassController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@Valid @RequestBody SchoolClassRequestDto request) {
         try {
-            log.info("Admin creating class: {}", request.className);
-            SchoolClassResponseDto body = schoolClassService.create(request);
+            log.info("Admin creating class: {}", request.className);            SchoolClassResponseDto body = schoolClassService.create(request);
             return ResponseEntity.ok(body);
         } catch (Exception e) {
             log.error("Error in createClass: {}", e.getMessage(), e);

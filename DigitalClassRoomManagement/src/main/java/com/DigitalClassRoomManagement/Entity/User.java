@@ -2,6 +2,7 @@ package com.DigitalClassRoomManagement.Entity;
 
 import com.DigitalClassRoomManagement.Enum.Role;
 import com.DigitalClassRoomManagement.Enum.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -18,10 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @Column(name = "user_id")
     private Long userId;
-
-    @NotBlank(message = "Username is required")
-    @Size(min = 4, max = 50, message = "Username must be between 4 to 50 characters")
-    @Column(unique = true, nullable = false)
+    
     private String userName;
 
     private String firstName;
@@ -36,7 +34,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Status status;//ACTIVE,INACTIVE
+    private Status status;//APPROVED,UNAPPROVED
 
     private LocalDateTime lastLogin;
 
@@ -47,5 +45,10 @@ public class User {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private Parent parent;
+
 
 }

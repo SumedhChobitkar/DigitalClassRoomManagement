@@ -1,7 +1,10 @@
 package com.DigitalClassRoomManagement.Controller;
 
+import com.DigitalClassRoomManagement.Dto.AssignTeacherRequestDto;
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Entity.Teacher;
+import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -9,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -110,5 +114,78 @@ public class TeacherController {
         }
     }
 
+
+    @GetMapping("/get/unapproved/statusrequest")
+    public ResponseEntity<List<?>>getUnapprovedStatusRequest()
+    {
+        try
+        {
+            return ResponseEntity.ok(service.getUnapprovedStatusRequest());
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @GetMapping("/get/approved/statusrequest")
+    public ResponseEntity<List<?>>getapprovedStatusRequest()
+    {
+        try
+        {
+            return ResponseEntity.ok(service.getapprovedStatusRequest());
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @PutMapping("/update/status/{id}")
+    public ResponseEntity<?> updateStatus(@PathVariable Long id,@RequestParam Status status)
+    {
+        try
+        {
+            User ad=service.updateStatus(id,status);
+            return ResponseEntity.status(HttpStatus.OK).body("Status Changed");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not Changed");
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/assign/{classId}/{sectionId}")
+    public ResponseEntity<?> assignTeacher(@PathVariable Long classId,
+                                           @PathVariable Long sectionId,
+                                           @RequestBody AssignTeacherRequestDto dto) {
+        try {
+            String result = service.assignTeacher(classId, sectionId, dto);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error assigning teacher: " + e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getTeacherByClassId/{classId}")
+    public ResponseEntity<?> getTeachersByClassId(@PathVariable Long classId) {
+        try {
+            List<TeacherDto> teachers = service.getTeacherByClassId(classId);
+            return ResponseEntity.ok(teachers);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error: " + e.getMessage());
+        }
+    }
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getTeacherBySectionId/{sectionId}")
+    public ResponseEntity<?> getTeachersBySectionId(@PathVariable Long sectionId) {
+        try {
+            List<TeacherDto> teachers = service.getTeacherBySectionId(sectionId);
+            return ResponseEntity.ok(teachers);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error: " + e.getMessage());
+        }
+    }
 
 }

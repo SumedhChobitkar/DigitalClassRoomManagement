@@ -32,7 +32,7 @@ public class CalendarController {
         if(!dummyAdmin.isPresent()){
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
-        String username = dummyAdmin.get().getUsername();
+        String username = dummyAdmin.get().getFirstName();
         return ResponseEntity.ok(calendarService.createAcademicCalender(request, username));
     }
 
