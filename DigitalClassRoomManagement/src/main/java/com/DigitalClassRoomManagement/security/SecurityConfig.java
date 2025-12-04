@@ -169,8 +169,17 @@ public class SecurityConfig {
 
                                 //Admin Exam
                                 "/api/Create-exam/CreateExam",
-                                "/api/Create-exam/getAll"
+                                "/api/Create-exam/getAll",
 
+
+                                //FeedBack
+                                "/api/feedback/FeedbackCreate",
+                                "api/feedback/FeedBack_get_student",
+                                "api/feedback/FeedBack_get_parent",
+                                "/api/feedback/{id}",
+                                "api/feedback/getAll",
+                                "api/feedback/{id}/review",
+                                "api/feedback/{id}"
 
 
 
