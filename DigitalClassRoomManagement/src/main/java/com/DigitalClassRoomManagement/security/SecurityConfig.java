@@ -96,6 +96,10 @@ public class SecurityConfig {
 
                                 "/api/teacher/delete",
 
+                                //ContactUs
+                                "/api/contact/**",
+
+
 
                                 //Assignment
                                         "/api/assignments/create",
@@ -170,9 +174,7 @@ public class SecurityConfig {
 
 
 
-
-
-                        ).permitAll()
+                                ).permitAll()
 
 
                         //Section Related
