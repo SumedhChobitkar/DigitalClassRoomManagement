@@ -1,30 +1,47 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
+import com.DigitalClassRoomManagement.Dto.LeaveRequestDto;
+import com.DigitalClassRoomManagement.Entity.LeaveRequest;
+import com.DigitalClassRoomManagement.Entity.Student;
+import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Enum.LeaveRequestStatus;
+import com.DigitalClassRoomManagement.Repository.LeaveRequestRepository;
 import com.DigitalClassRoomManagement.Dto.StudentDTO;
 import com.DigitalClassRoomManagement.Entity.Student;
 import com.DigitalClassRoomManagement.Exception.StudentNotFoundException;
 import com.DigitalClassRoomManagement.Repository.StudentRepository;
+import com.DigitalClassRoomManagement.Repository.UserRepository;
 import com.DigitalClassRoomManagement.Service.StudentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static com.DigitalClassRoomManagement.commonUtil.ValidationClass.*;
+
+@CrossOrigin(origins = "*")
+@Slf4j
 
 
 import static com.DigitalClassRoomManagement.commonUtil.ValidationClass.*;
 
 
 @Service
+
 public class StudentServiceImpl implements StudentService {
 
     private static final Logger logger = Logger.getLogger(StudentServiceImpl.class.getName());
 
     @Autowired
     private StudentRepository studentRepository;
+@Autowired
+private UserRepository userRepository;
+    //  Save a new student
 
     // Save a new student
     @Override
@@ -172,6 +189,71 @@ public class StudentServiceImpl implements StudentService {
             throw new RuntimeException("Internal error during enrollment");
         }
     }
+
+
+   @Autowired
+   private LeaveRequestRepository leaveRequestRepository;
+//    // Apply For Leave
+//    @Override
+//    public LeaveRequest applyForLeave(LeaveRequest leaveRequest) {
+//        try {
+//
+//            // set default status
+//            leaveRequest.setStatus(LeaveRequestStatus.PENDING);
+//
+//            LeaveRequest saved = leaveRequestRepository.save(leaveRequest);
+//
+//            log.info("Student leave request applied successfully, ID: {}", saved.getLeaveId());
+//            return saved;
+//
+//        } catch (Exception e) {
+//            log.error("Error while applying for student leave", e);
+//            throw new RuntimeException("Could not apply for leave");
+//        }
+//    }
+//@Override
+//public LeaveRequest applyForLeave(LeaveRequestDto dto) {
+//    try {
+//        log.info("Student applying for leave, userId = {}", dto.getUserId());
+//
+//        User user = userRepository.findById(dto.getUserId())
+//                .orElseThrow(() -> new RuntimeException("User not found with ID: " + dto.getUserId()));
+//
+//        LeaveRequest leave = LeaveRequest.builder()
+//                .user(user)
+//                .approvedByTeacher(dto.getApprovedByTeacherId())
+//                .teacherId(dto.getTeacherId())
+//                .leaveType(dto.getLeaveType())
+//                .fromDate(dto.getFromDate())
+//                .toDate(dto.getToDate())
+//                .reason(dto.getReason())
+//                .appliedOn(LocalDate.now())
+//                .status(LeaveRequestStatus.PENDING)
+//                .build();
+//
+//        LeaveRequest saved = leaveRequestRepository.save(leave);
+//
+//        log.info("Leave applied successfully with ID {}", saved.getLeaveId());
+//        return saved;
+//
+//    } catch (Exception e) {
+//        log.error("Error while applying for leave", e);
+//        throw new RuntimeException("Failed to apply for leave");
+//    }
+//}
+
+    // View Leave Approval Status
+    @Override
+    public LeaveRequest viewLeaveStatus(Long leaveRequestId) {
+        try {
+            return leaveRequestRepository.findById(leaveRequestId)
+                    .orElseThrow(() -> new RuntimeException("Leave request not found"));
+        } catch (Exception e) {
+            log.error("Error while fetching leave status {}", leaveRequestId, e);
+            throw e;
+        }
+    }
+}
 
 
 

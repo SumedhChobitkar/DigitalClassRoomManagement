@@ -1,5 +1,7 @@
 package com.DigitalClassRoomManagement.Service;
 
+import com.DigitalClassRoomManagement.Dto.LeaveRequestDto;
+import com.DigitalClassRoomManagement.Entity.LeaveRequest;
 import com.DigitalClassRoomManagement.Dto.StudentDTO;
 import com.DigitalClassRoomManagement.Entity.Student;
 
@@ -18,7 +20,11 @@ import java.util.Optional;
         Student updateStudent(Long id, Student updatedStudent);
 
         void deleteStudent(Long id);
+       // LeaveRequest applyForLeave(LeaveRequest leaveRequest);
 
+        LeaveRequest viewLeaveStatus(Long leaveRequestId);
+
+//        public LeaveRequest applyForLeave(LeaveRequestDto dto);
         List<Student> getStudentsByClass(String className);
 
        // StudentDTO.EnrollmentRequest.StudentCreateResponse enrollStudent(Long studentId, StudentDTO.EnrollmentRequest request);
