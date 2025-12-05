@@ -11,4 +11,12 @@ public interface AttendanceService{
     public Attendance getAttendanceByID(Long id);
     public String updateAttendanceById(Long id, AttendanceDto dto);
     public String deleteById(Long id);
+
+    String joinSession(String email, Long sessionId);
+
+    String leaveSession(String email, Long sessionId);
+
+    String markAbsent(Long sessionId, String email);
+
+    List<Attendance> getStudentsBySession(Long sessionId);
 }
