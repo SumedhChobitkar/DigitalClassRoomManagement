@@ -96,6 +96,10 @@ public class SecurityConfig {
 
                                 "/api/teacher/delete",
 
+                                //ContactUs
+                                "/api/contact/**",
+
+
 
                                 //Assignment
                                         "/api/assignments/create",
@@ -136,11 +140,6 @@ public class SecurityConfig {
                                 "/api/Librarymembers/updateLibraryMemberById/{id}",
                                 "/api/Librarymembers/deleteLibraryMemberyById/{id}",
 
-                                //Student
-                                "/api/students/**",
-
-                                //parent
-                                "/api/parents/**",
 
 
                                 //Result
@@ -165,14 +164,21 @@ public class SecurityConfig {
 
                                 //Admin Exam
                                 "/api/Create-exam/CreateExam",
-                                "/api/Create-exam/getAll"
+                                "/api/Create-exam/getAll",
+
+
+                                //FeedBack
+                                "/api/feedback/FeedbackCreate",
+                                "api/feedback/FeedBack_get_student",
+                                "api/feedback/FeedBack_get_parent",
+                                "/api/feedback/{id}",
+                                "api/feedback/getAll",
+                                "api/feedback/{id}/review",
+                                "api/feedback/{id}"
 
 
 
-
-
-
-                        ).permitAll()
+                                ).permitAll()
 
 
                         //Section Related
@@ -206,7 +212,21 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/timetable").hasRole("STUDENT")
                         .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/section").hasRole("STUDENT")
 
+                        // STUDENT
+                        .requestMatchers(HttpMethod.POST,"/api/students/saveStudent").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/students/getStudentById/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN", "PARENT")
+                        .requestMatchers(HttpMethod.GET, "/api/students/getAllStudent").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/students/updateStudentById/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/students/deleteStudentById/**").hasRole("ADMIN")
 
+                        // parent
+                        .requestMatchers(HttpMethod.POST, "/api/parents/saveParent").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/parents/getParentById/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/parents/getAllParent").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/parents/updateParent/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/parents/deleteParentById/**").hasAnyRole("TEACHER", "ADMIN")
+                        // Linking parent to student — ADMIN ONLY
+                        .requestMatchers(HttpMethod.POST, "/api/parents/linkParentToStudent").hasRole("ADMIN")
 
 
 
