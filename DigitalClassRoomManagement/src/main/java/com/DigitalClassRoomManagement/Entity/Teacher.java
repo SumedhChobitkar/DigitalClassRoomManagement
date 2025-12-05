@@ -49,8 +49,18 @@ public class Teacher {
             joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "section_id", referencedColumnName = "sectionId")
     )
+
+
+
+
     @JsonIgnore
     private List<Section> assignedSections = new ArrayList<>();
+
+    //  ADD THIS — Mapping with Students
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Student> students = new ArrayList<>();
+
 
     @Lob
     @Column(name = "profile_picture", columnDefinition = "LONGBLOB")
@@ -77,12 +87,6 @@ public class Teacher {
 //    @Builder.Default
 //    private List<Section> assignedSection = new ArrayList<>();
 //
-//    @ManyToMany
-//    @JoinTable(
-//            name = "teacher_student",
-//            joinColumns = @JoinColumn(name = "teacher_id"),
-//            inverseJoinColumns = @JoinColumn(name = "student_reg_id")
-//    )
 //    @Builder.Default
 //    private List<Student> student = new ArrayList<>();
 //

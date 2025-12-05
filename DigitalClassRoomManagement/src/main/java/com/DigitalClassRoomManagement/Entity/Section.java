@@ -44,6 +44,12 @@ public class Section {
     @JsonIgnore
     private SchoolClass schoolClass;
 
+    //student mapping
+    @OneToMany(mappedBy = "section")
+    @JsonIgnore
+    private List<Student> students = new ArrayList<>();
+
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
