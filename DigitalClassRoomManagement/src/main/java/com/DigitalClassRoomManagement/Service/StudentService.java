@@ -22,6 +22,15 @@ import java.util.Optional;
         void deleteStudent(Long id);
        // LeaveRequest applyForLeave(LeaveRequest leaveRequest);
 
+        Student assignTeacher(Long studentId, Long teacherId);
+
+        Student assignSection(Long studentId, Long sectionId);
+
+        Student assignParent(Long studentId, Long parentId);
+
+        Student assignClass(Long studentId, Long classId);
+
+
         LeaveRequest viewLeaveStatus(Long leaveRequestId);
 
 //        public LeaveRequest applyForLeave(LeaveRequestDto dto);

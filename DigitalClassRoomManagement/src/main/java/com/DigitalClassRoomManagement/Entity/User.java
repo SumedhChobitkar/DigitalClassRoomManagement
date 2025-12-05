@@ -50,5 +50,7 @@ public class User {
     @JsonIgnore
     private Parent parent;
 
-
+    @OneToOne(mappedBy = "users")
+    @JsonIgnore
+    private Student student;
 }

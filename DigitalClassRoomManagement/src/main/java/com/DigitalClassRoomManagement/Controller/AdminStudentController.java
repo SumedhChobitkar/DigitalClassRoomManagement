@@ -1,9 +1,8 @@
 package com.DigitalClassRoomManagement.Controller;
 
 import com.DigitalClassRoomManagement.Dto.StudentDTO;
-import com.DigitalClassRoomManagement.Entity.Student;
-import com.DigitalClassRoomManagement.Entity.User;
-import com.DigitalClassRoomManagement.Repository.UserRepository;
+import com.DigitalClassRoomManagement.Entity.*;
+import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Service.StudentService;
 
 import org.slf4j.Logger;
@@ -30,6 +29,21 @@ public class AdminStudentController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Autowired
+    private SectionRepository sectionRepository;
+
+    @Autowired
+    private ParentRepository parentRepository;
+
+    @Autowired
+    private SchoolClassRepository schoolClassRepository;
+
+
+
+
     // CREATE STUDENT
     @PostMapping("/saveStudent")
     public ResponseEntity<?> createStudent(@RequestBody StudentDTO studentDTO) {
@@ -53,6 +67,10 @@ public class AdminStudentController {
             student.setState(studentDTO.getState());
             student.setCountry(studentDTO.getCountry());
             student.setPinCode(studentDTO.getPinCode());
+            student.setTeacherMailId(studentDTO.getTeacherMailId());
+            student.setTeacher(studentDTO.getTeacher());
+            student.setSection(studentDTO.getSection());
+            student.setSchoolClass(studentDTO.getSchoolClass());
 
             if (studentDTO.getUsers() != null && studentDTO.getUsers().getUserId() != null) {
                 logger.info("Fetching user with ID: {}", studentDTO.getUsers().getUserId());
@@ -101,7 +119,12 @@ public class AdminStudentController {
                             student.getState(),
                             student.getCountry(),
                             student.getPinCode(),
-                            student.getUsers()
+                            student.getUsers(),
+                            student.getTeacherMailId(),
+                            student.getTeacher(),
+                            student.getSection(),
+                            student.getSchoolClass()
+
                     ))
                     .collect(Collectors.toList());
 
@@ -143,7 +166,11 @@ public class AdminStudentController {
                     student.getState(),
                     student.getCountry(),
                     student.getPinCode(),
-                    student.getUsers()
+                    student.getUsers(),
+                    student.getTeacherMailId(),
+                    student.getTeacher(),
+                    student.getSection(),
+                    student.getSchoolClass()
             );
 
             logger.info("Student found: {}", student.getFirstName());
@@ -222,29 +249,109 @@ public class AdminStudentController {
                     .body("Error deleting student: " + e.getMessage());
         }
     }
-
-    // ADD THIS IN YOUR CONTROLLER
-
-    /*@PutMapping("/enroll/{studentId}")
-    public ResponseEntity<StudentCreateResponse> enrollStudent(
+      // assign teacher by studentid
+    @PutMapping("/assignTeacher/{studentId}/{teacherId}")
+    public ResponseEntity<?> assignTeacherToStudent(
             @PathVariable Long studentId,
-            @RequestBody EnrollmentRequest request) {
+            @PathVariable Long teacherId) {
 
-        logger.info("Enrolling student with ID: {}", studentId);
+        logger.info("Assigning teacher {} to student {}", teacherId, studentId);
 
         try {
-            StudentCreateResponse response = studentService.enrollStudent(studentId, request);
-            return ResponseEntity.ok(response);
+            Student student = studentService.getStudentById(studentId)
+                    .orElseThrow(() -> new RuntimeException("Student not found"));
 
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new StudentCreateResponse("FAILED", e.getMessage()));
+            Teacher teacher = teacherRepository.findById(teacherId)
+                    .orElseThrow(() -> new RuntimeException("Teacher not found"));
 
+            student.setTeacher(teacher);
+            studentService.updateStudent(studentId, student);
+
+            return ResponseEntity.ok("Teacher assigned successfully!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new StudentCreateResponse("FAILED", "Internal server error"));
+            logger.error("Failed assigning teacher: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Failed to assign teacher: " + e.getMessage());
         }
-    }*/
+    }
+     // assign section by studentid
+    @PutMapping("/assignSection/{studentId}/{sectionId}")
+    public ResponseEntity<?> assignSectionToStudent(
+            @PathVariable Long studentId,
+            @PathVariable Long sectionId) {
+
+        logger.info("Assigning section {} to student {}", sectionId, studentId);
+
+        try {
+            Student student = studentService.getStudentById(studentId)
+                    .orElseThrow(() -> new RuntimeException("Student not found"));
+
+            Section section = sectionRepository.findById(sectionId)
+                    .orElseThrow(() -> new RuntimeException("Section not found"));
+
+            student.setSection(section);
+            studentService.updateStudent(studentId, student);
+
+            return ResponseEntity.ok("Section assigned successfully!");
+        } catch (Exception e) {
+            logger.error("Failed assigning section: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Failed to assign section: " + e.getMessage());
+        }
+    }
+    // assign parent by studentid
+    @PutMapping("/assignParent/{studentId}/{parentId}")
+    public ResponseEntity<?> assignParentToStudent(
+            @PathVariable Long studentId,
+            @PathVariable Long parentId) {
+
+        logger.info("Assigning parent {} to student {}", parentId, studentId);
+
+        try {
+            Student student = studentService.getStudentById(studentId)
+                    .orElseThrow(() -> new RuntimeException("Student not found"));
+
+            Parent parent = parentRepository.findById(parentId)
+                    .orElseThrow(() -> new RuntimeException("Parent not found"));
+
+            student.setParent(parent);
+            studentService.updateStudent(studentId, student);
+
+            return ResponseEntity.ok("Parent assigned successfully!");
+        } catch (Exception e) {
+            logger.error("Failed assigning parent: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Failed to assign parent: " + e.getMessage());
+        }
+    }
+     // assign class by studentbyid
+    @PutMapping("/assignClass/{studentId}/{classId}")
+    public ResponseEntity<?> assignClassToStudent(
+            @PathVariable Long studentId,
+            @PathVariable Long classId) {
+
+        logger.info("Assigning class {} to student {}", classId, studentId);
+
+        try {
+            Student student = studentService.getStudentById(studentId)
+                    .orElseThrow(() -> new RuntimeException("Student not found"));
+
+            SchoolClass schoolClass = schoolClassRepository.findById(classId)
+                    .orElseThrow(() -> new RuntimeException("Class not found"));
+
+            student.setSchoolClass(schoolClass);
+            studentService.updateStudent(studentId, student);
+
+            return ResponseEntity.ok("Class assigned successfully!");
+        } catch (Exception e) {
+            logger.error("Failed assigning class: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Failed to assign class: " + e.getMessage());
+        }
+    }
+
+
+
 
 
     @PutMapping("/enroll/{studentId}")
@@ -277,6 +384,8 @@ public class AdminStudentController {
                     ));
         }
     }
+
+
 
 
 
