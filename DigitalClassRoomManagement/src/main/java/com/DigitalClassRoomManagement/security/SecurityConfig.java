@@ -142,6 +142,8 @@ public class SecurityConfig {
 
 
 
+
+
                                 ).permitAll()
 
                         //Teacher Exam
@@ -172,7 +174,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/feedback/Delete/{id}").hasRole("ADMIN")
 
                         //Admin Exam
-                        .requestMatchers(HttpMethod.POST, "/api/exams/Exam-Create").hasAnyRole("ADMIN", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.POST, "/api/exams/examSave").hasAnyRole("ADMIN", "PRINCIPAL")
                         .requestMatchers(HttpMethod.GET, "/api/exams/GetAllExam").hasAnyRole("ADMIN", "TEACHER", "PRINCIPAL")
                         .requestMatchers(HttpMethod.GET, "/api/exams/{id}").hasAnyRole("ADMIN", "TEACHER")
                         .requestMatchers(HttpMethod.PUT, "/api/exams/Update_By/{id}").hasRole("ADMIN")
