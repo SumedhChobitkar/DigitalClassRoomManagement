@@ -2,7 +2,6 @@ package com.DigitalClassRoomManagement.Controller;
 
 import com.DigitalClassRoomManagement.Dto.ExamDto;
 import com.DigitalClassRoomManagement.Dto.ResultDto;
-import com.DigitalClassRoomManagement.Entity.ExamSubmission;
 import com.DigitalClassRoomManagement.Service.ExamService;
 import com.DigitalClassRoomManagement.Service.ExamSubmissionService;
 import com.DigitalClassRoomManagement.Service.ResultService;
@@ -11,12 +10,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Tag(name = "Student Exam APIs", description = "Operations for students to view and submit exams")
@@ -35,39 +36,52 @@ public class StudentExamController {
     @Autowired
     private ResultService resultService;
 
-    // ------------------ Submit Exam ------------------
+
+    // <-------------------- Submit Exam ------------------------------>
     @Operation(summary = "Submit Exam", description = "Allows a student to submit answers for a specific exam")
     @ApiResponse(responseCode = "200", description = "Exam submitted successfully")
     @ApiResponse(responseCode = "500", description = "Failed to submit exam")
-    @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/submit")
+    @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<?> submitExam(
-            @RequestParam Long examId,
             @RequestParam Long studentId,
-            @RequestBody ExamSubmission examSubmission
+            @RequestParam Long examId,
+            @RequestBody Map<Long, String> answers
     ) {
-        log.info("Received exam submission request | examId: {}, studentId: {}", examId, studentId);
+
+        log.info("API Call: submitExam studentId={}, examId={}, answersCount={}",
+                studentId, examId, answers != null ? answers.size() : 0);
 
         try {
-            ExamSubmission savedSubmission =
-                    examSubmissionService.submitExam(examId, studentId, examSubmission.getAnswers());
+            examSubmissionService.submitExam(studentId, examId, answers);
 
-            log.info("Exam submitted successfully for studentId: {}", studentId);
-            return ResponseEntity.ok(savedSubmission);
+            log.info("Exam submitted successfully for studentId={}, examId={}", studentId, examId);
+            return ResponseEntity.ok("Exam submitted successfully");
 
-        } catch (Exception e) {
-            log.error("Error while submitting exam for studentId={}: {}", studentId, e.getMessage(), e);
-            return ResponseEntity.status(500).body("Failed to submit exam: " + e.getMessage());
+        } catch (RuntimeException ex) {
+            log.error("Failed to submit exam. studentId={}, examId={}, message={}",
+                    studentId, examId, ex.getMessage());
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Failed to submit exam: " + ex.getMessage());
+
+        } catch (Exception ex) {
+            log.error("Unexpected error while submitting exam", ex);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred while submitting the exam.");
         }
     }
 
-    // ------------------ Get Scheduled Exams ------------------
+
+    // <------------------- Get Scheduled Exams ---------------------->
     @Operation(summary = "Get Scheduled Exams", description = "Fetches all exams that are upcoming or ongoing for students")
     @ApiResponse(responseCode = "200", description = "Exams fetched successfully")
     @ApiResponse(responseCode = "500", description = "Failed to fetch exams")
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('STUDENT','TEACHER','ADMIN', 'PRINCIPAL' )")
     @GetMapping("/scheduled")
     public ResponseEntity<?> getScheduledExams() {
+
         log.info("Fetching scheduled exams for students");
 
         try {
@@ -75,8 +89,11 @@ public class StudentExamController {
             LocalDateTime now = LocalDateTime.now();
 
             List<ExamDto> scheduledExams = allExams.stream()
-                    .filter(exam -> exam.getStartTime().isAfter(now) ||
-                            (exam.getStartTime().isBefore(now) && exam.getEndTime().isAfter(now)))
+                    .filter(exam ->
+                            exam.getStartTime().isAfter(now) ||
+                                    (exam.getStartTime().isBefore(now) &&
+                                            exam.getEndTime().isAfter(now))
+                    )
                     .collect(Collectors.toList());
 
             if (scheduledExams.isEmpty()) {
@@ -93,14 +110,16 @@ public class StudentExamController {
         }
     }
 
-    // ------------------ View Results ------------------
-    @Operation(summary = "View Exam Results", description = "Fetch results for students with optional filters by studentId and/or examId")
+
+    //  <--------------------- View Results ---------------------------->
+    @Operation(summary = "View Exam Results", description = "Fetch results with optional filters by studentId and examId")
     @ApiResponse(responseCode = "200", description = "Results fetched successfully")
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('STUDENT','PARENT')")
     @GetMapping("/result")
     public ResponseEntity<?> viewResults(
             @RequestParam(required = false) Long studentId,
-            @RequestParam(required = false) Long examId) {
+            @RequestParam(required = false) Long examId
+    ) {
 
         log.info("Fetching results with studentId={} and examId={}", studentId, examId);
 

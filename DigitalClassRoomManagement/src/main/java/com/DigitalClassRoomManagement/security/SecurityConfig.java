@@ -116,7 +116,7 @@ public class SecurityConfig {
                                 "api/teacher/assignments/updateAssignmentById/{id}",
                                 "api/teacher/assignments/getAllAssignments",
                                 "api/teacher/assignments/getAssignmentById/{id}",
-                                "api/teacher/assignments/deleteAssignmentById/{id",
+                                "api/teacher/assignments/deleteAssignmentById/{id}",
 
                                 // Homework
                                 "/api/homeworks/saveHomework",
@@ -138,47 +138,45 @@ public class SecurityConfig {
                                 "/api/Librarymembers/getByIdLibraryMember/{id}",
                                   "/api/Librarymembers/getAllLibraryMembers",
                                 "/api/Librarymembers/updateLibraryMemberById/{id}",
-                                "/api/Librarymembers/deleteLibraryMemberyById/{id}",
-
-
-
-                                //Result
-                                "/api/results/SaverResult",
-                                "/api/results/GetResult/{id}",
-                                "/api/results/getAllResult",
-                                "/api/results/UpdateResult/{id}",
-                                "api/results/DeleteById/{id}",
-                                "/api/results/top",
-
-
-                                //StudentExam
-                                "/api/exam/submit",
-                                "/api/exam/getAllExam",
-                                "/api/exam/result",
-
-
-                                //TeacherExam
-                                "/api/TeacherExam/{examId}/questions",
-                                "/api/TeacherExam/submissions",
-
-
-                                //Admin Exam
-                                "/api/Create-exam/CreateExam",
-                                "/api/Create-exam/getAll",
-
-
-                                //FeedBack
-                                "/api/feedback/FeedbackCreate",
-                                "api/feedback/FeedBack_get_student",
-                                "api/feedback/FeedBack_get_parent",
-                                "/api/feedback/{id}",
-                                "api/feedback/getAll",
-                                "api/feedback/{id}/review",
-                                "api/feedback/{id}"
+                                "/api/Librarymembers/deleteLibraryMemberyById/{id}"
 
 
 
                                 ).permitAll()
+
+                        //Teacher Exam
+                        .requestMatchers(HttpMethod.POST, "/api/teacher/exam/{examId}/questions").hasAnyRole("TEACHER", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/teacher/exam/submissions").hasRole("TEACHER")
+
+                        // Student Exam
+                        .requestMatchers(HttpMethod.POST, "/api/student/exam/submit").hasRole("STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/student/exam/scheduled").hasAnyRole("STUDENT", "TEACHER", "ADMIN", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/student/exam/result").hasAnyRole("STUDENT", "PARENT")
+
+                        //Result
+                        .requestMatchers(HttpMethod.POST, "/api/results/Create-result").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/results/{id}").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/results/GetAll").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/results/Update_by/{id}").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/results/Delete/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/results/top").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+
+
+                        //  Feedback
+                        .requestMatchers(HttpMethod.POST, "/api/feedback/FeedbackCreate").hasAnyRole("STUDENT", "PARENT")
+                        .requestMatchers(HttpMethod.GET, "/api/feedback/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/feedback/FeedBack_get_student").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/feedback/FeedBack_get_parent").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/feedback/getAll").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/feedback/{id}/review").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/feedback/Delete/{id}").hasRole("ADMIN")
+
+                        //Admin Exam
+                        .requestMatchers(HttpMethod.POST, "/api/exams/Exam-Create").hasAnyRole("ADMIN", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/exams/GetAllExam").hasAnyRole("ADMIN", "TEACHER", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/exams/{id}").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/exams/Update_By/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/exams/Delete/{id}").hasRole("ADMIN")
 
 
                         //Section Related

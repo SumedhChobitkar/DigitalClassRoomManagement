@@ -29,7 +29,7 @@ public class AdminExamController {
     @ApiResponse(responseCode = "201", description = "Exam created successfully")
     @ApiResponse(responseCode = "500", description = "Failed to create exam")
     @PostMapping("/Exam-Create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','PRINCIPAL')")
     public ResponseEntity<?> createExam(@RequestBody ExamDto examDto) {
         log.info("Request to create exam: {}", examDto);
         try {
@@ -46,7 +46,7 @@ public class AdminExamController {
     @Operation(summary = "Get Exams", description = "Fetches all exams or filtered by examId and/or teacherId")
     @ApiResponse(responseCode = "200", description = "Exams fetched successfully")
     @GetMapping("/GetAllExam")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','PRINCIPAL')")
     public ResponseEntity<?> getExams(
             @RequestParam(required = false) Long examId,
             @RequestParam(required = false) Long teacherId
@@ -87,7 +87,7 @@ public class AdminExamController {
     @Operation(summary = "Update Exam", description = "Updates an existing exam by ID")
     @ApiResponse(responseCode = "200", description = "Exam updated successfully")
     @ApiResponse(responseCode = "404", description = "Exam not found")
-    @PutMapping("/{id}")
+    @PutMapping("/Update_By/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateExam(@PathVariable Long id, @RequestBody ExamDto examDto) {
         log.info("Request to update exam with ID: {}", id);
@@ -108,7 +108,7 @@ public class AdminExamController {
     @Operation(summary = "Delete Exam", description = "Deletes an exam by ID")
     @ApiResponse(responseCode = "200", description = "Exam deleted successfully")
     @ApiResponse(responseCode = "404", description = "Exam not found")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/Delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteExam(@PathVariable Long id) {
         log.info("Request to delete exam with ID: {}", id);

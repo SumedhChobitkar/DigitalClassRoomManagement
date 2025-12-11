@@ -24,7 +24,7 @@ public class ExamQuestion {
 
     private String questionText;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private QuestionType questionType;
 
     @ElementCollection
