@@ -16,6 +16,7 @@ import java.util.Map;
 @RequestMapping("/api/submissions")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin("*")
 public class AssignmentSubmissionController {
 
     @Autowired

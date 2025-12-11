@@ -53,13 +53,22 @@ public class ContactUsController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/getAllContacts")
     @Operation(summary = "Get All Contacts")
-    public ResponseEntity<List<ContactUsDto>> getAllContacts() {
-        List<ContactUsDto> contacts = contactService.getAll();
-        logger.info("Fetched all contact messages, total: {}", contacts.size());
-        return ResponseEntity.ok(contacts);
+    public ResponseEntity<?> getAllContacts() {
+        try {
+            List<ContactUsDto> contacts = contactService.getAll();
+            logger.info("Fetched all contact messages, total: {}", contacts.size());
+            return ResponseEntity.ok(contacts);
+
+        } catch (Exception e) {
+            logger.error("Error fetching all contact messages", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong while fetching contacts: " + e.getMessage());
+        }
     }
+
+
 
     @PutMapping("updateContactById/{id}")
     @Operation(summary = "Update Contact by ID")

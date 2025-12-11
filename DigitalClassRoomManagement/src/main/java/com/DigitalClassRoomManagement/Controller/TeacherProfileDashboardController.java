@@ -16,6 +16,7 @@ import java.util.Base64;
 
 @RestController
 @RequestMapping("/api/profile/dashboard")
+@CrossOrigin(origins = "*")
 public class TeacherProfileDashboardController {
     @Autowired
     private TeacherService teacherService;

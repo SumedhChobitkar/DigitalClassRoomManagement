@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/teacher/assignments")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class TeacherAssignmentController {
 
     @Autowired
