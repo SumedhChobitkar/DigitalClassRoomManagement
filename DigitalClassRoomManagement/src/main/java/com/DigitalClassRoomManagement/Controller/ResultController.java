@@ -75,7 +75,7 @@ public class ResultController {
     }
 
     //<----------------------UPDATE RESULT BY ID----------------->
-    @PutMapping("/{id}")
+    @PutMapping("Update_by/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @Operation(summary = "Update Result", description = "Update an existing result by ID")
     @ApiResponse(responseCode = "200", description = "Result updated successfully")
@@ -92,7 +92,7 @@ public class ResultController {
     }
 
     //<-----------------------DELETE RESULT------------------------->
-    @DeleteMapping("/{id}")
+    @DeleteMapping("Delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete Result", description = "Delete a result by ID")
     @ApiResponse(responseCode = "204", description = "Result deleted successfully")

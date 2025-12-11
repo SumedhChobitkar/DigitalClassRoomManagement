@@ -21,62 +21,6 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
     @Autowired
     private ExamRepository examRepository;
 
-
-    public ExamQuestionDto addQuestion(ExamQuestionDto dto) {
-
-        try {
-            log.info("Adding question for examId: {}", dto.getExamId());
-
-            //<---------------- MCQ VALIDATION  ------------------->
-
-            if (dto.getQuestionType() != null && dto.getQuestionType().name().equals("MCQ")) {
-
-                log.debug("Validating MCQ options for examId: {}", dto.getExamId());
-
-                if (dto.getOptions() == null || dto.getOptions().isEmpty()) {
-                    log.error("MCQ question missing options for examId: {}", dto.getExamId());
-                    throw new IllegalArgumentException("MCQ must have options");
-                }
-
-                if (!dto.getOptions().contains(dto.getCorrectAnswer())) {
-                    log.error("Correct answer not in options for examId: {}", dto.getExamId());
-                    throw new IllegalArgumentException("Correct answer must be one of the options");
-                }
-            }
-
-           Exam exam= examRepository.findById(dto.getExamId()).orElseThrow(()-> new RuntimeException("Exam id not found"));
-
-            // <------------------ MAP DTO ENTITY-------------------------->
-            ExamQuestion question = ExamQuestion.builder()
-                    .exam(exam)
-                    .questionText(dto.getQuestionText())
-                    .questionType(dto.getQuestionType())
-                    .options(dto.getOptions())
-                    .correctAnswer(dto.getCorrectAnswer())
-                    .marks(dto.getMarks())
-                    .build();
-
-            log.debug("Saving question to database for examId: {}", dto.getExamId());
-            ExamQuestion savedQuestion = questionRequestRepository.save(question);
-
-            // <---------------- MAP ENTITY DTO ---------------------------->
-
-            return ExamQuestionDto.builder()
-                    .examId(savedQuestion.getExam().getExamId())
-                    .questionText(savedQuestion.getQuestionText())
-                    .questionType(savedQuestion.getQuestionType())
-                    .options(savedQuestion.getOptions())
-                    .correctAnswer(savedQuestion.getCorrectAnswer())
-                    .marks(savedQuestion.getMarks())
-                    .build();
-
-        } catch (Exception e) {
-            log.error("Error occurred while adding question for examId {}: {}",
-                    dto.getExamId(), e.getMessage(), e);
-            throw e;
-        }
-    }
-
     @Override
     public void addQuestions(Long examId, List<ExamQuestion> questions, Long teacherId) {
         try {

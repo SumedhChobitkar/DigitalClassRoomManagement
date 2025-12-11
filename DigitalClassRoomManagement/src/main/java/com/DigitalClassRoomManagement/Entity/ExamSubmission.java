@@ -2,17 +2,20 @@ package com.DigitalClassRoomManagement.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
 @Table
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ExamSubmission {
 
     @Id
@@ -29,14 +32,20 @@ public class ExamSubmission {
 
     private LocalDateTime submittedAt;
 
-    @Column(columnDefinition = "TEXT")
-    private String answers; // JSON string
+//    @Column(columnDefinition = "TEXT")
+//    private String answers; // JSON string
+
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ExamSubmissionAnswer> answers;
 
     private BigDecimal obtainedMarks;
 
-    private LocalDateTime submissionStatus;  // FIX naming (was SubmissionStatus)
+    @Column(name = "submission_status")
+    private LocalDateTime submissionStatus;   // FIX naming (was SubmissionStatus)
 
     private Long evaluatedBy;
 
     private LocalDateTime evaluatedAt;
+
+
 }

@@ -32,7 +32,7 @@ public class TeacherExamController {
     @Operation(summary = "Add Questions", description = "Allows a teacher to add multiple questions to a specific exam")
     @ApiResponse(responseCode = "200", description = "Questions added successfully")
     @ApiResponse(responseCode = "400", description = "Failed to add questions")
-    @PreAuthorize("hasRole('TEACHER')")
+    @PreAuthorize("hasAnyRole('TEACHER','PRINCIPAL')")
     @PostMapping("/{examId}/questions")
     public ResponseEntity<?> addQuestions(
             @PathVariable Long examId,

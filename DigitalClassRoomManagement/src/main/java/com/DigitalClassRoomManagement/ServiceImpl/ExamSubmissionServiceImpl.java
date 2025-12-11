@@ -1,20 +1,18 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
-import com.DigitalClassRoomManagement.Entity.Exam;
-import com.DigitalClassRoomManagement.Entity.ExamSubmission;
-import com.DigitalClassRoomManagement.Entity.Student;
-import com.DigitalClassRoomManagement.Repository.ExamRepository;
-import com.DigitalClassRoomManagement.Repository.ExamSubmissionRepository;
-import com.DigitalClassRoomManagement.Repository.StudentRepository;
+import com.DigitalClassRoomManagement.Entity.*;
+import com.DigitalClassRoomManagement.Enum.SubmissionStatus;
+import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Service.ExamSubmissionService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -30,31 +28,80 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
     private StudentRepository studentRepository;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private ExamQuestionRepository questionRepository;
+
+    @Autowired
+    private ExamSubmissionAnswerRepository answerRepository;
 
     // <---------------------- SUBMIT EXAM ------------------------------>
     @Override
-    public ExamSubmission submitExam(Long examId, Long studentId, String answers) {
+    @Transactional
+    public void submitExam(Long studentId, Long examId, Map<Long, String> answersMap) {
+        log.info("Submitting exam. studentId={}, examId={}", studentId, examId);
 
-        Exam exam = examRepository.findById(examId)
-                .orElseThrow(() -> new RuntimeException("Exam not found with ID: " + examId));
+        try {
+            // Fetch student
+            Student student = studentRepository.findById(studentId)
+                    .orElseThrow(() -> {
+                        log.error("Student not found with id={}", studentId);
+                        return new RuntimeException("Student not found");
+                    });
 
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId));
+            // Fetch exam
+            Exam exam = examRepository.findById(examId)
+                    .orElseThrow(() -> {
+                        log.error("Exam not found with id={}", examId);
+                        return new RuntimeException("Exam not found");
+                    });
 
-        boolean alreadySubmitted = examSubmissionRepository
-                .existsByExamAndStudent(exam, student);
+            // Create ExamSubmission
+            ExamSubmission submission = ExamSubmission.builder()
+                    .student(student)
+                    .exam(exam)
+                    .submittedAt(LocalDateTime.now())
+                    .submissionStatus(LocalDateTime.now())
+                    .build();
+            examSubmissionRepository.save(submission);
+            log.info("ExamSubmission created: submissionId={}", submission.getSubmissionId() );
 
-        if (alreadySubmitted) {
-            throw new RuntimeException("Student has already submitted this exam");
+            // Create ExamSubmissionAnswer list
+            List<ExamSubmissionAnswer> submissionAnswers = new ArrayList<>();
+            for (Map.Entry<Long, String> entry : answersMap.entrySet()) {
+                Long questionId = entry.getKey();
+                String answerText = entry.getValue();
+
+                ExamQuestion question = questionRepository.findById(questionId)
+                        .orElseThrow(() -> {
+                            log.error("Question not found: questionId={}", questionId);
+                            return new RuntimeException("Question not found: " + questionId);
+                        });
+
+                ExamSubmissionAnswer answer = ExamSubmissionAnswer.builder()
+                        .submission(submission)
+                        .student(student)
+                        .question(question)
+                        .answer(answerText)
+                        .marksObtained(null)
+                        .build();
+
+                submissionAnswers.add(answer);
+            }
+
+            // Save answers
+            answerRepository.saveAll(submissionAnswers);
+            log.info("Saved {} answers for submissionId={}", submissionAnswers.size(), submission.getSubmissionId());
+
+            // Link answers to submission
+            submission.setAnswers(submissionAnswers);
+            examSubmissionRepository.save(submission);
+
+            log.info("Exam submission completed successfully: submissionId={}", submission.getSubmissionId());
+
+        } catch (Exception e) {
+            log.error("Error while submitting exam. studentId={}, examId={}, error={}",
+                    studentId, examId, e.getMessage(), e);
+            throw e;
         }
-        ExamSubmission submission = new ExamSubmission();
-        submission.setExam(exam);
-        submission.setStudent(student);
-        submission.setAnswers(answers);
-        submission.setSubmittedAt(LocalDateTime.now());
-        submission.setSubmissionStatus(LocalDateTime.now()); // Use current timestamp
-        return examSubmissionRepository.save(submission);
     }
 
     // <---------------------- GET SUBMISSIONS ------------------------------>
