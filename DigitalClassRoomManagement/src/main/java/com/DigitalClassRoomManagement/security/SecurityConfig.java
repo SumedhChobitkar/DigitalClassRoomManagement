@@ -125,6 +125,15 @@ public class SecurityConfig {
                                 "/api/homeworks/updateHomeworkById/{id}",
                                 "/api/homeworks/deleteHomeworkById/{id}",
 
+                                //ReportCard
+
+                                "/api/reportCards/create",
+                                "/api/reportcards/getReportCardById/{id}",
+                                "/api/reportcards/getAllReportCards",
+                                "/api/reportcards/getReportCardByStudentId/{studentId}",
+                                "/api/reportcards/updateReportCardById/{id}",
+                                "/api/reportcards/deleteReportCardById/{id}",
+
                                 // AuditLog
                                 "/api/auditlogs/saveAuditlog",
                                 "/api/auditlogs/getAuditlogById/{id}",
@@ -139,9 +148,6 @@ public class SecurityConfig {
                                   "/api/Librarymembers/getAllLibraryMembers",
                                 "/api/Librarymembers/updateLibraryMemberById/{id}",
                                 "/api/Librarymembers/deleteLibraryMemberyById/{id}"
-
-
-
 
 
                                 ).permitAll()
