@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/classes")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class SchoolClassController {
 
     private final SchoolClassService schoolClassService;

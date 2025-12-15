@@ -31,7 +31,7 @@ public class FeedbackController {
     @ApiResponse(responseCode = "201", description = "Feedback created successfully")
     @ApiResponse(responseCode = "500", description = "Failed to create feedback")
     @PostMapping("/FeedbackCreate")
-    //@PreAuthorize("hasAnyRole('STUDENT', 'PARENT')")
+    @PreAuthorize("hasAnyRole('STUDENT', 'PARENT')")
     public ResponseEntity<?> createFeedback(@Valid @RequestBody FeedbackDto feedbackDto) {
         log.info("Request to create feedback: {}", feedbackDto);
         try {
@@ -49,7 +49,7 @@ public class FeedbackController {
     @ApiResponse(responseCode = "200", description = "Feedback retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Feedback not found")
     @GetMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getFeedbackById(@PathVariable Long id) {
         log.info("Request to fetch feedback with ID: {}", id);
         try {
@@ -69,7 +69,7 @@ public class FeedbackController {
     @Operation(summary = "Get Feedback by Student", description = "Fetches feedback using student ID and name")
     @ApiResponse(responseCode = "200", description = "Feedback retrieved successfully")
     @GetMapping("/FeedBack_get_student")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getFeedbackByStudent(
             @RequestParam Long studentId,
             @RequestParam String studentName) {
@@ -91,7 +91,7 @@ public class FeedbackController {
     // <---------------- Get Feedback by Parent (ID + Name) ----------------->
     @Operation(summary = "Get Feedback by Parent", description = "Fetches feedback using parent ID and name")
     @ApiResponse(responseCode = "200", description = "Feedback retrieved successfully")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/FeedBack_get_parent")
     @Query("SELECT f FROM Feedback f WHERE f.parent.id = :parentId AND f.parent.name = :parentName")
     public ResponseEntity<?> getFeedbackByParent(
@@ -117,7 +117,7 @@ public class FeedbackController {
     @Operation(summary = "Get All Feedback", description = "Fetches all feedback entries")
     @ApiResponse(responseCode = "200", description = "Feedback list retrieved successfully")
     @GetMapping("/getAll")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllFeedbacks() {
         log.info("Fetching all feedback entries");
         try {
@@ -135,7 +135,7 @@ public class FeedbackController {
     @ApiResponse(responseCode = "200", description = "Feedback marked as reviewed successfully")
     @ApiResponse(responseCode = "404", description = "Feedback not found")
     @PutMapping("/{id}/review")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> markFeedbackReviewed(@PathVariable Long id) {
         log.info("Marking feedback {} as reviewed", id);
         try {
@@ -155,8 +155,8 @@ public class FeedbackController {
     @Operation(summary = "Delete Feedback", description = "Deletes a feedback by ID")
     @ApiResponse(responseCode = "200", description = "Feedback deleted successfully")
     @ApiResponse(responseCode = "404", description = "Feedback not found")
-    @DeleteMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/Delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteFeedback(@PathVariable Long id) {
         log.info("Request to delete feedback with ID: {}", id);
         try {

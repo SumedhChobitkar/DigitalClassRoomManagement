@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/student/leaves")
+@CrossOrigin(origins = "*")
 public class StudentLeaveRequestController {
 
     @Autowired

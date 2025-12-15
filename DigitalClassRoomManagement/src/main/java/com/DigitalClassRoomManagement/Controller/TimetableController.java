@@ -52,17 +52,30 @@ public class TimetableController {
         }
     }
 
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping("/getAll")
+//    public ResponseEntity<?> getAll() {
+//        try {
+//            List<Timetable> list = timetableService.getAllTimetables();
+//            return new ResponseEntity<>(list, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(" Failed to fetch timetables: " + e.getMessage(),
+//                    HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
-            List<Timetable> list = timetableService.getAllTimetables();
+            List<TimetableDTO> list = timetableService.getAllTimetables();
             return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(" Failed to fetch timetables: " + e.getMessage(),
                     HttpStatus.BAD_REQUEST);
         }
     }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")

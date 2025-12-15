@@ -1,6 +1,6 @@
 package com.DigitalClassRoomManagement.Enum;
 
 public enum QuestionType {
-    MCQ, SUBJECTIVE
-
+    MCQ,   TRUE_FALSE,
+    DESCRIPTIVE
 }
