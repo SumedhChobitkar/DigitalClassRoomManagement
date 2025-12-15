@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/leaves")
 @Slf4j
+@CrossOrigin("*")
 public class AdminLeaveRequestController {
 
     @Autowired

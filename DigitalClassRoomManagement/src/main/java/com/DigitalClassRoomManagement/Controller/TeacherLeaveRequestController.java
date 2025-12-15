@@ -18,6 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/teacher/leave")
 @Tag(name = "Teacher Leave Request Controller", description = "Teacher leave management APIs")
 public class TeacherLeaveRequestController {
