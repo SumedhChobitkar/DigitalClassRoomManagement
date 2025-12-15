@@ -13,7 +13,8 @@ public interface TimetableService {
 
     Timetable getTimetableById(Long id);
 
-    List<Timetable> getAllTimetables();
+   // List<Timetable> getAllTimetables();
+   List<TimetableDTO> getAllTimetables();
 
     List<Timetable> getTimetableByTeacherId(Long teacherId);
 
