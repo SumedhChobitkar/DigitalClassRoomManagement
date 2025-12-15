@@ -172,11 +172,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/feedback/Delete/{id}").hasRole("ADMIN")
 
                         //Admin Exam
-                        .requestMatchers(HttpMethod.POST, "/api/exams/Exam-Create").hasAnyRole("ADMIN", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.POST, "/api/exams/Exam-Create").hasAnyRole("ADMIN", "PRINCIPAL", "TEACHER")
                         .requestMatchers(HttpMethod.GET, "/api/exams/GetAllExam").hasAnyRole("ADMIN", "TEACHER", "PRINCIPAL")
-                        .requestMatchers(HttpMethod.GET, "/api/exams/{id}").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.PUT, "/api/exams/Update_By/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/exams/Delete/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/exams/{id}").hasAnyRole("ADMIN", "TEACHER","PRINCIPAL")
+                        .requestMatchers(HttpMethod.PUT, "/api/exams/Update_By/{id}").hasAnyRole("ADMIN", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.DELETE, "/api/exams/Delete/{id}").hasAnyRole("ADMIN", "PRINCIPAL")
 
 
                         //Section Related
