@@ -125,6 +125,15 @@ public class SecurityConfig {
                                 "/api/homeworks/updateHomeworkById/{id}",
                                 "/api/homeworks/deleteHomeworkById/{id}",
 
+                                //ReportCard
+
+                                "/api/reportCards/create",
+                                "/api/reportcards/getReportCardById/{id}",
+                                "/api/reportcards/getAllReportCards",
+                                "/api/reportcards/getReportCardByStudentId/{studentId}",
+                                "/api/reportcards/updateReportCardById/{id}",
+                                "/api/reportcards/deleteReportCardById/{id}",
+
                                 // AuditLog
                                 "/api/auditlogs/saveAuditlog",
                                 "/api/auditlogs/getAuditlogById/{id}",
@@ -139,7 +148,6 @@ public class SecurityConfig {
                                   "/api/Librarymembers/getAllLibraryMembers",
                                 "/api/Librarymembers/updateLibraryMemberById/{id}",
                                 "/api/Librarymembers/deleteLibraryMemberyById/{id}"
-
 
 
                                 ).permitAll()
@@ -173,6 +181,7 @@ public class SecurityConfig {
 
                         //Admin Exam
                         .requestMatchers(HttpMethod.POST, "/api/exams/Exam-Create").hasAnyRole("ADMIN", "PRINCIPAL", "TEACHER")
+                        .requestMatchers(HttpMethod.POST, "/api/exams/examSave").hasAnyRole("ADMIN", "PRINCIPAL")
                         .requestMatchers(HttpMethod.GET, "/api/exams/GetAllExam").hasAnyRole("ADMIN", "TEACHER", "PRINCIPAL")
                         .requestMatchers(HttpMethod.GET, "/api/exams/{id}").hasAnyRole("ADMIN", "TEACHER","PRINCIPAL")
                         .requestMatchers(HttpMethod.PUT, "/api/exams/Update_By/{id}").hasAnyRole("ADMIN", "PRINCIPAL")
