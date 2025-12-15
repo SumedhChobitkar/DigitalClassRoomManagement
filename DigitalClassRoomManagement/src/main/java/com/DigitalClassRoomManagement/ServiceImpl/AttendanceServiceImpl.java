@@ -3,6 +3,7 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 import com.DigitalClassRoomManagement.Dto.AttendanceDto;
 import com.DigitalClassRoomManagement.Entity.Attendance;
 import com.DigitalClassRoomManagement.Enum.AttendanceStatus;
+import com.DigitalClassRoomManagement.Enum.MarkBy;
 import com.DigitalClassRoomManagement.Exception.AttendanceNotFoundException;
 import com.DigitalClassRoomManagement.Repository.AttendanceRepository;
 import com.DigitalClassRoomManagement.Service.AttendanceService;
@@ -125,6 +126,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendance.setJoinTime(LocalDateTime.now());
             attendance.setStatus(AttendanceStatus.PRESENT);
             attendance.setDurationMinutes(0L);
+            attendance.setMarkedBy(MarkBy.TEACHER);
 
             repo.save(attendance);
             return "Student joined session succesfully";
@@ -172,6 +174,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendance.setDurationMinutes(0L);
         attendance.setJoinTime(null);
         attendance.setExitTime(null);
+        attendance.setMarkedBy(MarkBy.TEACHER);
 
         repo.save(attendance);
 
