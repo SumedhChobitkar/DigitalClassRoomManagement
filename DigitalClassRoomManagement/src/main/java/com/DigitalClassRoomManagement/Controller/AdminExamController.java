@@ -29,7 +29,7 @@ public class AdminExamController {
     @ApiResponse(responseCode = "201", description = "Exam created successfully")
     @ApiResponse(responseCode = "500", description = "Failed to create exam")
     @PostMapping("/Exam-Create")
-    @PreAuthorize("hasAnyRole('ADMIN','PRINCIPAL')")
+    @PreAuthorize("hasAnyRole('ADMIN','PRINCIPAL','TEACHER')")
     public ResponseEntity<?> createExam(@RequestBody ExamDto examDto) {
         log.info("Request to create exam: {}", examDto);
         try {
@@ -67,7 +67,7 @@ public class AdminExamController {
     @ApiResponse(responseCode = "200", description = "Exam found")
     @ApiResponse(responseCode = "404", description = "Exam not found")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','PRINCIPLE')")
     public ResponseEntity<?> getExamById(@PathVariable Long id) {
         log.info("Request to fetch exam with ID: {}", id);
         try {
@@ -88,7 +88,7 @@ public class AdminExamController {
     @ApiResponse(responseCode = "200", description = "Exam updated successfully")
     @ApiResponse(responseCode = "404", description = "Exam not found")
     @PutMapping("/Update_By/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','PRINCIPLE')")
     public ResponseEntity<?> updateExam(@PathVariable Long id, @RequestBody ExamDto examDto) {
         log.info("Request to update exam with ID: {}", id);
         try {
@@ -109,7 +109,7 @@ public class AdminExamController {
     @ApiResponse(responseCode = "200", description = "Exam deleted successfully")
     @ApiResponse(responseCode = "404", description = "Exam not found")
     @DeleteMapping("/Delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPLE')")
     public ResponseEntity<?> deleteExam(@PathVariable Long id) {
         log.info("Request to delete exam with ID: {}", id);
         try {
