@@ -29,16 +29,16 @@ public class Student {
 
     /* ---------------------- STUDENT BASIC DETAILS ---------------------- */
     @Column(nullable = false, unique = true)
-    @NotBlank(message = "Roll number is required")
+    //@NotBlank(message = "Roll number is required")
     private String rollNumber;
 
     private String academicYear;
 
     @Column(nullable = false, unique = true)
-    @NotBlank(message = "Admission number is required")
+    //@NotBlank(message = "Admission number is required")
     private String admissionNumber;
 
-    @NotBlank(message = "First name is required")
+    //@NotBlank(message = "First name is required")
     private String firstName;
 
     private String middleName;
@@ -87,6 +87,11 @@ public class Student {
     @JoinColumn(name = "section_id")
     private Section section;
 
+    /*--------------------------profile------------------------------*/
+    /*---------------------- Profile as BLOB ------------------------*/
+    @Lob
+    @Column(name = "profile", columnDefinition = "LONGBLOB")
+    private byte[] profile;
 
 
 

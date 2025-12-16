@@ -46,6 +46,10 @@ public class StudentDTO {
     private Long sectionId;
     private Section section;
 
+    //--------------------profile----------------------
+    private String profile;
+
+
     // ---------------------------------------------
     // Constructor for simple student list
     // ---------------------------------------------
