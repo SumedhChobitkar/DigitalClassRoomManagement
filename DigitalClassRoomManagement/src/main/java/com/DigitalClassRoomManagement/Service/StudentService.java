@@ -4,6 +4,7 @@ import com.DigitalClassRoomManagement.Dto.LeaveRequestDto;
 import com.DigitalClassRoomManagement.Entity.LeaveRequest;
 import com.DigitalClassRoomManagement.Dto.StudentDTO;
 import com.DigitalClassRoomManagement.Entity.Student;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -11,7 +12,8 @@ import java.util.Optional;
 
     public interface StudentService {
 
-        Student saveStudent(Student student);
+        //Student saveStudent(Student student);
+        public Student createStudent(StudentDTO dto, MultipartFile profileFile);
 
         List<Student> getAllStudents();
 
