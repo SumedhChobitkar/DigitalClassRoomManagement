@@ -22,7 +22,7 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attendanceId;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private LocalDate date;
 
     private LocalDateTime joinTime;
@@ -30,6 +30,13 @@ public class Attendance {
     private LocalDateTime exitTime;
 
     private Long durationMinutes;
+
+    private Long sessionId;
+
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    @Column(unique = true)
+    private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
@@ -51,6 +58,21 @@ public class Attendance {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+//    @PrePersist
+//    protected void onJoin() {
+//        if (this.joinTime == null) {
+//            this.joinTime = LocalDateTime.now();
+//        }
+//    }
+//
+//    @PreUpdate
+//    protected void onLeave() {
+//        if (this.exitTime == null && this.status != AttendanceStatus.PRESENT) {
+//            // leave time will be auto-set only when status is changed (e.g., leaving)
+//            this.exitTime = LocalDateTime.now();
+//        }
+//    }
 
 
 }

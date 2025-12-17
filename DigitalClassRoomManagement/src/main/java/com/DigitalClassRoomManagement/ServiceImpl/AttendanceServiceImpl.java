@@ -2,6 +2,8 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.AttendanceDto;
 import com.DigitalClassRoomManagement.Entity.Attendance;
+import com.DigitalClassRoomManagement.Enum.AttendanceStatus;
+import com.DigitalClassRoomManagement.Enum.MarkBy;
 import com.DigitalClassRoomManagement.Exception.AttendanceNotFoundException;
 import com.DigitalClassRoomManagement.Repository.AttendanceRepository;
 import com.DigitalClassRoomManagement.Service.AttendanceService;
@@ -10,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.management.RuntimeMBeanException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -108,5 +113,76 @@ public class AttendanceServiceImpl implements AttendanceService {
             log.error("Error occurred while deleting attendance with ID: {} - {}", id, e.getMessage(), e);
             throw new RuntimeException("Deletion failed: " + e.getMessage());
         }
+    }
+
+    @Override
+    public String joinSession(String email, Long sessionId) {
+        if (repo.findBySessionIdAndEmail(sessionId, email).isPresent()) {
+            return "User have already joined the session";
+        }
+            Attendance attendance = new Attendance();
+            attendance.setEmail(email);
+            attendance.setSessionId(sessionId);
+            attendance.setJoinTime(LocalDateTime.now());
+            attendance.setStatus(AttendanceStatus.PRESENT);
+            attendance.setDurationMinutes(0L);
+            attendance.setMarkedBy(MarkBy.TEACHER);
+
+            repo.save(attendance);
+            return "Student joined session succesfully";
+        }
+
+
+
+    @Override
+    public String leaveSession(String email, Long sessionId) {
+        Attendance attendance=repo.findBySessionIdAndEmail(sessionId,email)
+                .orElseThrow(() -> new RuntimeException("User did not join session!"));
+//        Session session = sessionRepository.findById(sessionId)
+//                .orElseThrow(() -> new RuntimeException("Session not found!"));
+        attendance.setExitTime(LocalDateTime.now());
+
+        long expectedTimeDuration= Duration.between(
+                attendance.getStartTime(),
+                attendance.getEndTime()).toMinutes();
+
+        long actualTimeDuration= Duration.between(
+                attendance.getJoinTime(),
+                attendance.getExitTime()
+        ).toMinutes();
+
+        if(actualTimeDuration<expectedTimeDuration/2){
+            attendance.setStatus(AttendanceStatus.HALF_DAY);
+        }else{
+            attendance.setStatus(AttendanceStatus.PRESENT);
+        }
+        repo.save(attendance);
+        return "Leave successful → Actual: " + actualTimeDuration +
+                " mins, Expected: " + expectedTimeDuration +
+                " mins → Status: " + attendance.getStatus();
+    }
+
+    @Override
+    public String markAbsent(Long sessionId, String email) {
+        Attendance attendance = repo
+                .findBySessionIdAndEmail(sessionId, email)
+                .orElse(new Attendance());
+
+        attendance.setSessionId(sessionId);
+        attendance.setEmail(email);
+        attendance.setStatus(AttendanceStatus.ABSENT);
+        attendance.setDurationMinutes(0L);
+        attendance.setJoinTime(null);
+        attendance.setExitTime(null);
+        attendance.setMarkedBy(MarkBy.TEACHER);
+
+        repo.save(attendance);
+
+        return "Marked as ABSENT for session " + sessionId;
+    }
+
+    @Override
+    public List<Attendance> getStudentsBySession(Long sessionId) {
+        return repo.findAllBySessionId(sessionId);
     }
 }

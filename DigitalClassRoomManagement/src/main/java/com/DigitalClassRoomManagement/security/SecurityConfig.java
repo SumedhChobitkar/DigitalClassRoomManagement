@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/swagger-resources/**",
                                 "/swagger-config/**",
+                                "/payment.html",
 
                                 // allow the custom path too:-
                           // User

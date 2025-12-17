@@ -12,6 +12,5 @@ import java.util.List;
 @Repository
     public interface StudentRepository extends JpaRepository<Student, Long> {
         List<Student> findByAcademicYear(String academicYear);
-
-
+        List<Student> findBySchoolClass_ClassId(Long classId);
 }
