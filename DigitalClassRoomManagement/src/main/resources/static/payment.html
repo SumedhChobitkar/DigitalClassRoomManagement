@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Razorpay Test Payment</title>
+</head>
+<body>
+
+<h2>Pay with Razorpay</h2>
+
+<button id="payBtn">Pay Now</button>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+    document.getElementById("payBtn").onclick = function () {
+
+        var options = {
+            "key": "rzp_test_RpoZhFnBA6wtCX",  // Replace with your key
+            "amount": 50000,           // Amount in paisa (₹500 = 50000)
+            "currency": "INR",
+            "name": "Digital Classroom Management",
+            "description": "Fee Payment",
+            "order_id": "order_RsalqPEmqXXeLz",   // Replace with your orderId received from backend
+
+            "handler": function (response) {
+                alert("Payment ID: " + response.razorpay_payment_id);
+                alert("Order ID: " + response.razorpay_order_id);
+                alert("Signature: " + response.razorpay_signature);
+
+                // SEND THIS DATA TO BACKEND VERIFY API
+                fetch("http://localhost:9090/api/payment/verify?" +
+                    "orderId=" + response.razorpay_order_id +
+                    "&paymentId=" + response.razorpay_payment_id +
+                    "&razorpaySignature=" + response.razorpay_signature +
+                    "&status=paid" +
+                    "&parentId=1" +
+                    "&studentRegId=1",
+                    { method: "POST" }
+                )
+                .then(res => res.json())
+                .then(data => console.log(data));
+            },
+
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    };
+
+</script>
+
+</body>
+</html>

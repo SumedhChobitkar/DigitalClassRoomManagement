@@ -25,16 +25,11 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
 
-//    @NotNull
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//
-//    @JoinColumn(name = "invoice_id", nullable = false)
-//
-//    private Invoice invoice;
-
-    private Long invoice_id;
-
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "invoice_id", nullable = false)
+    private Invoice invoice;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

@@ -33,6 +33,8 @@ public class PaymentRequest {
     @JsonIgnore
     private SchoolClass schoolClass;
 
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     @JsonIgnore
@@ -46,6 +48,11 @@ public class PaymentRequest {
 
     private boolean processed = false;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fee_id", nullable = false)
+    @JsonIgnore
+    private FeeStructure feeStructure;
 
 
 }

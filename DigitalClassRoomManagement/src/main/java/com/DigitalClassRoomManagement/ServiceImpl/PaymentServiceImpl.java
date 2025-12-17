@@ -2,6 +2,7 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.PaymentRequestDTO;
 import com.DigitalClassRoomManagement.Entity.*;
+import com.DigitalClassRoomManagement.Enum.InvoiceStatus;
 import com.DigitalClassRoomManagement.Enum.PaymentMode;
 import com.DigitalClassRoomManagement.Enum.PaymentStatus;
 import com.DigitalClassRoomManagement.Repository.*;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -38,12 +40,19 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private PaymentRequestRepository paymentRequestRepo;
+    @Autowired
+    private InvoiceRepository invoiceRepo;
+
+    @Autowired
+    private  FeeStructureRepository feeStructureRepo;
 
     @Value("${razorpay.key.id}")
     private String razorpayKeyId;
 
     @Value("${razorpay.key.secret}")
     private String razorpayKeySecret;
+
+
 
     @Override
     public String createPaymentRequest(PaymentRequestDTO dto) {
@@ -57,18 +66,38 @@ public class PaymentServiceImpl implements PaymentService {
             throw new RuntimeException("No students found for this class");
         }
 
+//        Student s = studentRepo.findById(dto.getStudentRegId())
+//                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+
+        FeeStructure feeStructure = feeStructureRepo
+                .findById(dto.getFeeId())
+                .orElseThrow(() ->
+                        new RuntimeException("Default FeeStructure not configured"));
+
+
         for (Student student : students) {
 
             PaymentRequest request = new PaymentRequest();
             request.setStudent(student);
             request.setParent(parentRepo.findByStudentId(student.getStudentRegId()));
-            request.setSchoolClass(schoolClass);   // *** FIXED ***
+            request.setSchoolClass(schoolClass);
             request.setStartDate(dto.getStartDate());
+            request.setFeeStructure(feeStructure);
             request.setEndDate(dto.getEndDate());
             request.setAmount(dto.getAmount());
             request.setStatus(PaymentStatus.PENDING);
-
             paymentRequestRepo.save(request);
+
+            Invoice invoice = new Invoice();
+            invoice.setStudent(student);
+            invoice.setFeeStructure(feeStructure);
+            invoice.setTotalDue(request.getAmount());
+            invoice.setAmountPaid(BigDecimal.ZERO);
+            invoice.setDueDate(request.getEndDate());
+            invoice.setStatus(InvoiceStatus.PAID);
+
+            invoiceRepo.save(invoice);
         }
 
         return "Payment request created for class " + dto.getClassId();
@@ -142,6 +171,10 @@ public class PaymentServiceImpl implements PaymentService {
 
             Parent parent = parentRepo.findById(parentId)
                     .orElseThrow(() -> new RuntimeException("Parent not found"));
+            Invoice invoice = invoiceRepo
+                    .findTopByStudent_StudentRegId_OrderByInvoiceIdDesc(studentRegId)
+                    .orElseThrow(() -> new RuntimeException("Invoice not found"));
+
 
             RazorpayClient client = new RazorpayClient(razorpayKeyId, razorpayKeySecret);
 
@@ -153,7 +186,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             System.out.println("PAYMENT VERIFIED SUCCESSFULLY");
             Payment payment = new Payment();
-            payment.setInvoice_id(0L);
+            payment.setInvoice(invoice);
             payment.setStudent(student);
             payment.setParent(parent);
             payment.setAmount(actualAmount);
@@ -175,11 +208,26 @@ public class PaymentServiceImpl implements PaymentService {
                 paymentRequest.setProcessed(true);
                 paymentRequestRepo.save(paymentRequest);
 
+
+
             } else {
                 payment.setStartDate(null);
                 payment.setEndDate(null);
             }
             Payment savedPayment = repo.save(payment);
+
+            invoice.setAmountPaid(
+                    invoice.getAmountPaid().add(actualAmount)
+            );
+
+            if (invoice.getAmountPaid().compareTo(invoice.getTotalDue()) >= 0) {
+                invoice.setStatus(InvoiceStatus.PAID);
+            } else {
+                invoice.setStatus(InvoiceStatus.PARTIALLY_PAID);
+            }
+
+            invoiceRepo.save(invoice);
+
             System.out.println("Success");
             response.put("message", "Payment Verified Successfully");
             response.put("orderId", orderId);
@@ -284,7 +332,7 @@ public class PaymentServiceImpl implements PaymentService {
                     "paymentId", p.getPaymentId(),
                     "orderId", p.getGatewayReferenceId(),
                     "razorpayPaymentId", p.getTransactionId(),
-                    "invoice_id", p.getInvoice_id(),
+                    "invoice_id", p.getInvoice(),
                     "amount", p.getAmount(),
                     "status", p.getStatus().name(),
                     "payment_date", p.getPaymentDate()
