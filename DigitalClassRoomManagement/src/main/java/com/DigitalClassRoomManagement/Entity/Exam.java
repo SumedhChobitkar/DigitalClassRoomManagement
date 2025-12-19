@@ -26,6 +26,10 @@ public class Exam {
         @Column(name = "exam_id")
         private Long examId;
 
+       @ManyToOne(fetch = FetchType.LAZY)
+       @JoinColumn(name = "admin_id", nullable = false)
+       private Admin admin;
+
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "teacher_id", nullable = false)
         private Teacher teacher;

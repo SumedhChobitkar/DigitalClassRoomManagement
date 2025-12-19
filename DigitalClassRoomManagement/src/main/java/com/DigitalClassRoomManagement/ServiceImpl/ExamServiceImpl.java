@@ -1,9 +1,11 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.ExamDto;
+import com.DigitalClassRoomManagement.Entity.Admin;
 import com.DigitalClassRoomManagement.Entity.Exam;
 import com.DigitalClassRoomManagement.Entity.Teacher;
 import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
+import com.DigitalClassRoomManagement.Repository.AdminRepository;
 import com.DigitalClassRoomManagement.Repository.ExamRepository;
 import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Service.ExamService;
@@ -27,6 +29,9 @@ public class ExamServiceImpl implements ExamService {
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
 
     // ------------------- CREATE EXAM --------------------------
@@ -144,7 +149,49 @@ public class ExamServiceImpl implements ExamService {
         }
     }
 
+    // ------------------- ADMIN CREATE EXAM --------------------------
+    @Override
+    public ExamDto adminCreateExam(ExamDto examDto) {
 
+        log.info("Admin creating exam for teacherId={}, adminId={}",
+                examDto.getTeacherId(), examDto.getAdminId());
+
+        Admin admin = adminRepository.findById(examDto.getAdminId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Admin not found with ID: " + examDto.getAdminId()));
+
+        Teacher teacher = teacherRepository.findById(examDto.getTeacherId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Teacher not found with ID: " + examDto.getTeacherId()));
+
+        Exam exam = Exam.builder()
+                .admin(admin)
+                .teacher(teacher)
+                .term(examDto.getTerm())
+                .startTime(examDto.getStartTime())
+                .endTime(examDto.getEndTime())
+                .duration(examDto.getDuration())
+                .totalMarks(examDto.getTotalMarks())
+                .build();
+
+        Exam savedExam = examRepository.save(exam);
+
+        log.info("Exam created successfully with examId={}", savedExam.getExamId());
+
+        return mapToDto(savedExam);
+    }
+
+    // ------------------- ADMIN GET ALL EXAMS --------------------------
+    @Override
+    public List<ExamDto> adminGetAllExams() {
+
+        log.info("Admin fetching all exams");
+
+        return examRepository.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
 
     // ------------------- GET ALL EXAMS --------------------------
     @Override
@@ -226,11 +273,11 @@ public class ExamServiceImpl implements ExamService {
 
     // ------------------- MAPPER --------------------------
     private ExamDto mapToDto(Exam entity) {
-        if (entity == null) return null;
 
         return ExamDto.builder()
                 .examId(entity.getExamId())
-                .teacherId(entity.getTeacher().getId())
+                .teacherId(entity.getTeacher() != null ? entity.getTeacher().getId() : null)
+                .adminId(entity.getAdmin() != null ? entity.getAdmin().getAdminId() : null)
                 .term(entity.getTerm())
                 .startTime(entity.getStartTime())
                 .endTime(entity.getEndTime())

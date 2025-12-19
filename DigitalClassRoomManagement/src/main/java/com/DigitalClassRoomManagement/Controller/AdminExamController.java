@@ -6,8 +6,10 @@ import com.DigitalClassRoomManagement.Service.ExamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,41 +30,55 @@ public class AdminExamController {
     @Operation(summary = "Create Exam", description = "Creates a new exam")
     @ApiResponse(responseCode = "201", description = "Exam created successfully")
     @ApiResponse(responseCode = "500", description = "Failed to create exam")
-    @PostMapping("/Exam-Create")
+    @PostMapping("/AdminExam-Create")
     @PreAuthorize("hasAnyRole('ADMIN','PRINCIPAL','TEACHER')")
-    public ResponseEntity<?> createExam(@RequestBody ExamDto examDto) {
-        log.info("Request to create exam: {}", examDto);
+    public ResponseEntity<ExamDto> createExam(
+            @Valid @RequestBody ExamDto examDto) {
+
+        log.info("Admin request to create exam: teacherId={}, adminId={}",
+                examDto.getTeacherId(), examDto.getAdminId());
+
         try {
-            ExamDto createdExam = examService.createExam(examDto);
-            log.info("Exam created successfully: {}", createdExam);
-            return ResponseEntity.status(201).body(createdExam);
+            ExamDto createdExam = examService.adminCreateExam(examDto);
+
+            log.info("Exam created successfully by admin, examId={}",
+                    createdExam.getExamId());
+
+            return new ResponseEntity<>(createdExam, HttpStatus.CREATED);
+
         } catch (Exception e) {
-            log.error("Error creating exam", e);
-            return ResponseEntity.status(500).body("Failed to create exam");
+            log.error("Error occurred while creating exam by admin", e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 
-    // <---------------- Get All Exams ----------------->
+    // <----------------Admin Get All Exams ----------------->
     @Operation(summary = "Get Exams", description = "Fetches all exams or filtered by examId and/or teacherId")
     @ApiResponse(responseCode = "200", description = "Exams fetched successfully")
-    @GetMapping("/GetAllExam")
+    @GetMapping("/AdminGetAllExam")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','PRINCIPAL')")
-    public ResponseEntity<?> getExams(
-            @RequestParam(required = false) Long examId,
-            @RequestParam(required = false) Long teacherId
-    ) {
-        log.info("Fetching exams with filters - examId: {}, teacherId: {}", examId, teacherId);
+    public ResponseEntity<List<ExamDto>> getAllExams() {
+
+        log.info("Request received to fetch all exams");
+
         try {
-            List<ExamDto> exams = examService.getExams(examId, teacherId);
-            log.info("Exams fetched successfully. Total exams: {}", exams.size());
+            List<ExamDto> exams = examService.adminGetAllExams();
+
+            log.info("Fetched {} exams successfully", exams.size());
+
             return ResponseEntity.ok(exams);
+
         } catch (Exception e) {
-            log.error("Error fetching exams", e);
-            return ResponseEntity.status(500).body("Failed to fetch exams");
+            log.error("Error occurred while fetching exams", e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 
-    // <---------------- Get Exam by ID ----------------->
+    // <----------------Admin Get Exam by ID ----------------->
     @Operation(summary = "Get Exam by ID", description = "Fetches an exam by its ID")
     @ApiResponse(responseCode = "200", description = "Exam found")
     @ApiResponse(responseCode = "404", description = "Exam not found")

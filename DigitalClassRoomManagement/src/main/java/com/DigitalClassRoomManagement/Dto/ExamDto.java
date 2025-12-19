@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ExamDto {
 
+
     private Long examId;
+    private Long adminId;
     private Long teacherId;
     private String term;
     private LocalDateTime startTime;

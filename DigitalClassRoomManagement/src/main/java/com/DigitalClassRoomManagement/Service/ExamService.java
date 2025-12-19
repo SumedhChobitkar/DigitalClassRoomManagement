@@ -18,4 +18,10 @@ public interface ExamService {
 
     List<ExamDto> getExams(  Long examId, Long teacherId);
 
+    ExamDto adminCreateExam(ExamDto examDto);
+
+    List<ExamDto> adminGetAllExams();
+
+
+
 }

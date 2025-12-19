@@ -24,14 +24,14 @@ public class ExamController {
     @Autowired
     private ExamService examService;
 
-    // ------------------ CREATE EXAM --------------------------
-    @PostMapping("/saveExam")
+    // ------------------ TEACHER CREATE EXAM --------------------------
+    @PostMapping("/TeacherSaveExam")
     public ResponseEntity<?> createExam(@RequestBody ExamDto examDto) {
 
         log.info("Received request to create exam with teacherId: {}", examDto.getTeacherId());
 
         try {
-            ExamDto createdExam = examService.createExam(examDto);
+            ExamDto createdExam = examService.adminCreateExam(examDto);
             log.info("Exam created successfully with examId: {}", createdExam.getExamId());
 
             return new ResponseEntity<>(createdExam, HttpStatus.CREATED);
@@ -47,7 +47,7 @@ public class ExamController {
         }
     }
 
-    // ------------------ UPDATE EXAM --------------------------
+    // ------------------TEACHER UPDATE EXAM --------------------------
     @PutMapping("/UpdateByExamId/{examId}")
     public ResponseEntity<?> updateExam(@PathVariable("examId") Long examId,
                                         @RequestBody ExamDto examDto) {
@@ -71,7 +71,7 @@ public class ExamController {
         }
     }
 
-    // ------------------ GET EXAM BY ID --------------------------
+    // ------------------TEACHER GET EXAM BY ID --------------------------
     @GetMapping("/GetByExamId/{id}")
     public ResponseEntity<?> getExamById(@PathVariable("id") Long examId) {
 

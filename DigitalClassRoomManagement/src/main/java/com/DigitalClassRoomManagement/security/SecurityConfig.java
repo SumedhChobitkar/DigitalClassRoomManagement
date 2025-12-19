@@ -62,7 +62,7 @@ public class SecurityConfig {
                                          "/api/digitalClassroom/verify-otp",
                                          "/api/digitalClassroom/reset-password",
                                 //Exam
-                                "/api/exam/saveExam",
+                                "/api/exam/TeacherSaveExam",
                                 "/api/exam/UpdateByExamId/{examId}",
                                 "/api/exam/GetByExamId/{id}",
                                 "/api/getByTeacher/{teacherId}",
@@ -95,10 +95,12 @@ public class SecurityConfig {
                                 "/api/subject/**",
 
 
+
                                 "/api/teacher/delete",
 
                                 //ContactUs
                                 "/api/contact/**",
+
 
 
 
@@ -181,9 +183,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/feedback/Delete/{id}").hasRole("ADMIN")
 
                         //Admin Exam
-                        .requestMatchers(HttpMethod.POST, "/api/exams/Exam-Create").hasAnyRole("ADMIN", "PRINCIPAL", "TEACHER")
-                        .requestMatchers(HttpMethod.POST, "/api/exams/examSave").hasAnyRole("ADMIN", "PRINCIPAL")
-                        .requestMatchers(HttpMethod.GET, "/api/exams/GetAllExam").hasAnyRole("ADMIN", "TEACHER", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.POST, "/api/exams/AdminExam-Create").hasAnyRole("ADMIN", "PRINCIPAL", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/exams/AdminGetAllExam").hasAnyRole("ADMIN", "TEACHER", "PRINCIPAL")
                         .requestMatchers(HttpMethod.GET, "/api/exams/{id}").hasAnyRole("ADMIN", "TEACHER","PRINCIPAL")
                         .requestMatchers(HttpMethod.PUT, "/api/exams/Update_By/{id}").hasAnyRole("ADMIN", "PRINCIPAL")
                         .requestMatchers(HttpMethod.DELETE, "/api/exams/Delete/{id}").hasAnyRole("ADMIN", "PRINCIPAL")
