@@ -55,7 +55,7 @@ public interface TeacherService {
 
     public List<User> getUnapprovedStatusRequest();
     public List<User> getapprovedStatusRequest();
-    public User updateStatus(Long id, Status status);
+    public Teacher updateStatus(Long id, Status status);
 
     String assignTeacher(Long classId, Long sectionId, AssignTeacherRequestDto dto);
     List<TeacherDto> getTeacherByClassId(Long classId);

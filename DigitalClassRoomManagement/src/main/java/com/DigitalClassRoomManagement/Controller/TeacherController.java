@@ -142,7 +142,7 @@ public class TeacherController {
     {
         try
         {
-            User ad=service.updateStatus(id,status);
+            Teacher ad=service.updateStatus(id,status);
             return ResponseEntity.status(HttpStatus.OK).body("Status Changed");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not Changed");

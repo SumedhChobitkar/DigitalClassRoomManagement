@@ -69,6 +69,9 @@ private LeaveRequestRepository leaveRequestRepository;
     private EmailSenderService emailSenderService;
 
     @Autowired
+    private TeacherRepository teacherRepo;
+
+    @Autowired
     private JavaMailSender mailSender;
 
     // CREATE
@@ -454,23 +457,23 @@ private LeaveRequestRepository leaveRequestRepository;
         }
     }
     @Override
-    public User updateStatus(Long id, Status status)
+    public Teacher updateStatus(Long id, Status status)
     {
         try
         {
-            Optional<User> u=urepo.findById(id);
+            Optional<Teacher> u=teacherRepo.findById(id);
             if(u.isPresent())
             {
-                User u1=u.get();
-                if(u1.getStatus()==status)
+                Teacher t1=u.get();
+                if(t1.getStatus()==TeacherStatus.APPROVED)
                 {
                     throw new RuntimeException("Already Done");
                 }else {
-                    u1.setStatus(status);
-                    return urepo.save(u1);
+                    t1.setStatus(TeacherStatus.APPROVED);
+                    return teacherRepo.save(t1);
                 }
             }
-            throw new RuntimeException("UserNotFoud");
+            throw new TeacherNotFoundException("Teacher Not Found");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
