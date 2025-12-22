@@ -31,7 +31,7 @@ public class ExamController {
         log.info("Received request to create exam with teacherId: {}", examDto.getTeacherId());
 
         try {
-            ExamDto createdExam = examService.adminCreateExam(examDto);
+            ExamDto createdExam = examService.createExam(examDto);
             log.info("Exam created successfully with examId: {}", createdExam.getExamId());
 
             return new ResponseEntity<>(createdExam, HttpStatus.CREATED);
