@@ -121,12 +121,6 @@ public class SecurityConfig {
                                 "api/teacher/assignments/getAssignmentById/{id}",
                                 "api/teacher/assignments/deleteAssignmentById/{id}",
 
-                                // Homework
-                                "/api/homeworks/saveHomework",
-                                "/api/homeworks/getHomeworkById/{id}",
-                                "/api/homeworks/getAllHomework",
-                                "/api/homeworks/updateHomeworkById/{id}",
-                                "/api/homeworks/deleteHomeworkById/{id}",
 
                                 //ReportCard
 
@@ -135,22 +129,22 @@ public class SecurityConfig {
                                 "/api/reportcards/getAllReportCards",
                                 "/api/reportcards/getReportCardByStudentId/{studentId}",
                                 "/api/reportcards/updateReportCardById/{id}",
-                                "/api/reportcards/deleteReportCardById/{id}",
+                                "/api/reportcards/deleteReportCardById/{id}"
+//
+//                                // AuditLog
+//                                "/api/auditlogs/saveAuditlog",
+//                                "/api/auditlogs/getAuditlogById/{id}",
+//                                "/api/auditlogs/getAllAuditlogs",
+//                                "/api/auditlogs/updateAuditlogById/{id}",
+//                                "/api/auditlogs/deleteAuditlogById/{id}"
 
-                                // AuditLog
-                                "/api/auditlogs/saveAuditlog",
-                                "/api/auditlogs/getAuditlogById/{id}",
-                                "/api/auditlogs/getAllAuditlogs",
-                                "/api/auditlogs/updateAuditlogById/{id}",
-                                "/api/auditlogs/deleteAuditlogById/{id}",
 
-
-                                //LibraryMember
-                                  "/api/Librarymembers/saveLibraryMember",
-                                "/api/Librarymembers/getByIdLibraryMember/{id}",
-                                  "/api/Librarymembers/getAllLibraryMembers",
-                                "/api/Librarymembers/updateLibraryMemberById/{id}",
-                                "/api/Librarymembers/deleteLibraryMemberyById/{id}"
+//                                //LibraryMember
+//                                  "/api/Librarymembers/saveLibraryMember",
+//                                "/api/Librarymembers/getByIdLibraryMember/{id}",
+//                                  "/api/Librarymembers/getAllLibraryMembers",
+//                                "/api/Librarymembers/updateLibraryMemberById/{id}",
+//                                "/api/Librarymembers/deleteLibraryMemberyById/{id}"
 
 
                                 ).permitAll()
