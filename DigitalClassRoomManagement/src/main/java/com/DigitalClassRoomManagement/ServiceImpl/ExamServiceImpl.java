@@ -10,6 +10,7 @@ import com.DigitalClassRoomManagement.Repository.ExamRepository;
 import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Service.ExamService;
 
+import org.apache.catalina.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -163,6 +164,7 @@ public class ExamServiceImpl implements ExamService {
         Teacher teacher = teacherRepository.findById(examDto.getTeacherId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Teacher not found with ID: " + examDto.getTeacherId()));
+
 
         Exam exam = Exam.builder()
                 .admin(admin)

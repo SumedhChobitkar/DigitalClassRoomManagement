@@ -31,7 +31,7 @@ public class AdminExamController {
     @ApiResponse(responseCode = "201", description = "Exam created successfully")
     @ApiResponse(responseCode = "500", description = "Failed to create exam")
     @PostMapping("/AdminExam-Create")
-    @PreAuthorize("hasAnyRole('ADMIN','PRINCIPAL','TEACHER')")
+    //@PreAuthorize("hasAnyRole('ADMIN','PRINCIPAL','TEACHER')")
     public ResponseEntity<ExamDto> createExam(
             @Valid @RequestBody ExamDto examDto) {
 
