@@ -122,6 +122,67 @@ public class SecurityConfig {
                                 "api/teacher/assignments/getAssignmentById/{id}",
                                 "api/teacher/assignments/deleteAssignmentById/{id}",
 
+                                // Homework
+                                "/api/homeworks/saveHomework",
+                                "/api/homeworks/getHomeworkById/{id}",
+                                "/api/homeworks/getAllHomework",
+                                "/api/homeworks/updateHomeworkById/{id}",
+                                "/api/homeworks/deleteHomeworkById/{id}",
+
+                                // AuditLog
+                                "/api/auditlogs/saveAuditlog",
+                                "/api/auditlogs/getAuditlogById/{id}",
+                                "/api/auditlogs/getAllAuditlogs",
+                                "/api/auditlogs/updateAuditlogById/{id}",
+                                "/api/auditlogs/deleteAuditlogById/{id}",
+
+
+                                //LibraryMember
+                                  "/api/Librarymembers/saveLibraryMember",
+                                "/api/Librarymembers/getByIdLibraryMember/{id}",
+                                  "/api/Librarymembers/getAllLibraryMembers",
+                                "/api/Librarymembers/updateLibraryMemberById/{id}",
+                                "/api/Librarymembers/deleteLibraryMemberyById/{id}",
+
+                                //Student
+                                "/api/students/**",
+
+                                //parent
+                                "/api/parents/**",
+
+
+                                //Result
+                                "/api/results/SaverResult",
+                                "/api/results/GetResult/{id}",
+                                "/api/results/getAllResult",
+                                "/api/results/UpdateResult/{id}",
+                                "api/results/DeleteById/{id}",
+                                "/api/results/top",
+
+
+                                //StudentExam
+                                "/api/exam/submit",
+                                "/api/exam/getAllExam",
+                                "/api/exam/result",
+
+
+                                //TeacherExam
+                                "/api/TeacherExam/{examId}/questions",
+                                "/api/TeacherExam/submissions",
+
+
+                                //Admin Exam
+                                "/api/Create-exam/CreateExam",
+                                "/api/Create-exam/getAll"
+
+
+
+
+
+
+
+
+                        ).permitAll()
 
                                 //ReportCard
 
@@ -207,6 +268,21 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/timetable/getAll").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/timetable/update/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/timetable/delete/{id}").hasRole("ADMIN")
+
+                        //Location Related
+                        .requestMatchers(HttpMethod.POST, "/api/locations/save/{schoolId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/locations/{locationId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/locations/{locationId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/locations/name/{schoolName}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/locations/name/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/locations/{locationId}/map-link").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/locations/update/{locationId}").permitAll()
+
+
+
+
+
+
 
                         //TeacherTimetable Related
                         .requestMatchers(HttpMethod.GET, "/api/teacherTimetable/{teacherId}/timetable").hasRole("TEACHER")
