@@ -65,7 +65,7 @@ public class Student {
 
 
     /* ---------------------- TEACHER MAPPING ---------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "teacher_id")
     @JsonIgnore
     private Teacher teacher;

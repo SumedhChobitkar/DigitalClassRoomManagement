@@ -39,7 +39,7 @@ public class Section {
     private List<Teacher> teachers = new ArrayList<>();
 
     //private String schoolClass;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
     @JsonIgnore
     private SchoolClass schoolClass;

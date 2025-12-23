@@ -35,7 +35,7 @@ public class Teacher {
     private String adminMailId;
     private String gender;
     private String dateOfBirth;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
@@ -64,7 +64,7 @@ public class Teacher {
 
     @Lob
     @Column(name = "profile_picture", columnDefinition = "LONGBLOB")
-    @Basic(fetch = FetchType.LAZY)
+    @Basic
     @Nullable
     private byte[] profilePicture;
 
@@ -104,7 +104,7 @@ public class Teacher {
 //    private List<PTM> ptms;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             name = "teacher_assigned_classes",
             joinColumns = @JoinColumn(name = "teacher_id"),
