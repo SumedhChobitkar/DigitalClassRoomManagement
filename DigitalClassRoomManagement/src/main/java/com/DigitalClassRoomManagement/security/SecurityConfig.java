@@ -112,7 +112,7 @@ public class SecurityConfig {
                                 "api/teacher/assignments/updateAssignmentById/{id}",
                                 "api/teacher/assignments/getAllAssignments",
                                 "api/teacher/assignments/getAssignmentById/{id}",
-                                "api/teacher/assignments/deleteAssignmentById/{id",
+                                "api/teacher/assignments/deleteAssignmentById/{id}",
 
                                 // Homework
                                 "/api/homeworks/saveHomework",
@@ -172,6 +172,8 @@ public class SecurityConfig {
 
 
 
+
+
                         ).permitAll()
 
 
@@ -197,6 +199,21 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/timetable/getAll").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/timetable/update/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/timetable/delete/{id}").hasRole("ADMIN")
+
+                        //Location Related
+                        .requestMatchers(HttpMethod.POST, "/api/locations/save/{schoolId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/locations/{locationId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/locations/{locationId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/locations/name/{schoolName}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/locations/name/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/locations/{locationId}/map-link").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/locations/update/{locationId}").permitAll()
+
+
+
+
+
+
 
                         //TeacherTimetable Related
                         .requestMatchers(HttpMethod.GET, "/api/teacherTimetable/{teacherId}/timetable").hasRole("TEACHER")
