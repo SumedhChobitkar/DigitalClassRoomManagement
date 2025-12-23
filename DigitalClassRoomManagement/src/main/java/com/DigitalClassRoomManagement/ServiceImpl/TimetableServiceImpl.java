@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -118,16 +120,57 @@ public Timetable createTimetable(TimetableDTO dto) {
             throw new RuntimeException("Failed to get timetable");
         }
     }
+//    @Override
+//    public List<Timetable> getAllTimetables() {
+//        try {
+//            log.info("Fetching all timetables");
+//            return timetableRepository.findAll();
+//        } catch (Exception e) {
+//            log.error("Error fetching timetable list: {}", e.getMessage());
+//            throw new RuntimeException("Failed to fetch timetable list");
+//        }
+//    }
+
     @Override
-    public List<Timetable> getAllTimetables() {
+    public List<TimetableDTO> getAllTimetables() {
         try {
             log.info("Fetching all timetables");
-            return timetableRepository.findAll();
+            List<Timetable> list = timetableRepository.findAll();
+            List<TimetableDTO> dtoList = new ArrayList<>();
+
+            for (Timetable tt : list) {
+                TimetableDTO dto = new TimetableDTO();
+
+                dto.setTimetableId(tt.getTimetableId());
+
+                if (tt.getSchoolClass() != null)
+                    dto.setClassId(tt.getSchoolClass().getClassId());
+
+                if (tt.getSection() != null)
+                    dto.setSectionId(tt.getSection().getSectionId());
+
+                if (tt.getSubject() != null)
+                    dto.setSubjectId(tt.getSubject().getSubjectId());
+
+                if (tt.getTeacher() != null)
+                    dto.setTeacherId(tt.getTeacher().getId());
+
+                dto.setDayOfWeek(tt.getDayOfWeek());
+                dto.setDate(tt.getDate());
+                dto.setStartTime(tt.getStartTime());
+                dto.setEndTime(tt.getEndTime());
+
+                dtoList.add(dto);
+            }
+
+            return dtoList;
+
         } catch (Exception e) {
             log.error("Error fetching timetable list: {}", e.getMessage());
             throw new RuntimeException("Failed to fetch timetable list");
         }
     }
+
 
     @Override
     public List<Timetable> getTimetableByTeacherId(Long teacherId) {

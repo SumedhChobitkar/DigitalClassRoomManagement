@@ -2,6 +2,7 @@ package com.DigitalClassRoomManagement.Dto;
 
 import com.DigitalClassRoomManagement.Enum.AttendanceStatus;
 import com.DigitalClassRoomManagement.Enum.MarkBy;
+import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
@@ -21,4 +22,11 @@ public class AttendanceDto {
     private AttendanceStatus status;
     @Enumerated(EnumType.STRING)
     private MarkBy markedBy;
+    private Long sessionId;
+
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    @Column(unique = true)
+    private String email;
+
 }

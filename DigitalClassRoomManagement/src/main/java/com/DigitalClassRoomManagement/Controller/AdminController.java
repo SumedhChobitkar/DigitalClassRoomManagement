@@ -1,8 +1,8 @@
 package com.DigitalClassRoomManagement.Controller;
 
 import com.DigitalClassRoomManagement.Entity.Admin;
-import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Entity.User;
+import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Service.AdminService;
 import com.DigitalClassRoomManagement.Dto.AdminDTO;
@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
+@CrossOrigin(origins = "*")
 public class AdminController {
 
     @Autowired

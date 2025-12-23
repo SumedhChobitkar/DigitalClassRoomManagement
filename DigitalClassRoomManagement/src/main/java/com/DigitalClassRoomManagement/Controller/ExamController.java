@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/exam")
+@CrossOrigin(origins = "*")
 public class ExamController {
 
     private static final Logger log = LoggerFactory.getLogger(ExamController.class);
@@ -23,8 +24,8 @@ public class ExamController {
     @Autowired
     private ExamService examService;
 
-    // ------------------ CREATE EXAM --------------------------
-    @PostMapping("/saveExam")
+    // ------------------ TEACHER CREATE EXAM --------------------------
+    @PostMapping("/TeacherSaveExam")
     public ResponseEntity<?> createExam(@RequestBody ExamDto examDto) {
 
         log.info("Received request to create exam with teacherId: {}", examDto.getTeacherId());
@@ -46,7 +47,7 @@ public class ExamController {
         }
     }
 
-    // ------------------ UPDATE EXAM --------------------------
+    // ------------------TEACHER UPDATE EXAM --------------------------
     @PutMapping("/UpdateByExamId/{examId}")
     public ResponseEntity<?> updateExam(@PathVariable("examId") Long examId,
                                         @RequestBody ExamDto examDto) {
@@ -70,7 +71,7 @@ public class ExamController {
         }
     }
 
-    // ------------------ GET EXAM BY ID --------------------------
+    // ------------------TEACHER GET EXAM BY ID --------------------------
     @GetMapping("/GetByExamId/{id}")
     public ResponseEntity<?> getExamById(@PathVariable("id") Long examId) {
 

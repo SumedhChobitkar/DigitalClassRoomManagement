@@ -43,7 +43,6 @@ import java.time.LocalDate;
         @ManyToOne(fetch = FetchType.LAZY)
         @JsonIgnore
         @JoinColumn(name = "userId", nullable = false)
-
         private User user; // (FK → User → Student/Teacher)
 
         @Enumerated(EnumType.STRING)

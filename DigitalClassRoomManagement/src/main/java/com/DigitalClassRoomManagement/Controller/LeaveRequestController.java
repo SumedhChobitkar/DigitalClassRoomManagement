@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Controller;
 
+import com.DigitalClassRoomManagement.Dto.LeaveRequestDto;
 import com.DigitalClassRoomManagement.Entity.LeaveRequest;
 import com.DigitalClassRoomManagement.Service.LeaveRequestService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,16 +31,28 @@ public class LeaveRequestController {
                             content = @Content(schema = @Schema(implementation = LeaveRequest.class))),
                     @ApiResponse(responseCode = "500", description = "Error while creating leave request")
             })
+//    @PostMapping("/createLeaveRequest")
+//   public ResponseEntity<?> createLeave(@RequestBody LeaveRequestDto leaveRequest) {
+//       try {
+//          LeaveRequest created = leaveRequestService.createLeaveRequest(leaveRequest);
+//           return ResponseEntity.ok(created);        } catch (Exception e) {
+//          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                  .body("Error while creating leave request: " + e.getMessage());
+//        }
+//       }
     @PostMapping("/createLeaveRequest")
-    public ResponseEntity<?> createLeave(@RequestBody LeaveRequest leaveRequest) {
+    public ResponseEntity<?> createLeave(@RequestBody LeaveRequestDto leaveRequestDto) {
         try {
-            LeaveRequest created = leaveRequestService.createLeaveRequest(leaveRequest);
+            LeaveRequest created = leaveRequestService.createLeaveRequest(leaveRequestDto);
             return ResponseEntity.ok(created);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error while creating leave request: " + e.getMessage());
         }
     }
+
+
+
 
     // Get All Leave Requests
     @Operation(summary = "Get all leave requests",
@@ -85,17 +98,26 @@ public class LeaveRequestController {
                     @ApiResponse(responseCode = "200", description = "Leave request updated successfully"),
                     @ApiResponse(responseCode = "500", description = "Error updating leave request")
             })
-    @PutMapping("/updateLeaveById/{Id}")
-    public ResponseEntity<?> updateLeave(@PathVariable Long id,
-                                         @RequestBody LeaveRequest leaveRequest) {
-        try {
-            LeaveRequest updated = leaveRequestService.updateLeaveRequest(id, leaveRequest);
-            return ResponseEntity.ok(updated);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error updating leave request: " + e.getMessage());
-        }
+//    @PutMapping("/updateLeaveById/{Id}")
+////    public ResponseEntity<?> updateLeave(@PathVariable Long id,
+////                                         @RequestBody LeaveRequest leaveRequest) {
+////        try {
+////            LeaveRequest updated = leaveRequestService.updateLeaveRequest(id, leaveRequest);
+////            return ResponseEntity.ok(updated);
+////        } catch (Exception e) {
+////            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+////                    .body("Error updating leave request: " + e.getMessage());
+////        }
+////    }
+
+    @PutMapping("/updateleaveid/{id}")
+    public ResponseEntity<LeaveRequest> updateLeave(@PathVariable Long id, @RequestBody LeaveRequestDto dto) {
+        LeaveRequest updated = leaveRequestService.updateLeaveRequest(id, dto);
+        return ResponseEntity.ok(updated);
     }
+
+
+
 
     // Delete Leave
     @Operation(summary = "Delete a leave request",

@@ -117,4 +117,28 @@ public class AttendanceController {
                     .body("Failed to delete attendance: " + e.getMessage());
         }
     }
+
+   /// ///////////////////////////////////////////
+    @PostMapping("/join/{sessionId}/{email}")
+    public String join(@PathVariable Long sessionId,
+                       @PathVariable String email) {
+        return service.joinSession(email, sessionId);
+    }
+
+    @PostMapping("/leave/{sessionId}/{email}")
+    public String leave(@PathVariable Long sessionId,
+                        @PathVariable String email) {
+        return service.leaveSession(email, sessionId);
+    }
+
+    @PostMapping("/absent/{sessionId}/{email}")
+    public String absent(@PathVariable Long sessionId,
+                         @PathVariable String email) {
+        return service.markAbsent(sessionId, email);
+    }
+
+    @GetMapping("/session/{sessionId}")
+    public List<Attendance> getList(@PathVariable Long sessionId) {
+        return service.getStudentsBySession(sessionId);
+    }
 }

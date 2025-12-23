@@ -17,6 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/calendars")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class CalendarController {
 
     private final CalendarService calendarService;

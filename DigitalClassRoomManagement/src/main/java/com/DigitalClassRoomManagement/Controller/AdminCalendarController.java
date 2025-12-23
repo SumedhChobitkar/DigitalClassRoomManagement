@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admincalendar")
+@CrossOrigin("*")
 public class AdminCalendarController {
 
     @Autowired

@@ -17,7 +17,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+//    @Column(name = "user_id")
     private Long userId;
     
     private String userName;
@@ -50,5 +50,7 @@ public class User {
     @JsonIgnore
     private Parent parent;
 
-
+    @OneToOne(mappedBy = "users")
+    @JsonIgnore
+    private Student student;
 }

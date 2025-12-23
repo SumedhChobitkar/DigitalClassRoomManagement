@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
         import jakarta.validation.constraints.NotBlank;
@@ -51,6 +52,12 @@ public class SchoolClass {
 
     @OneToMany(mappedBy = "schoolClass")
     private List<Timetable> timetables;
+
+    // student mapping
+    @OneToMany(mappedBy = "schoolClass", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Student> students = new ArrayList<>();
+
 
     @PrePersist
     protected void onCreate() {

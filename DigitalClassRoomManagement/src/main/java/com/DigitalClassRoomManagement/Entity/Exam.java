@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -25,9 +26,16 @@ public class Exam {
         @Column(name = "exam_id")
         private Long examId;
 
+       @ManyToOne(fetch = FetchType.LAZY)
+       @JoinColumn(name = "admin_id", nullable = false)
+       private Admin admin;
+
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "teacher_id", nullable = false)
         private Teacher teacher;
+
+        @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL)
+        private List<ExamQuestion> questions;
 
         @Column(nullable = false)
         private String term;

@@ -1,4 +1,12 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
+import com.DigitalClassRoomManagement.Dto.LeaveRequestDto;
+import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
+import com.DigitalClassRoomManagement.Dto.TeacherDto;
+import com.DigitalClassRoomManagement.Dto.TeacherResponseDto;
+import com.DigitalClassRoomManagement.Entity.LeaveRequest;
+import com.DigitalClassRoomManagement.Entity.SchoolClass;
+import com.DigitalClassRoomManagement.Entity.Teacher;
+import com.DigitalClassRoomManagement.Enum.LeaveRequestStatus;
 import com.DigitalClassRoomManagement.Dto.AssignTeacherRequestDto;
 import com.DigitalClassRoomManagement.Dto.SchoolClassResponseDto;
 import com.DigitalClassRoomManagement.Dto.TeacherDto;
@@ -13,6 +21,10 @@ import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 
 import com.DigitalClassRoomManagement.Exception.SectionNotFoundException;
 import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
+import com.DigitalClassRoomManagement.Repository.LeaveRequestRepository;
+import com.DigitalClassRoomManagement.Repository.SchoolClassRepository;
+import com.DigitalClassRoomManagement.Repository.TeacherRepository;
+import com.DigitalClassRoomManagement.Repository.UserRepository;
 import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Service.EmailSenderService;
 import com.DigitalClassRoomManagement.Service.TeacherService;
@@ -23,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -43,6 +56,8 @@ public class TeacherServiceImpl implements TeacherService {
     private UserRepository urepo;
     @Autowired
     private  SchoolClassRepository classRepo;
+@Autowired
+private LeaveRequestRepository leaveRequestRepository;
 
     @Autowired
     private SectionRepository sectionRepo;
@@ -52,6 +67,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Autowired
     private EmailSenderService emailSenderService;
+
+    @Autowired
+    private TeacherRepository teacherRepo;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -314,8 +332,96 @@ public class TeacherServiceImpl implements TeacherService {
             throw new RuntimeException("Fetch Teachers Failed: " + e.getMessage());
         }
     }
+    @Autowired
+    private UserRepository userRepository;
+    @Override
+    public LeaveRequest applyForLeave(LeaveRequestDto dto) {
+        try {
+            // Fetch Teacher User
+            User user = userRepository.findById(dto.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + dto.getUserId()));
+
+            // Build LeaveRequest from DTO
+            LeaveRequest leave = LeaveRequest.builder()
+                    .user(user)
+                    .leaveType(dto.getLeaveType())
+                    .fromDate(dto.getFromDate())
+                    .toDate(dto.getToDate())
+                    .reason(dto.getReason())
+                    .status(LeaveRequestStatus.PENDING)
+                    .appliedOn(LocalDate.now())
+                    .build();
+
+            // Save leave request
+            LeaveRequest saved = leaveRequestRepository.save(leave);
+
+            log.info("Teacher applied for leave. Leave ID: {}", saved.getLeaveId());
+            return saved;
+
+        } catch (Exception e) {
+            log.error("Error applying for teacher leave", e);
+            throw new RuntimeException("Failed to apply leave");
+        }
+    }
 
 
+    // Fetch student pending leaves
+    @Override
+    public List<LeaveRequest> viewStudentPendingLeaveRequests() {
+        try {
+            List<LeaveRequest> list =
+                    leaveRequestRepository.findByStatus(LeaveRequestStatus.PENDING);
+
+            log.info("Fetched {} pending student leave requests", list.size());
+            return list;
+
+        } catch (Exception e) {
+            log.error("Error fetching pending student leave requests", e);
+            throw new RuntimeException("Failed to fetch leave data");
+        }
+    }
+    //  Approve student leave
+    @Override
+    public LeaveRequest approveStudentLeaveRequest(Long leaveRequestId) {
+        try {
+            LeaveRequest request = leaveRequestRepository.findById(leaveRequestId)
+                    .orElseThrow(() -> new RuntimeException("Leave request not found"));
+
+            request.setStatus(LeaveRequestStatus.APPROVED);
+            request.setApprovalDate(LocalDate.now());
+
+            LeaveRequest updated = leaveRequestRepository.save(request);
+
+            log.info("Approved student leave request ID: {}", leaveRequestId);
+            return updated;
+
+        } catch (Exception e) {
+            log.error("Error approving leave {}", leaveRequestId, e);
+            throw e;
+        }
+    }
+
+    //  Reject student leave
+    @Override
+    public LeaveRequest rejectStudentLeaveRequest(Long leaveRequestId, String remarks) {
+        try {
+            LeaveRequest request = leaveRequestRepository.findById(leaveRequestId)
+                    .orElseThrow(() -> new RuntimeException("Leave request not found"));
+
+            request.setStatus(LeaveRequestStatus.REJECTED);
+            request.setRemarks(remarks);
+            request.setApprovalDate(LocalDate.now());
+
+            LeaveRequest updated = leaveRequestRepository.save(request);
+
+            log.info("Rejected student leave request ID: {}", leaveRequestId);
+            return updated;
+
+        } catch (Exception e) {
+            log.error("Error rejecting leave {}", leaveRequestId, e);
+            throw e;
+        }
+    }
     @Override
     public List<User> getUnapprovedStatusRequest( )
     {
@@ -351,23 +457,23 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
     @Override
-    public User updateStatus(Long id, Status status)
+    public Teacher updateStatus(Long id, Status status)
     {
         try
         {
-            Optional<User> u=urepo.findById(id);
+            Optional<Teacher> u=teacherRepo.findById(id);
             if(u.isPresent())
             {
-                User u1=u.get();
-                if(u1.getStatus()==status)
+                Teacher t1=u.get();
+                if(t1.getStatus()==TeacherStatus.APPROVED)
                 {
                     throw new RuntimeException("Already Done");
                 }else {
-                    u1.setStatus(status);
-                    return urepo.save(u1);
+                    t1.setStatus(TeacherStatus.APPROVED);
+                    return teacherRepo.save(t1);
                 }
             }
-            throw new RuntimeException("UserNotFoud");
+            throw new TeacherNotFoundException("Teacher Not Found");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

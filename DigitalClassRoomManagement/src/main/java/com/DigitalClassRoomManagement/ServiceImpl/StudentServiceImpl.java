@@ -1,43 +1,138 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
+
+import com.DigitalClassRoomManagement.Entity.*;
+import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Dto.StudentDTO;
 import com.DigitalClassRoomManagement.Entity.Student;
 import com.DigitalClassRoomManagement.Exception.StudentNotFoundException;
-import com.DigitalClassRoomManagement.Repository.StudentRepository;
 import com.DigitalClassRoomManagement.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
 import static com.DigitalClassRoomManagement.commonUtil.ValidationClass.*;
 
 
+
 @Service
+
 public class StudentServiceImpl implements StudentService {
 
     private static final Logger logger = Logger.getLogger(StudentServiceImpl.class.getName());
 
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Autowired
+    private SectionRepository sectionRepository;
+
+    @Autowired
+    private ParentRepository parentRepository;
+
+    @Autowired
+    private SchoolClassRepository schoolClassRepository;
+    //  Save a new student
 
     // Save a new student
-    @Override
-    public Student saveStudent(Student student) {
+    //@Override
+    /*public Student saveStudent(Student student) {
         try {
-            validateStudent(student);
+            *//*validateStudent(student);*//*
             logger.info("Saving new student with Roll No: " + student.getRollNumber());
             return studentRepository.save(student);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error saving student: " + e.getMessage(), e);
             throw new RuntimeException("Failed to save student. Please check input data: " + e.getMessage());
         }
+    }*/
+
+    @Override
+    public Student createStudent(StudentDTO dto, MultipartFile profileFile) {
+
+        Student student = new Student();
+
+        // BASIC DETAILS
+        student.setRollNumber(dto.getRollNumber());
+        student.setAdmissionNumber(dto.getAdmissionNumber());
+        student.setFirstName(dto.getFirstName());
+        student.setMiddleName(dto.getMiddleName());
+        student.setLastName(dto.getLastName());
+        student.setAcademicYear(dto.getAcademicYear());
+        student.setEmail(dto.getEmail());
+        student.setMobileNumber(dto.getMobileNumber());
+        student.setGender(dto.getGender());
+
+        if (dto.getDateOfBirth() != null) {
+            student.setDateOfBirth(LocalDate.parse(dto.getDateOfBirth()));
+        }
+
+        // ADDRESS
+        student.setStreet(dto.getStreet());
+        student.setCity(dto.getCity());
+        student.setState(dto.getState());
+        student.setCountry(dto.getCountry());
+        student.setPinCode(dto.getPinCode());
+
+        // USER MAPPING
+        if (dto.getUsers() == null || dto.getUsers().getUserId() == null) {
+            throw new RuntimeException("User ID is required");
+        }
+
+        User user = userRepository.findById(dto.getUsers().getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        student.setUsers(user);
+
+        // TEACHER MAPPING
+        if (dto.getTeacherId() != null) {
+            Teacher teacher = teacherRepository.findById(dto.getTeacherId())
+                    .orElseThrow(() -> new RuntimeException("Teacher not found"));
+            student.setTeacher(teacher);
+        }
+
+        student.setTeacherMailId(dto.getTeacherMailId());
+
+        // CLASS MAPPING
+        if (dto.getClassId() != null) {
+            SchoolClass schoolClass = schoolClassRepository.findById(dto.getClassId())
+                    .orElseThrow(() -> new RuntimeException("Class not found"));
+            student.setSchoolClass(schoolClass);
+        }
+
+        // SECTION MAPPING
+        if (dto.getSectionId() != null) {
+            Section section = sectionRepository.findById(dto.getSectionId())
+                    .orElseThrow(() -> new RuntimeException("Section not found"));
+            student.setSection(section);
+        }
+
+        // PROFILE (BLOB)
+        if (profileFile != null && !profileFile.isEmpty()) {
+            try {
+                student.setProfile(profileFile.getBytes());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to read profile image");
+            }
+        }
+
+        return studentRepository.save(student);
     }
+
 
     // Get all students
     @Override
@@ -79,6 +174,18 @@ public class StudentServiceImpl implements StudentService {
                 student.setLastName(updatedStudent.getLastName());
                 student.setAcademicYear(updatedStudent.getAcademicYear());
                 student.setEmail(updatedStudent.getEmail());
+
+                // PROFILE — Update only if new image received
+                if (updatedStudent.getProfile() != null && updatedStudent.getProfile().length > 0) {
+                    student.setProfile(updatedStudent.getProfile());  // byte[] BLOB update
+                }
+
+
+                // USER — only if changed
+                if (updatedStudent.getUsers() != null) {
+                    student.setUsers(updatedStudent.getUsers());
+                }
+
                 return studentRepository.save(student);
 
             }).orElseThrow(() ->
@@ -123,22 +230,61 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-/*    @Override
-    public StudentDTO.EnrollmentRequest.StudentCreateResponse enrollStudent(Long studentId, StudentDTO.EnrollmentRequest request) {
+
+    @Override
+    public Student assignTeacher(Long studentId, Long teacherId) {
+        logger.info("Assigning teacher " + teacherId + " to student " + studentId);
 
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found with ID: " + studentId));
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
 
-        // update academic information
-        student.setAcademicYear(request.getAcademicYear());
-        student.setStandard(request.getStandard());
-        student.setDivision(request.getDivision());
+        student.setTeacher(teacher);
+        return studentRepository.save(student);
+    }
 
-        studentRepository.save(student);
+    @Override
+    public Student assignSection(Long studentId, Long sectionId) {
+        logger.info("Assigning section " + sectionId + " to student " + studentId);
 
-        return new StudentDTO.EnrollmentRequest.StudentCreateResponse("SUCCESS",
-                "Student enrolled successfully for academic year " + request.getAcademicYear());
-    }*/
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Section section = sectionRepository.findById(sectionId)
+                .orElseThrow(() -> new RuntimeException("Section not found"));
+
+        student.setSection(section);
+        return studentRepository.save(student);
+    }
+
+    @Override
+    public Student assignParent(Long studentId, Long parentId) {
+        logger.info("Assigning parent " + parentId + " to student " + studentId);
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Parent parent = parentRepository.findById(parentId)
+                .orElseThrow(() -> new RuntimeException("Parent not found"));
+
+        student.setParent(parent);
+        return studentRepository.save(student);
+    }
+
+    @Override
+    public Student assignClass(Long studentId, Long classId) {
+        logger.info("Assigning class " + classId + " to student " + studentId);
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        SchoolClass schoolClass = schoolClassRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Class not found"));
+
+        student.setSchoolClass(schoolClass);
+        return studentRepository.save(student);
+
+    }
+
+
 
 
     @Override
@@ -173,49 +319,66 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    @Autowired
+    private LeaveRequestRepository leaveRequestRepository;
 
 
-// Validation logic
-private void validateStudent(Student student) {
-
-    if (student.getRollNumber() == null || !Pattern.compile("^[A-Za-z0-9]{2,20}$")
-            .matcher(student.getRollNumber()).matches()) {
-        throw new IllegalArgumentException("Invalid Roll Number. It must be alphanumeric (2–20 characters).");
+    // View Leave Approval Status
+    @Override
+    public LeaveRequest viewLeaveStatus(Long leaveRequestId) {
+        try {
+            return leaveRequestRepository.findById(leaveRequestId)
+                    .orElseThrow(() -> new RuntimeException("Leave request not found"));
+        } catch (Exception e) {
+//            logger.err("Error while fetching leave status {}", leaveRequestId, e);
+            throw e;
+        }
     }
 
-    if (student.getAdmissionNumber() == null || !Pattern.compile("^[A-Za-z0-9-]{2,20}$")
-            .matcher(student.getAdmissionNumber()).matches()) {
-        throw new IllegalArgumentException("Invalid Admission Number. It must be alphanumeric or contain hyphen (2–20 characters).");
-    }
 
-    if (student.getFirstName() == null || student.getFirstName().trim().isEmpty()) {
-        throw new IllegalArgumentException("First Name is required.");
-    }
-    if (!NAME_PATTERN.matcher(student.getFirstName()).matches()) {
-        throw new IllegalArgumentException("Invalid First Name. Must start with a capital letter & contain only letters.");
-    }
 
-    if (student.getLastName() == null || student.getLastName().trim().isEmpty()) {
-        throw new IllegalArgumentException("Last Name is required.");
-    }
-    if (!NAME_PATTERN.matcher(student.getLastName()).matches()) {
-        throw new IllegalArgumentException("Invalid Last Name. Must start with a capital letter & contain only letters.");
-    }
 
-    if (student.getAcademicYear() == null || student.getAcademicYear().trim().isEmpty()) {
-        throw new IllegalArgumentException("Academic Year is required.");
-    }
-    if (!Pattern.compile("^(\\d{4})-(\\d{4})$").matcher(student.getAcademicYear()).matches()) {
-        throw new IllegalArgumentException("Invalid Academic Year. Format: YYYY-YYYY");
-    }
+    // Validation logic
+    private void validateStudent(Student student) {
 
-    if (student.getEmail() == null || student.getEmail().trim().isEmpty()) {
-        throw new IllegalArgumentException("Email is required.");
+       /* if (student.getRollNumber() == null || !Pattern.compile("^[A-Za-z0-9]{2,20}$")
+                .matcher(student.getRollNumber()).matches()) {
+            throw new IllegalArgumentException("Invalid Roll Number. It must be alphanumeric (2–20 characters).");
+        }*/
+
+        if (student.getAdmissionNumber() == null || !Pattern.compile("^[A-Za-z0-9]{2,20}$")
+                .matcher(student.getAdmissionNumber()).matches()) {
+            throw new IllegalArgumentException("Invalid Admission Number. It must be alphanumeric or contain hyphen (2–20 characters).");
+        }
+
+        if (student.getFirstName() == null || student.getFirstName().trim().isEmpty()) {
+            throw new IllegalArgumentException("First Name is required.");
+        }
+        if (!NAME_PATTERN.matcher(student.getFirstName()).matches()) {
+            throw new IllegalArgumentException("Invalid First Name. Must start with a capital letter & contain only letters.");
+        }
+
+        if (student.getLastName() == null || student.getLastName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Last Name is required.");
+        }
+        if (!NAME_PATTERN.matcher(student.getLastName()).matches()) {
+            throw new IllegalArgumentException("Invalid Last Name. Must start with a capital letter & contain only letters.");
+        }
+
+        if (student.getAcademicYear() == null || student.getAcademicYear().trim().isEmpty()) {
+            throw new IllegalArgumentException("Academic Year is required.");
+        }
+        if (!Pattern.compile("^(\\d{4})-(\\d{4})$").matcher(student.getAcademicYear()).matches()) {
+            throw new IllegalArgumentException("Invalid Academic Year. Format: YYYY-YYYY");
+        }
+
+        if (student.getEmail() == null || student.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required.");
+        }
+        if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
+            throw new IllegalArgumentException("Invalid Email format.");
+        }
     }
-    if (!EMAIL_PATTERN.matcher(student.getEmail()).matches()) {
-        throw new IllegalArgumentException("Invalid Email format.");
-    }
-}
 }
 
 

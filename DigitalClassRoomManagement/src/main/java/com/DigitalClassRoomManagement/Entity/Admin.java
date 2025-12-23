@@ -17,6 +17,7 @@ import lombok.Setter;
 public class Admin {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminId;
     @Column(nullable = false)
     private String firstName;

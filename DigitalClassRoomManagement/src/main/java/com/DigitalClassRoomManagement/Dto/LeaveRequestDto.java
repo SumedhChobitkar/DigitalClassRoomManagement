@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Dto;
 
+import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.LeaveRequestStatus;
 import com.DigitalClassRoomManagement.Enum.LeaveType;
 import lombok.*;

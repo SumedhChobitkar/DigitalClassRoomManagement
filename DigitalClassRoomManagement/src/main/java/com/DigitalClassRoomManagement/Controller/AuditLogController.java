@@ -22,59 +22,123 @@ import java.util.List;
 public class AuditLogController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuditLogController.class);
-
     private final AuditLogService auditLogService;
 
-    @Operation(summary = "Create new AuditLog", description = "Create and save a new audit log record")
+    // CREATE AUDIT LOG
+    @Operation(summary = "Create new AuditLog")
     @PostMapping("/saveAuditlog")
-    public ResponseEntity<AuditLog> createAuditLog(@RequestBody AuditLogDto dto) {
+    public ResponseEntity<?> createAuditLog(@RequestBody AuditLogDto dto) {
         logger.info("Request to create AuditLog: {}", dto);
 
-        AuditLog auditLog = AuditLog.builder()
-                .userId(dto.getUserId())
-                .username(dto.getUsername())
-                .action(dto.getAction())
-                .module(dto.getModule())
-                .time(dto.getTime())
-                .build();
+        try {
+            AuditLog auditLog = AuditLog.builder()
+                    .userId(dto.getUserId())
+                    .username(dto.getUsername())
+                    .action(dto.getAction())
+                    .module(dto.getModule())
+                    .time(dto.getTime())
+                    .build();
 
-        AuditLog created = auditLogService.createAuditLog(auditLog);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+            AuditLog created = auditLogService.createAuditLog(auditLog);
+            logger.info("AuditLog created successfully with ID: {}", created.getAuditLogId());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+
+        } catch (Exception e) {
+            logger.error("Error creating AuditLog: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating AuditLog: " + e.getMessage());
+        }
     }
-
-    @Operation(summary = "Get AuditLog by ID", description = "Fetch a specific audit log using its ID")
+    // GET AUDIT LOG BY ID
+    @Operation(summary = "Get AuditLog by ID")
     @GetMapping("/getAuditlogById/{id}")
-    public ResponseEntity<AuditLog> getAuditLogById(@PathVariable Long id) {
-        AuditLog auditLog = auditLogService.getAuditLogById(id);
-        return ResponseEntity.ok(auditLog);
+    public ResponseEntity<?> getAuditLogById(@PathVariable Long id) {
+        logger.info("Fetching AuditLog by ID: {}", id);
+
+        try {
+            AuditLog auditLog = auditLogService.getAuditLogById(id);
+            logger.info("AuditLog found: {}", id);
+            return ResponseEntity.ok(auditLog);
+
+        } catch (RuntimeException e) {
+            logger.warn("AuditLog not found for ID: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+
+        } catch (Exception e) {
+            logger.error("Error fetching AuditLog {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.internalServerError()
+                    .body("Error fetching AuditLog: " + e.getMessage());
+        }
     }
 
-    @Operation(summary = "Get all AuditLogs", description = "Retrieve all audit log records")
+    // GET ALL AUDIT LOGS
+    @Operation(summary = "Get all AuditLogs")
     @GetMapping("/getAllAuditlogs")
-    public ResponseEntity<List<AuditLog>> getAllAuditLogs() {
-        List<AuditLog> auditLogs = auditLogService.getAllAuditLogs();
-        return ResponseEntity.ok(auditLogs);
-    }
+    public ResponseEntity<?> getAllAuditLogs() {
+        logger.info("Request to fetch all AuditLogs");
 
-    @Operation(summary = "Update existing AuditLog", description = "Update an existing audit log record using its ID")
+        try {
+            List<AuditLog> auditLogs = auditLogService.getAllAuditLogs();
+            logger.info("Total AuditLogs retrieved: {}", auditLogs.size());
+            return ResponseEntity.ok(auditLogs);
+
+        } catch (Exception e) {
+            logger.error("Error fetching all AuditLogs: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError()
+                    .body("Error fetching AuditLogs: " + e.getMessage());
+        }
+    }
+    // UPDATE AUDIT LOG
+    @Operation(summary = "Update existing AuditLog")
     @PutMapping("/updateAuditlogById/{id}")
-    public ResponseEntity<AuditLog> updateAuditLog(@PathVariable Long id, @RequestBody AuditLogDto dto) {
-        AuditLog auditLog = AuditLog.builder()
-                .userId(dto.getUserId())
-                .username(dto.getUsername())
-                .action(dto.getAction())
-                .module(dto.getModule())
-                .time(dto.getTime())
-                .build();
+    public ResponseEntity<?> updateAuditLog(@PathVariable Long id, @RequestBody AuditLogDto dto) {
+        logger.info("Request to update AuditLog ID: {}", id);
 
-        AuditLog updated = auditLogService.updateAuditLog(id, auditLog);
-        return ResponseEntity.ok(updated);
+        try {
+            AuditLog auditLog = AuditLog.builder()
+                    .userId(dto.getUserId())
+                    .username(dto.getUsername())
+                    .action(dto.getAction())
+                    .module(dto.getModule())
+                    .time(dto.getTime())
+                    .build();
+
+            AuditLog updated = auditLogService.updateAuditLog(id, auditLog);
+            logger.info("AuditLog updated successfully: {}", id);
+
+            return ResponseEntity.ok(updated);
+
+        } catch (RuntimeException e) {
+            logger.warn("AuditLog not found for update: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+
+        } catch (Exception e) {
+            logger.error("Error updating AuditLog {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.internalServerError()
+                    .body("Error updating AuditLog: " + e.getMessage());
+        }
     }
+    // DELETE AUDIT LOG
 
-    @Operation(summary = "Delete AuditLog", description = "Delete a specific audit log record by ID")
+    @Operation(summary = "Delete AuditLog")
     @DeleteMapping("/deleteAuditlogById/{id}")
-    public ResponseEntity<Void> deleteAuditLog(@PathVariable Long id) {
-        auditLogService.deleteAuditLog(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteAuditLog(@PathVariable Long id) {
+        logger.info("Request to delete AuditLog ID: {}", id);
+
+        try {
+            auditLogService.deleteAuditLog(id);
+            logger.info("AuditLog deleted successfully: {}", id);
+            return ResponseEntity.ok("AuditLog deleted successfully with ID: " + id);
+
+        } catch (RuntimeException e) {
+            logger.warn("AuditLog not found for deletion: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+
+        } catch (Exception e) {
+            logger.error("Error deleting AuditLog {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.internalServerError()
+                    .body("Error deleting AuditLog: " + e.getMessage());
+        }
     }
 }
