@@ -14,6 +14,15 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    //Session Not Found
+    @ExceptionHandler(SessionNotFoundException.class)
+    public ResponseEntity<Map<String,String>> handleNotFound(SessionNotFoundException ex){
+        Map<String,String> body = new HashMap<>();
+        body.put("error", "Session not found");
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
     // Teacher not found
     @ExceptionHandler(TeacherNotFoundException.class)
     public ResponseEntity<?> handleTeacherNotFound(TeacherNotFoundException ex) {

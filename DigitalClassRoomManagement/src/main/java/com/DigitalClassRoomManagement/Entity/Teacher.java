@@ -1,6 +1,5 @@
 package com.DigitalClassRoomManagement.Entity;
 
-
 import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micrometer.common.lang.Nullable;
@@ -9,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,25 +47,19 @@ public class Teacher {
             joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "section_id", referencedColumnName = "sectionId")
     )
-
-
-
-
     @JsonIgnore
     private List<Section> assignedSections = new ArrayList<>();
 
-    //  ADD THIS — Mapping with Students
+    // ADD THIS — Mapping with Students
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Student> students = new ArrayList<>();
-
 
     @Lob
     @Column(name = "profile_picture", columnDefinition = "LONGBLOB")
     @Basic
     @Nullable
     private byte[] profilePicture;
-
 
 //    @ManyToMany
 //    @JoinTable(
@@ -103,7 +95,6 @@ public class Teacher {
 //    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<PTM> ptms;
 
-
     @ManyToMany
     @JoinTable(
             name = "teacher_assigned_classes",
@@ -113,7 +104,10 @@ public class Teacher {
     @JsonIgnore
     private List<SchoolClass> assignedClass = new ArrayList<>();
 
-
+    // --- Sessions mapping (one teacher can have many sessions)
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Session> sessions = new ArrayList<>();
 
 
 }
