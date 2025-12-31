@@ -61,6 +61,8 @@ public class StudentServiceImpl implements StudentService {
         }
     }*/
 
+
+
     @Override
     public Student createStudent(StudentDTO dto, MultipartFile profileFile) {
 
@@ -250,8 +252,15 @@ public class StudentServiceImpl implements StudentService {
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
+//        Section section = sectionRepository.findById(sectionId)
+//                .orElseThrow(() -> new RuntimeException("Section not found"));
+//        Student student = studentService.getStudentById(studentId)
+//                .orElseThrow(() -> new RuntimeException("Student not found"));
+
         Section section = sectionRepository.findById(sectionId)
                 .orElseThrow(() -> new RuntimeException("Section not found"));
+
+        student.setSection(section);
 
         student.setSection(section);
         return studentRepository.save(student);
