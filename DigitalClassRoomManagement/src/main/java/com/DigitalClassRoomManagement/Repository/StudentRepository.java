@@ -6,6 +6,7 @@ import com.DigitalClassRoomManagement.Entity.Student;
 import com.DigitalClassRoomManagement.Enum.LeaveRequestStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository

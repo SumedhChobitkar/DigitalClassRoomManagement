@@ -3,7 +3,6 @@ package com.DigitalClassRoomManagement.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.Instant;
-
 @Entity
 @Table(name = "oauth_states")
 @Data

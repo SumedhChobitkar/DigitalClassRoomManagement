@@ -2,7 +2,6 @@ package com.DigitalClassRoomManagement.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 @Entity
 @Table(name = "google_refresh_tokens")
 @Data

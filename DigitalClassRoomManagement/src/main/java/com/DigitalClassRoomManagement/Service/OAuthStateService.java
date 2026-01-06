@@ -4,7 +4,6 @@ import com.DigitalClassRoomManagement.Entity.OAuthState;
 import com.DigitalClassRoomManagement.Repository.OAuthStateRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service

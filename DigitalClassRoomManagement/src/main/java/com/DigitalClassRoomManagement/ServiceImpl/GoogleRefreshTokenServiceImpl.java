@@ -27,7 +27,6 @@ public class GoogleRefreshTokenServiceImpl implements GoogleRefreshTokenService 
         repo.save(token);
         log.info("Saved refresh token for teacher {}", teacher.getId());
     }
-
     @Override
     public GoogleRefreshToken findByTeacher(Teacher teacher) {
         return repo.findByTeacher(teacher).orElse(null);

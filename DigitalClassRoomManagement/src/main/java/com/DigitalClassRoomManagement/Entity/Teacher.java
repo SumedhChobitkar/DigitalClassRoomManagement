@@ -109,5 +109,4 @@ public class Teacher {
     @JsonIgnore
     private List<Session> sessions = new ArrayList<>();
 
-
 }

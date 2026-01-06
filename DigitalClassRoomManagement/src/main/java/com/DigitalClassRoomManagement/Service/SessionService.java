@@ -2,7 +2,6 @@ package com.DigitalClassRoomManagement.Service;
 
 import com.DigitalClassRoomManagement.Dto.SessionCreateRequestDto;
 import com.DigitalClassRoomManagement.Dto.SessionResponseDto;
-
 import java.util.List;
 
 public interface SessionService {

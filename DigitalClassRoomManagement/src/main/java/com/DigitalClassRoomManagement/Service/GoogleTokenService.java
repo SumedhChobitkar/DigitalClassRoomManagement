@@ -1,5 +1,4 @@
 package com.DigitalClassRoomManagement.Service;
-
 import java.util.Map;
 
 public interface GoogleTokenService {

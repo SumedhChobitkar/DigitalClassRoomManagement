@@ -61,7 +61,6 @@ public class SecurityConfig {
                                 "/",
                                 "/error",
 
-
                                // allow the custom path too:-
                                 // User
                                 "/api/user/login",

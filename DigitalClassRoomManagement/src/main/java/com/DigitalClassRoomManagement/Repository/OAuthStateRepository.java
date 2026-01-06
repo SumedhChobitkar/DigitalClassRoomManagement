@@ -1,6 +1,7 @@
 package com.DigitalClassRoomManagement.Repository;
 
 import com.DigitalClassRoomManagement.Entity.OAuthState;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
