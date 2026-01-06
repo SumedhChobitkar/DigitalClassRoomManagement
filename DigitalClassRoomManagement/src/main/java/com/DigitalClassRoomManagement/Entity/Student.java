@@ -81,7 +81,6 @@ public class Student {
     private SchoolClass schoolClass;
 
 
-
     /* ---------------------- SECTION MAPPING ---------------------- */
     @ManyToOne
     @JoinColumn(name = "section_id")
@@ -92,9 +91,6 @@ public class Student {
     @Lob
     @Column(name = "profile", columnDefinition = "LONGBLOB")
     private byte[] profile;
-
-
-
 
 
     /* ---------------------- AUDIT FIELDS ---------------------- */

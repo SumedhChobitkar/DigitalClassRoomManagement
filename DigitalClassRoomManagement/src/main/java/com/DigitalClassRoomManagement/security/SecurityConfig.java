@@ -34,8 +34,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        // Swagger URLs (new custom + default paths)
-                        .requestMatchers(
+
+                                // Swagger URLs (new custom + default paths)
+                                .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
@@ -44,23 +45,40 @@ public class SecurityConfig {
                                 "/swagger-config/**",
                                 "/payment.html",
 
-                                // allow the custom path too:-
-                          // User
-                          "/api/user/login",
-                                         "/api/user/registerUser",
-                                         "/api/user/getAll",
-                                         "/api/user/getById/{id}",
-                                         "/api/user/forgot-password",
-                                         "/api/user/verify-otp",
-                                         "/api/user/reset-password",
+                                // OAuth endpoints (make these publicly accessible)
+                                //OAuth
+                               "/oauth/**",
+                               "/google/**",
+                               "/oauth/callback",
+                               "/oauth2/**",
+                               "/oauth2/authorize",
+                               "/oauth2/callback",
+
+                                //Meet
+                                "/meet/**",
+
+                                // Home & error
+                                "/",
+                                "/error",
+
+                               // allow the custom path too:-
+                                // User
+                                "/api/user/login",
+                                "/api/user/registerUser",
+                                "/api/user/getAll",
+                                "/api/user/getById/{id}",
+                                "/api/user/forgot-password",
+                                "/api/user/verify-otp",
+                                "/api/user/reset-password",
                                 "/api/user/logout/{id}",
-                          "/api/digitalClassroom/login",
-                                         "/api/digitalClassroom/registerUser",
-                                         "/api/digitalClassroom/getAll",
-                                         "/api/digitalClassroom/getById/{id}",
-                                         "/api/digitalClassroom/forgot-password",
-                                         "/api/digitalClassroom/verify-otp",
-                                         "/api/digitalClassroom/reset-password",
+                                "/api/digitalClassroom/login",
+                                "/api/digitalClassroom/registerUser",
+                                "/api/digitalClassroom/getAll",
+                                "/api/digitalClassroom/getById/{id}",
+                                "/api/digitalClassroom/forgot-password",
+                                "/api/digitalClassroom/verify-otp",
+                                "/api/digitalClassroom/reset-password",
+
                                 //Exam
                                 "/api/exam/TeacherSaveExam",
                                 "/api/exam/UpdateByExamId/{examId}",
@@ -68,8 +86,8 @@ public class SecurityConfig {
                                 "/api/getByTeacher/{teacherId}",
                                 "/api/exam/GetAllExam",
                                 "/api/exam/DeleteByExamId/{id}",
-                                // Teacher
 
+                                // Teacher
                                 "/api/teacher/addTeacher",
                                 "/api/teacher/getAll",
                                 "/api/teacher/getById",
@@ -87,40 +105,33 @@ public class SecurityConfig {
                                 "/api/profile/dashboard/{id}/get-profile-picture",
                                 "/api/profile/dashboard/{id}/remove-profile-picture",
 
-
                                 // Student Related
                                 "/api/students/saveStudent",
 
-
                                 // Subject Related
                                 "/api/subject/**",
-
-
 
                                 "/api/teacher/delete",
 
                                 //ContactUs
                                 "/api/contact/**",
 
-
-
-
                                 //Assignment
-                                        "/api/assignments/create",
-                                        "/api/assignments/updateAssignmentById/{id}",
-                                        "/api/assignments/getAllAssignments",
-                                        "/api/assignments/getAssignmentById/{id}",
-                                        "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
-                                        "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
-                                        "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
-                                        "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}",
+                                "/api/assignments/create",
+                                "/api/assignments/updateAssignmentById/{id}",
+                                "/api/assignments/getAllAssignments",
+                                "/api/assignments/getAssignmentById/{id}",
+                                "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
+                                "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
+                                "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}",
 
                                 //TeacherAssignmentSubmission
-                                "api/teacher/assignments/create",
-                                "api/teacher/assignments/updateAssignmentById/{id}",
-                                "api/teacher/assignments/getAllAssignments",
-                                "api/teacher/assignments/getAssignmentById/{id}",
-                                "api/teacher/assignments/deleteAssignmentById/{id}",
+                                "/api/teacher/assignments/create",
+                                "/api/teacher/assignments/updateAssignmentById/{id}",
+                                "/api/teacher/assignments/getAllAssignments",
+                                "/api/teacher/assignments/getAssignmentById/{id}",
+                                "/api/teacher/assignments/deleteAssignmentById/{id}",
 
                                 // Homework
                                 "/api/homeworks/saveHomework",
@@ -138,9 +149,9 @@ public class SecurityConfig {
 
 
                                 //LibraryMember
-                                  "/api/Librarymembers/saveLibraryMember",
+                                "/api/Librarymembers/saveLibraryMember",
                                 "/api/Librarymembers/getByIdLibraryMember/{id}",
-                                  "/api/Librarymembers/getAllLibraryMembers",
+                                "/api/Librarymembers/getAllLibraryMembers",
                                 "/api/Librarymembers/updateLibraryMemberById/{id}",
                                 "/api/Librarymembers/deleteLibraryMemberyById/{id}",
 
@@ -173,16 +184,7 @@ public class SecurityConfig {
 
                                 //Admin Exam
                                 "/api/Create-exam/CreateExam",
-                                "/api/Create-exam/getAll"
-
-
-
-
-
-
-
-
-                        ).permitAll()
+                                "/api/Create-exam/getAll",
 
                                 //ReportCard
 
@@ -216,6 +218,17 @@ public class SecurityConfig {
 
 
                         ).permitAll()
+
+                         //SESSION APIs
+                         // READ sessions -> PUBLIC
+                         .requestMatchers(HttpMethod.GET, "/api/sessions/**").permitAll()
+                         // CREATE session
+                          .requestMatchers(HttpMethod.POST, "/api/sessions/create").permitAll()
+                          .requestMatchers(HttpMethod.GET,"/api/session/getAll").permitAll()
+                          .requestMatchers(HttpMethod.GET,"/api/session/getById/{Id}").permitAll()
+                          .requestMatchers(HttpMethod.GET,"/api/session/{id}/create-meet").permitAll()
+                         .requestMatchers(HttpMethod.GET,"/api/session/teacher/{teacherId}").permitAll()
+
 
                         //Teacher Exam
                         .requestMatchers(HttpMethod.POST, "/api/teacher/exam/{examId}/questions").hasAnyRole("TEACHER", "PRINCIPAL")
@@ -266,12 +279,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/superAdmin/get/unapproved/statusrequest","/api/superAdmin/get/approved/statusrequest","/api/superAdmin/update/status/{id}").permitAll()
 
                         // Teacher endpoints
-                        .requestMatchers(HttpMethod.POST, "/api/teacher/addTeacher").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/teacher/addTeacher").hasRole("ADMIN")
 
                         //Timetable Related
-                        .requestMatchers(HttpMethod.POST, "/api/timetable/createTimetable").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/timetable/createTimetable").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/timetable/get/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/timetable/getAll").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/timetable/getAll").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/timetable/update/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/timetable/delete/{id}").hasRole("ADMIN")
 
@@ -283,12 +296,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/locations/name/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/locations/{locationId}/map-link").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/locations/update/{locationId}").permitAll()
-
-
-
-
-
-
 
                         //TeacherTimetable Related
                         .requestMatchers(HttpMethod.GET, "/api/teacherTimetable/{teacherId}/timetable").hasRole("TEACHER")
@@ -313,8 +320,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/parents/deleteParentById/**").hasAnyRole("TEACHER", "ADMIN")
                         // Linking parent to student — ADMIN ONLY
                         .requestMatchers(HttpMethod.POST, "/api/parents/linkParentToStudent").hasRole("ADMIN")
-
-
 
                         // Teacher endpoints
                         .requestMatchers(HttpMethod.POST, "/api/teacher/add").hasRole("ADMIN")

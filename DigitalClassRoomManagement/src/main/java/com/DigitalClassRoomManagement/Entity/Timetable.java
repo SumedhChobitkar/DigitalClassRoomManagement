@@ -8,8 +8,6 @@ import lombok.*;
 
 import com.DigitalClassRoomManagement.Enum.DayOfWeek;
 //import java.time.DayOfWeek;
-
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -43,7 +41,7 @@ public class Timetable {
     @JoinColumn(name = "teacherId", nullable = false)
     private Teacher teacher;
 
-//    @NotNull(message = "Day of week is required")
+//  @NotNull(message = "Day of week is required")
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
@@ -60,6 +58,11 @@ public class Timetable {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    //--- for Session---
+    // ---Reverse one-to-one link to Session (mappedBy = "timetable")
+    @OneToOne(mappedBy = "timetable", fetch = FetchType.LAZY)
+    private Session session;
 
     @PrePersist
     public void onCreated(){
