@@ -6,13 +6,21 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    //Session Not Found
+    @ExceptionHandler(SessionNotFoundException.class)
+    public ResponseEntity<Map<String,String>> handleNotFound(SessionNotFoundException ex){
+        Map<String,String> body = new HashMap<>();
+        body.put("error", "Session not found");
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
 
     // Teacher not found
     @ExceptionHandler(TeacherNotFoundException.class)

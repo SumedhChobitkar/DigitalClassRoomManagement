@@ -7,7 +7,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 @Table(name = "sections")
 @Data
@@ -49,6 +48,10 @@ public class Section {
     @JsonIgnore
     private List<Student> students = new ArrayList<>();
 
+    // ---Sessions mapping (one section can have many sessions)---
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Session> sessions = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
