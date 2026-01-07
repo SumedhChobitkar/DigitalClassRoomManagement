@@ -193,7 +193,7 @@ public class SecurityConfig {
                                 "/api/reportcards/getAllReportCards",
                                 "/api/reportcards/getReportCardByStudentId/{studentId}",
                                 "/api/reportcards/updateReportCardById/{id}",
-                                "/api/reportcards/deleteReportCardById/{id}"
+                                "/api/reportcards/deleteReportCardById/{id}",
 //
 //                                // AuditLog
 //                                "/api/auditlogs/saveAuditlog",
@@ -210,8 +210,14 @@ public class SecurityConfig {
 //                                "/api/Librarymembers/updateLibraryMemberById/{id}",
 //                                "/api/Librarymembers/deleteLibraryMemberyById/{id}"
 
+//                                "/api/admissions/createAdmission",
+                                "/api/admissions/getAllAdmissions",
+                                "/api/admissions/getByIdAdmissions/{id}",
+                                "/api/admissions/updateAdmissions/{id}",
+                                "/api/admissions/deleteAdmissions/{id}"
 
-                                ).permitAll()
+
+                        ).permitAll()
 
                          //SESSION APIs
                          // READ sessions -> PUBLIC
@@ -373,7 +379,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getByIdLibraryMember/**").hasAnyRole("ADMIN", "TEACHER")
                         .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getAllLibraryMembers").hasAnyRole("ADMIN", "TEACHER")
 
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/admissions/createAdmissions").hasRole("PRINCIPAL")
+
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

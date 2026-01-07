@@ -195,6 +195,45 @@ public class ValidationClass {
         if (address.length() < 10 || address.length() > 2000)
             throw new IllegalArgumentException("Address must be between 10 and 2000 characters.");
     }
+    // ---------------- Admission Validation ----------------
+    public static void validateAdmission(
+            String studentName,
+            String email,
+            String course,
+            LocalDate admissionDate
+    ) {
+
+        // ---- Student Name ----
+        if (studentName == null || studentName.trim().isEmpty())
+            throw new IllegalArgumentException("Student name is required.");
+
+        if (!NAME_PATTERN.matcher(studentName).matches())
+            throw new IllegalArgumentException(
+                    "Student name must start with a capital letter and contain only letters, spaces or dots."
+            );
+
+        // ---- Email ----
+        if (email == null || email.trim().isEmpty())
+            throw new IllegalArgumentException("Email is required.");
+
+        if (!EMAIL_PATTERN.matcher(email).matches())
+            throw new IllegalArgumentException("Invalid email format.");
+
+        // ---- Course ----
+        if (course == null || course.trim().isEmpty())
+            throw new IllegalArgumentException("Course is required.");
+
+        if (course.length() < 2 || course.length() > 50)
+            throw new IllegalArgumentException("Course name must be between 2 and 50 characters.");
+
+        // ---- Admission Date ----
+        if (admissionDate == null)
+            throw new IllegalArgumentException("Admission date is required.");
+
+        if (admissionDate.isAfter(LocalDate.now()))
+            throw new IllegalArgumentException("Admission date cannot be in the future.");
+    }
+
 }
 
 
