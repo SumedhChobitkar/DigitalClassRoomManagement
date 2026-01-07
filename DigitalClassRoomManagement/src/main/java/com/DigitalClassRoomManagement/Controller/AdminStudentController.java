@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,7 @@ public class AdminStudentController {
 
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(value = "/saveStudent", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/saveStudent", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createStudent(
             @RequestPart("student") StudentDTO studentDTO,
             @RequestPart(value = "profile", required = false) MultipartFile profileFile) {
@@ -56,9 +57,12 @@ public class AdminStudentController {
 
         try {
             Student savedStudent = studentService.createStudent(studentDTO, profileFile);
-
+            HashMap<String,Object> response=new HashMap<>();
+            response.put("teacherId",savedStudent.getTeacher().getId());
+            response.put("classId", savedStudent.getSchoolClass().getClassId());
+            response.put("Student",savedStudent);
             logger.info("Student created successfully");
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (Exception e) {
             logger.error("Error while creating student", e);
@@ -147,8 +151,8 @@ public class AdminStudentController {
                     .body("Error deleting student: " + e.getMessage());
         }
     }
-      // assign teacher by studentid
-      @PreAuthorize("hasRole('ADMIN')")
+    // assign teacher by studentid
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/assignTeacher/{studentId}/{teacherId}")
     public ResponseEntity<?> assignTeacherToStudent(
             @PathVariable Long studentId,
@@ -174,8 +178,8 @@ public class AdminStudentController {
                     .body("Failed to assign teacher: " + e.getMessage());
         }
     }
-     // assign section by studentid
-     @PreAuthorize("hasRole('ADMIN')")
+    // assign section by studentid
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/assignSection/{studentId}/{sectionId}")
     public ResponseEntity<?> assignSectionToStudent(
             @PathVariable Long studentId,
@@ -185,7 +189,7 @@ public class AdminStudentController {
 
         try {
 
-           // studentService.assignSection(studentId,sectionId);
+            // studentService.assignSection(studentId,sectionId);
 
 
             return ResponseEntity.ok( studentService.assignSection(studentId,sectionId));
@@ -221,8 +225,8 @@ public class AdminStudentController {
                     .body("Failed to assign parent: " + e.getMessage());
         }
     }
-     // assign class by studentbyid
-     @PreAuthorize("hasRole('ADMIN')")
+    // assign class by studentbyid
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/assignClass/{studentId}/{classId}")
     public ResponseEntity<?> assignClassToStudent(
             @PathVariable Long studentId,
@@ -284,6 +288,8 @@ public class AdminStudentController {
                     ));
         }
     }
+
+
 
 
 
