@@ -107,7 +107,7 @@ public class StudentServiceImpl implements StudentService {
             student.setTeacher(teacher);
         }
 
-        student.setTeacherMailId(dto.getTeacherMailId());
+       // student.setTeacherMailId(dto.getTeacherMailId());
 
         // CLASS MAPPING
         if (dto.getClassId() != null) {

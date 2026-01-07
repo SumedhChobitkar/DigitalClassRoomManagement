@@ -70,8 +70,7 @@ public class Student {
     @JsonIgnore
     private Teacher teacher;
 
-    // Store teacher email directly in student table also
-    private String teacherMailId;
+
 
 
     /* ---------------------- CLASS MAPPING ---------------------- */
