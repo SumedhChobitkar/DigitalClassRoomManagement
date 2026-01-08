@@ -43,6 +43,18 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/swagger-config/**",
                                 "/payment.html",
+                                "/",
+                                "/static/**",
+                                "/public/**",
+                                "/resources/**",
+                                "/favicon.ico",
+                                "/chat/**",
+                                "/api/chat/**",
+                                "/student.html",
+                                "/parent.html",
+                                "/teacher.html",
+                                // for chat
+                              //  "/api/chat/student/open",
 
                                 // allow the custom path too:-
                           // User
@@ -173,7 +185,7 @@ public class SecurityConfig {
 
                                 //Admin Exam
                                 "/api/Create-exam/CreateExam",
-                                "/api/Create-exam/getAll"
+                                "/api/Create-exam/getAll",
 
 
 
@@ -182,7 +194,7 @@ public class SecurityConfig {
 
 
 
-                        ).permitAll()
+
 
                                 //ReportCard
 
@@ -214,7 +226,7 @@ public class SecurityConfig {
                         //Teacher Exam
                         .requestMatchers(HttpMethod.POST, "/api/teacher/exam/{examId}/questions").hasAnyRole("TEACHER", "PRINCIPAL")
                         .requestMatchers(HttpMethod.GET, "/api/teacher/exam/submissions").hasRole("TEACHER")
-
+                        .requestMatchers("/chat/**").permitAll()
                         // Student Exam
                         .requestMatchers(HttpMethod.POST, "/api/student/exam/submit").hasRole("STUDENT")
                         .requestMatchers(HttpMethod.GET, "/api/student/exam/scheduled").hasAnyRole("STUDENT", "TEACHER", "ADMIN", "PRINCIPAL")

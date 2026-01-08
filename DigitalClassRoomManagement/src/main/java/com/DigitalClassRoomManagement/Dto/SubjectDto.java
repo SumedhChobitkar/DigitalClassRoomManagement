@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Dto;
 
+import com.DigitalClassRoomManagement.Entity.SchoolClass;
 import com.DigitalClassRoomManagement.Entity.Teacher;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -19,35 +20,15 @@ import java.time.LocalDateTime;
 @Builder
 public class SubjectDto {
 
-
-    @NotBlank
-    private String subjectName;
-
-    @NotBlank
-    @Column(unique = true)
-    private String subjectCode;
-
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "classId", nullable = false)
-//    private SchoolClass schoolClass;
-    @NotBlank
-    private String schoolClass;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "teacherId")
-    @JsonIgnore
-    private Teacher teacher;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Builder.Default
-    private Boolean isActive = true;
-    @Column(nullable = false)
-    private BigDecimal maxMarks;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+     private Long subjectId;
+     private String subjectName;
+     private String subjectCode;
+     private Long classId;
+     private String className;
+     private Long id;
+     private String description;
+     private Boolean isActive = true;
+     private BigDecimal maxMarks;
+     private LocalDateTime createdAt;
+     private LocalDateTime updatedAt;
 }
