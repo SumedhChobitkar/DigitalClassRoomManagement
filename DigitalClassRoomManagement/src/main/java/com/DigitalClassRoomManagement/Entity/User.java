@@ -53,4 +53,8 @@ public class User {
     @OneToOne(mappedBy = "users")
     @JsonIgnore
     private Student student;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private Admin admin;
 }
