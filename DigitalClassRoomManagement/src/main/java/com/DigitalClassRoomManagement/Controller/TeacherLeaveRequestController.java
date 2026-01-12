@@ -61,48 +61,95 @@ public class TeacherLeaveRequestController {
     }
 
 
-//  View all pending leave requests of students
-@Operation(summary = "View all pending student leave requests")
-@GetMapping("/student/pending")
-public ResponseEntity<?> viewStudentPendingLeaveRequests() {
-    try {
-        List<LeaveRequest> list = teacherService.viewStudentPendingLeaveRequests();
-        return ResponseEntity.ok(list);
+    //  View all pending leave requests of students
+    @Operation(summary = "View all pending student leave requests")
+    @GetMapping("/student/pending")
+    public ResponseEntity<?> viewStudentPendingLeaveRequests() {
+        try {
+            List<LeaveRequest> list = teacherService.viewStudentPendingLeaveRequests();
+            return ResponseEntity.ok(list);
 
-    } catch (Exception e) {
-        log.error("Error fetching student pending leave requests", e);
-        return ResponseEntity.internalServerError().body("Could not fetch student leave requests");
+        } catch (Exception e) {
+            log.error("Error fetching student pending leave requests", e);
+            return ResponseEntity.internalServerError().body("Could not fetch student leave requests");
+        }
     }
-}
 
 
-//  Approve Student Leave
-@Operation(summary = "Approve a student leave request")
-@PutMapping("/student/approve/{leaveRequestId}")
-public ResponseEntity<?> approveStudentLeaveRequest(@PathVariable Long leaveRequestId) {
-    try {
-        LeaveRequest updated = teacherService.approveStudentLeaveRequest(leaveRequestId);
-        return ResponseEntity.ok(updated);
+    //  Approve Student Leave
+    @Operation(summary = "Approve a student leave request")
+    @PutMapping("/student/approve/{leaveRequestId}")
+    public ResponseEntity<?> approveStudentLeaveRequest(@PathVariable Long leaveRequestId) {
+        try {
+            LeaveRequest updated = teacherService.approveStudentLeaveRequest(leaveRequestId);
+            return ResponseEntity.ok(updated);
 
-    } catch (Exception e) {
-        log.error("Error approving leave request {}", leaveRequestId, e);
-        return ResponseEntity.internalServerError().body("Could not approve leave");
+        } catch (Exception e) {
+            log.error("Error approving leave request {}", leaveRequestId, e);
+            return ResponseEntity.internalServerError().body("Could not approve leave");
+        }
     }
-}
 
 
-//  Reject Student Leave
-@Operation(summary = "Reject a student leave request")
-@PutMapping("/student/reject/{leaveRequestId}")
-public ResponseEntity<?> rejectStudentLeaveRequest(@PathVariable Long leaveRequestId,
-                                                   @RequestParam(required = false) String remarks) {
-    try {
-        LeaveRequest updated = teacherService.rejectStudentLeaveRequest(leaveRequestId, remarks);
-        return ResponseEntity.ok(updated);
+    //  Reject Student Leave
+    @Operation(summary = "Reject a student leave request")
+    @PutMapping("/student/reject/{leaveRequestId}")
+    public ResponseEntity<?> rejectStudentLeaveRequest(@PathVariable Long leaveRequestId,
+                                                       @RequestParam(required = false) String remarks) {
+        try {
+            LeaveRequest updated = teacherService.rejectStudentLeaveRequest(leaveRequestId, remarks);
+            return ResponseEntity.ok(updated);
 
-    } catch (Exception e) {
-        log.error("Error rejecting leave request {}", leaveRequestId, e);
-        return ResponseEntity.internalServerError().body("Could not reject leave");
+        } catch (Exception e) {
+            log.error("Error rejecting leave request {}", leaveRequestId, e);
+            return ResponseEntity.internalServerError().body("Could not reject leave");
+        }
     }
-}
+
+        //getleavebyteacherid
+        @Operation(summary = "Get all student leave requests by teacher ID")
+        @GetMapping("/student/teacher/{teacherId}")
+        public ResponseEntity<?> getLeaveByTeacherId (@PathVariable Long teacherId){
+            try {
+                log.info("Fetching leave requests for teacherId: {}", teacherId);
+
+                List<LeaveRequest> leaveList = teacherService.getLeaveByTeacherId(teacherId);
+
+                if (leaveList.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body("No leave requests found for this teacher");
+                }
+
+                return ResponseEntity.ok(leaveList);
+
+            } catch (Exception e) {
+                log.error("Error getting leave list by teacherId {}", teacherId, e);
+                return ResponseEntity.internalServerError()
+                        .body("Failed to fetch leave requests");
+            }
+        }
+
+    //  Get ALL teacher leave requests
+    @Operation(summary = "Get all teacher leave requests")
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllTeacherLeaves() {
+        try {
+            log.info("Fetching all teacher leave requests");
+
+            List<LeaveRequest> leaveList = teacherService.getAllTeacherLeaves();
+
+            if (leaveList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No teacher leave requests found");
+            }
+
+            return ResponseEntity.ok(leaveList);
+
+        } catch (Exception e) {
+            log.error("Error fetching all teacher leave requests", e);
+            return ResponseEntity.internalServerError()
+                    .body("Failed to fetch teacher leave requests");
+        }
+    }
+
 }
