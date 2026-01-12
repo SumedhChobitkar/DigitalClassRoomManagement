@@ -115,4 +115,43 @@ public class TeacherAssignmentController {
         }
     }
 
+    // ------------------- GET FILE BY TEACHER ASSIGNMENT ID -------------------
+    @GetMapping(
+            value = "/getAssignmentFileByTeacherAssignmentId/{Id}",
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+    )
+    public ResponseEntity<?> getFileByTeacherAssignmentId(
+            @PathVariable("Id") Long teacherAssignmentId) {
+
+        log.info("API START → Fetching file for Teacher Assignment ID: {}", teacherAssignmentId);
+
+        try {
+            byte[] fileData = assignmentService.getFileByAssignmentId(teacherAssignmentId);
+
+            log.info("File fetched successfully for Teacher Assignment ID: {}", teacherAssignmentId);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(fileData);
+
+        } catch (RuntimeException e) {
+            log.error("File NOT FOUND for Teacher Assignment ID {}: {}",
+                    teacherAssignmentId, e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+
+        } catch (Exception e) {
+            log.error("Unexpected error while fetching file for Teacher Assignment ID {}",
+                    teacherAssignmentId, e);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Unable to fetch file");
+        }
+    }
+
+
+
+
+
 }

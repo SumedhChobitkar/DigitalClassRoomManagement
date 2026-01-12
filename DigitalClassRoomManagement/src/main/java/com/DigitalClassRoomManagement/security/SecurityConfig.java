@@ -132,7 +132,7 @@ public class SecurityConfig {
                                 "/api/assignments/create",
                                 "/api/assignments/updateAssignmentById/{id}",
                                 "/api/assignments/getAllAssignments",
-                                "/api/assignments/getAssignmentById/{id}",
+                                "/api/assignments/getAssignmentsById/{id}",
                                 "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
                                 "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
                                 "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
@@ -144,6 +144,7 @@ public class SecurityConfig {
                                 "/api/teacher/assignments/getAllAssignments",
                                 "/api/teacher/assignments/getAssignmentById/{id}",
                                 "/api/teacher/assignments/deleteAssignmentById/{id}",
+                                        "/api/teacher/assignments/getAssignmentFileByTeacherAssignmentId/{Id}",
 
                                 // Homework
                                 "/api/homeworks/saveHomework",

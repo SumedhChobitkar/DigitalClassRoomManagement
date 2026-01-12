@@ -160,7 +160,7 @@ public class AssignmentController {
 
     // -------------------- GET FILE BY ASSIGNMENT ID -------------------------
     @GetMapping("/getAssignmentsFileByAssignmentId/{Id}")
-    public ResponseEntity<?> getFileByAssignmentId(@PathVariable Long assignmentId) {
+    public ResponseEntity<?> getFileByAssignmentId(@PathVariable ("Id") Long assignmentId) {
 
         log.info("API - Download file for assignment ID: {}", assignmentId);
 
@@ -172,10 +172,10 @@ public class AssignmentController {
                     .header("Content-Disposition", "attachment; filename=\"assignment_file\"")
                     .body(fileData);
 
-        } catch (Exception e) {
-            log.error("Error retrieving file for assignment ID {}: {}", assignmentId, e.getMessage(), e);
+        } catch (RuntimeException e) {
+            log.error("Error retrieving file for assignment ID {}: {}", assignmentId, e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Error: " + e.getMessage());
+                    .body(e.getMessage());
         }
     }
 }
