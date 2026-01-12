@@ -51,6 +51,11 @@ public class SchoolClass {
     @OneToMany(mappedBy = "schoolClass")
     private List<Timetable> timetables;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "subjectId")
+    @JsonIgnore
+    private Subject  subject;
+
     // student mapping
     @OneToMany(mappedBy = "schoolClass", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

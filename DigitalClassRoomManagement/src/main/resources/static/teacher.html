@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Chat Console</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        #log { border: 1px solid #ccc; height: 250px; overflow-y: auto; padding: 10px; }
+        input, select, button { margin-top: 6px; padding: 5px; }
+    </style>
+</head>
+
+<body>
+
+<h2>Teacher Console</h2>
+
+<label>Teacher ID:</label>
+<input id="teacherId" value="1">
+<button onclick="connect()">Connect</button>
+
+<hr>
+
+<h3>Reply</h3>
+
+<label>Reply To:</label>
+<select id="replyType">
+    <option value="STUDENT">Student</option>
+    <option value="PARENT">Parent</option>
+</select><br>
+
+<label>Student Reg ID:</label>
+<input id="studentRegId" placeholder="For Student reply"><br>
+
+<label>Parent ID:</label>
+<input id="parentId" placeholder="For Parent reply"><br>
+
+<input id="message" placeholder="Type reply message">
+<button onclick="sendReply()">Send Reply</button>
+
+<hr>
+
+<h3>Messages</h3>
+<pre id="log"></pre>
+
+<script>
+    let stompClient = null;
+
+    function connect() {
+        const teacherId = document.getElementById("teacherId").value;
+
+        // Load history
+      fetch(`/api/chat/teacher/messages?teacherId=${teacherId}`)
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("Failed to load messages");
+        }
+        return res.json();
+    })
+    .then(messages => {
+
+        if (!Array.isArray(messages)) {
+            console.error("Expected array, got:", messages);
+            return;
+        }
+
+        const log = document.getElementById("log");
+        log.innerHTML = "";
+
+        messages.forEach(m => {
+            log.innerHTML += `${m.sender}: ${m.message}\n`;
+        });
+    })
+    .catch(err => {
+        console.error("Message load error:", err);
+    });
+
+
+        // Mark as read
+        fetch(`/api/chat/teacher/open?teacherId=${teacherId}`, {
+    method: "POST"
+});
+
+
+        const socket = new SockJS("http://localhost:9090/chat");
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, () => {
+            console.log("Teacher connected");
+
+            stompClient.subscribe(
+                "/topic/chat/teacher/" + teacherId,
+                (msg) => {
+                    const data = JSON.parse(msg.body);
+                    document.getElementById("log").innerHTML +=
+                        `${data.sender}: ${data.message}\n`;
+                }
+            );
+        });
+    }
+
+    function sendReply() {
+        if (!stompClient) {
+            alert("Connect first");
+            return;
+        }
+
+        const teacherId = document.getElementById("teacherId").value;
+        const replyType = document.getElementById("replyType").value;
+        const message = document.getElementById("message").value.trim();
+
+        if (!message) {
+            alert("Message cannot be empty");
+            return;
+        }
+
+        let payload = {
+            teacherId,
+            sender: "TEACHER",
+            message
+        };
+
+        if (replyType === "STUDENT") {
+            const studentRegId = document.getElementById("studentRegId").value;
+            if (!studentRegId) {
+                alert("Student Reg ID required");
+                return;
+            }
+            payload.studentRegId = studentRegId;
+            payload.parentId = null;
+        }
+
+        if (replyType === "PARENT") {
+            const parentId = document.getElementById("parentId").value;
+            if (!parentId) {
+                alert("Parent ID required");
+                return;
+            }
+            payload.parentId = parentId;
+            payload.studentRegId = null;
+        }
+
+        stompClient.send(
+            "/app/chat/send",
+            { "content-type": "application/json" },
+            JSON.stringify(payload)
+        );
+
+        document.getElementById("message").value = "";
+    }
+</script>
+
+</body>
+</html>
