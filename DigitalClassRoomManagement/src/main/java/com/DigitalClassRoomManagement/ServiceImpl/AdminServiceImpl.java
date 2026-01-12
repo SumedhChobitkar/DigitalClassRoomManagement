@@ -117,7 +117,17 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public String GetData(@Valid Admin admin) {
-        admin.setRole(Role.ADMIN);
+        if (admin.getUser() == null || admin.getUser().getUserId() == null) {
+            throw new RuntimeException("User ID is required to create Admin");
+        }
+
+        User user = userRepository.findById(admin.getUser().getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        admin.setUser(user);
+        if (user.getRole() != Role.ADMIN && user.getRole() != Role.PRINCIPAL) {
+            throw new RuntimeException("User must have ADMIN or PRINCIPAL role");
+        }
+        admin.setRole(Role.PRINCIPAL);
         adminRepo.save(admin);
         return "Data saved successfully";
     }
