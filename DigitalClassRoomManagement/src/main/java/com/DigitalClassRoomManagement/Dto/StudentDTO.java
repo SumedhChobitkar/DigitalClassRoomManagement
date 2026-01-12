@@ -35,7 +35,7 @@ public class StudentDTO {
 
     // -------------------- TEACHER --------------------
     private Long teacherId;         // For assigning teacher
-    private String teacherMailId;   // Read only
+    //private String teacherMailId;   // Read only
     private Teacher teacher;        // Response only
 
     // -------------------- CLASS --------------------
@@ -93,7 +93,7 @@ public class StudentDTO {
         this.country = country;
         this.pinCode = pinCode;
         this.users = users;
-        this.teacherMailId = teacherMailId;
+        //this.teacherMailId = teacherMailId;
         this.teacher = teacher;
         this.section = section;
         this.schoolClass = schoolClass;

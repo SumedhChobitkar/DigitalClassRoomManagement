@@ -3,14 +3,12 @@ package com.DigitalClassRoomManagement.Entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-        import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-
-        import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 @Table(name = "school_classes")
 @Getter
@@ -63,6 +61,10 @@ public class SchoolClass {
     @JsonIgnore
     private List<Student> students = new ArrayList<>();
 
+    // ---Sessions mapping (one class can have many sessions)---
+    @OneToMany(mappedBy = "schoolClass", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Session> sessions = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

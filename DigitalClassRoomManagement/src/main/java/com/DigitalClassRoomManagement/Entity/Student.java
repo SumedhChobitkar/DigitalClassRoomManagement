@@ -70,8 +70,7 @@ public class Student {
     @JsonIgnore
     private Teacher teacher;
 
-    // Store teacher email directly in student table also
-    private String teacherMailId;
+
 
 
     /* ---------------------- CLASS MAPPING ---------------------- */
@@ -79,7 +78,6 @@ public class Student {
     @JoinColumn(name = "class_id")
     @JsonBackReference
     private SchoolClass schoolClass;
-
 
 
     /* ---------------------- SECTION MAPPING ---------------------- */
@@ -92,9 +90,6 @@ public class Student {
     @Lob
     @Column(name = "profile", columnDefinition = "LONGBLOB")
     private byte[] profile;
-
-
-
 
 
     /* ---------------------- AUDIT FIELDS ---------------------- */
