@@ -464,20 +464,20 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
     @Override
-    public User updateStatus(Long id, Status status)
+    public Teacher updateTeacherStatus(Long id, TeacherStatus status)
     {
         try
         {
-            Optional<User> u=urepo.findById(id);
+            Optional<Teacher> u=repo.findById(id);
             if(u.isPresent())
             {
-                User u1=u.get();
+                Teacher u1=u.get();
                 if(u1.getStatus()==status)
                 {
                     throw new RuntimeException("Already Done");
                 }else {
                     u1.setStatus(status);
-                    return urepo.save(u1);
+                    return repo.save(u1);
                 }
             }
             throw new RuntimeException("UserNotFoud");

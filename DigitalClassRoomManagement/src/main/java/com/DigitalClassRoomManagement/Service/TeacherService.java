@@ -10,6 +10,7 @@ import com.DigitalClassRoomManagement.Entity.LeaveRequest;
 import com.DigitalClassRoomManagement.Entity.Teacher;
 import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.Status;
+import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -59,7 +60,7 @@ public interface TeacherService {
 
     public List<User> getUnapprovedStatusRequest();
     public List<User> getapprovedStatusRequest();
-    public User updateStatus(Long id, Status status);
+    public Teacher updateTeacherStatus(Long id, TeacherStatus status);
 
     String assignTeacher(Long classId, Long sectionId, AssignTeacherRequestDto dto);
     List<TeacherDto> getTeacherByClassId(Long classId);

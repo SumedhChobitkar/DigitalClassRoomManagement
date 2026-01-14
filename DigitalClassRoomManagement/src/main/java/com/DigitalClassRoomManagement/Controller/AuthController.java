@@ -4,6 +4,7 @@ import com.DigitalClassRoomManagement.Entity.OAuthState;
 import com.DigitalClassRoomManagement.Repository.OAuthStateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,8 @@ import java.util.UUID;
 public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
-
-    private final OAuthStateRepository oauthStateRepository;
+    @Autowired
+    private OAuthStateRepository oauthStateRepository;
 
     @Value("${google.client.id}")
     private String clientId;
@@ -40,10 +41,10 @@ public class AuthController {
 
     @Value("${google.scopes}")
     private String scopes;
-
-    public AuthController(OAuthStateRepository oauthStateRepository) {
-        this.oauthStateRepository = oauthStateRepository;
-    }
+//
+//    public AuthController(OAuthStateRepository oauthStateRepository) {
+//        this.oauthStateRepository = oauthStateRepository;
+//    }
 
     /**
      * Start OAuth flow.
