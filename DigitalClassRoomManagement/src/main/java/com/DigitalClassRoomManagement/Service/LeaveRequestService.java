@@ -14,4 +14,6 @@ public interface LeaveRequestService {
     List<LeaveRequest> getAllPendingRequests();
     String approveRequest(Long leaveRequestId);
     String rejectRequest(Long leaveRequestId);
+    List<LeaveRequest> getLeavesByStudentId(Long studentId);
+
 }
