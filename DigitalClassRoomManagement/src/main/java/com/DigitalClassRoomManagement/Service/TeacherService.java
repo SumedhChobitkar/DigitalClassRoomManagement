@@ -48,6 +48,10 @@ public interface TeacherService {
     // LeaveRequest applyForLeave(LeaveRequest leaveRequest);
     LeaveRequest applyForLeave(LeaveRequestDto dto);
     List<LeaveRequest> viewStudentPendingLeaveRequests();
+    //getleaveby teacherid
+    List<LeaveRequest> getLeaveByTeacherId(Long teacherId);
+    //getAllTeacher
+    List<LeaveRequest> getAllTeacherLeaves();
 
     LeaveRequest approveStudentLeaveRequest(Long leaveRequestId);
 
@@ -55,7 +59,7 @@ public interface TeacherService {
 
     public List<User> getUnapprovedStatusRequest();
     public List<User> getapprovedStatusRequest();
-    public Teacher updateStatus(Long id, Status status);
+    public User updateStatus(Long id, Status status);
 
     String assignTeacher(Long classId, Long sectionId, AssignTeacherRequestDto dto);
     List<TeacherDto> getTeacherByClassId(Long classId);
