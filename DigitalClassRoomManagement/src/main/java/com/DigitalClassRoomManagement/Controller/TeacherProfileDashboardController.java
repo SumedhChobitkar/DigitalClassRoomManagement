@@ -7,6 +7,7 @@ import com.DigitalClassRoomManagement.Exception.InvalidImageFormatException;
 import com.DigitalClassRoomManagement.Exception.TeacherNotFoundException;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,35 +59,13 @@ public class TeacherProfileDashboardController {
     }
 
     @GetMapping("/{id}/get-profile-picture")
-    public ResponseEntity<TeacherDto> getTeacherProfile(@PathVariable Long id) {
-        Teacher teacher = teacherService.getTeacherById(id);
+    public ResponseEntity<byte[]> getProfilePicture(@PathVariable Long id) {
 
-        if (teacher == null) {
-            return ResponseEntity.notFound().build();
-        }
+        byte[] image = teacherService.getProfilePicture(id);
 
-        TeacherDto dto = new TeacherDto();
-        dto.setId(teacher.getId());
-        dto.setFirstName(teacher.getFirstName());
-        dto.setLastName(teacher.getLastName());
-        dto.setEmail(teacher.getEmail());
-        dto.setPhone(teacher.getPhone());
-        dto.setAdminMailId(teacher.getAdminMailId());
-        dto.setQualification(teacher.getQualification());
-        dto.setExperienceYears(teacher.getExperienceYears());
-        dto.setGender(teacher.getGender());
-        dto.setDateOfBirth(teacher.getDateOfBirth());
-        dto.setStatus(teacher.getStatus());
-
-
-
-
-
-        if (teacher.getProfilePicture() != null) {
-            dto.setProfilePicture(Base64.getEncoder().encodeToString(teacher.getProfilePicture()).getBytes());
-        }
-
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(image);
     }
 
 

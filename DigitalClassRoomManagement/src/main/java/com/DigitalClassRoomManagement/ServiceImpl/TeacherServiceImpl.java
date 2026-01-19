@@ -56,8 +56,8 @@ public class TeacherServiceImpl implements TeacherService {
     private UserRepository urepo;
     @Autowired
     private  SchoolClassRepository classRepo;
-@Autowired
-private LeaveRequestRepository leaveRequestRepository;
+    @Autowired
+    private LeaveRequestRepository leaveRequestRepository;
 
     @Autowired
     private SectionRepository sectionRepo;
@@ -85,19 +85,19 @@ private LeaveRequestRepository leaveRequestRepository;
             if (repo.existsByPhone(dto.getPhone())) {
                 throw new IllegalArgumentException("A teacher with this phone number already exists: " + dto.getPhone());
             }
-             Teacher teacher = new Teacher();
-        teacher.setEmail(dto.getEmail());
-        teacher.setGender(dto.getGender());
-        teacher.setPhone(dto.getPhone());
-        teacher.setFirstName(dto.getFirstName());
-        teacher.setLastName(dto.getLastName());
-        teacher.setQualification(dto.getQualification());
-        teacher.setDateOfBirth(String.valueOf(LocalDate.parse(String.valueOf(dto.getDateOfBirth()))));
-        teacher.setExperienceYears(dto.getExperienceYears());
+            Teacher teacher = new Teacher();
+            teacher.setEmail(dto.getEmail());
+            teacher.setGender(dto.getGender());
+            teacher.setPhone(dto.getPhone());
+            teacher.setFirstName(dto.getFirstName());
+            teacher.setLastName(dto.getLastName());
+            teacher.setQualification(dto.getQualification());
+            teacher.setDateOfBirth(String.valueOf(LocalDate.parse(String.valueOf(dto.getDateOfBirth()))));
+            teacher.setExperienceYears(dto.getExperienceYears());
             User user = urepo.findByEmail(dto.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found with email: " + dto.getEmail()));
-        teacher.setUser(user);
-        teacher.setStatus(TeacherStatus.PENDING);
+            teacher.setUser(user);
+            teacher.setStatus(TeacherStatus.PENDING);
 
             String toEmail =dto.getAdminMailId() ;
             String subject = "No Reply";
@@ -107,10 +107,10 @@ private LeaveRequestRepository leaveRequestRepository;
                     "\nIf you have any related queries, feel free to reach out to us." + "\n\n"
                     + "Best Regards," + "\n" + "HR Team." + "\n\n\nThis is an auto-generated mail.";
 
-        Teacher savedTeacher = repo.save(teacher);
+            Teacher savedTeacher = repo.save(teacher);
             emailSenderService.sendEmail(toEmail,subject,body);
-        log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
-        return "Teacher registration submitted. Pending for approval. " + savedTeacher.getId();
+            log.info("Teacher added successfully with ID: {}", savedTeacher.getId());
+            return "Teacher registration submitted. Pending for approval. " + savedTeacher.getId();
 
         } catch (Exception e) {
             log.error("Error while adding teacher: {}", e.getMessage(), e);
@@ -360,6 +360,11 @@ private LeaveRequestRepository leaveRequestRepository;
             throw new RuntimeException("Failed to apply leave");
         }
     }
+    //getleavebteacherid
+    @Override
+    public List<LeaveRequest> getLeaveByTeacherId(Long teacherId) {
+        return leaveRequestRepository.findByApprovedByTeacher_Id(teacherId);
+    }
 
 
     // Fetch student pending leaves
@@ -420,6 +425,11 @@ private LeaveRequestRepository leaveRequestRepository;
         }
     }
     @Override
+    public List<LeaveRequest> getAllTeacherLeaves() {
+        return leaveRequestRepository.findByUserRole("TEACHER");
+    }
+
+    @Override
     public List<User> getUnapprovedStatusRequest( )
     {
         try
@@ -454,20 +464,20 @@ private LeaveRequestRepository leaveRequestRepository;
         }
     }
     @Override
-    public User updateStatus(Long id, Status status)
+    public Teacher updateTeacherStatus(Long id, TeacherStatus status)
     {
         try
         {
-            Optional<User> u=urepo.findById(id);
+            Optional<Teacher> u=repo.findById(id);
             if(u.isPresent())
             {
-                User u1=u.get();
+                Teacher u1=u.get();
                 if(u1.getStatus()==status)
                 {
                     throw new RuntimeException("Already Done");
                 }else {
                     u1.setStatus(status);
-                    return urepo.save(u1);
+                    return repo.save(u1);
                 }
             }
             throw new RuntimeException("UserNotFoud");

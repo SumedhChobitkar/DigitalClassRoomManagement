@@ -1,17 +1,10 @@
 package com.DigitalClassRoomManagement.Entity;
 
 import com.DigitalClassRoomManagement.Enum.Relationship;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
-//import org.apache.catalina.User;
-
-
-//import org.apache.catalina.User;
-
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Data
 @Entity
@@ -23,11 +16,6 @@ public class Parent {
     @Column(name = "parent_id")
     private Long parentId;
 
-    // One-to-One relationship with User entity
-   /* @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    @JsonManagedReference(value = "user-parent")
-    private User users;*/
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -50,6 +38,8 @@ public class Parent {
     private Student student;
 
 
+
+
     // Enum type — FATHER, MOTHER, GUARDIAN
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
@@ -63,9 +53,6 @@ public class Parent {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    /* // One-to-Many relationship with ParentStudentMapping
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ParentStudentMapping> studentMappings;     */
 
     // Auto timestamps
     @PrePersist

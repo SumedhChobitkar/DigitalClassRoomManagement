@@ -5,6 +5,7 @@ import com.DigitalClassRoomManagement.Dto.TeacherDto;
 import com.DigitalClassRoomManagement.Entity.Teacher;
 import com.DigitalClassRoomManagement.Entity.User;
 import com.DigitalClassRoomManagement.Enum.Status;
+import com.DigitalClassRoomManagement.Enum.TeacherStatus;
 import com.DigitalClassRoomManagement.Service.TeacherService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -138,17 +139,16 @@ public class TeacherController {
     }
 
     @PutMapping("/update/status/{id}")
-    public ResponseEntity<?> updateStatus(@PathVariable Long id,@RequestParam Status status)
+    public ResponseEntity<?> updateTeacherStatus(@PathVariable Long id,@RequestParam TeacherStatus status)
     {
         try
         {
-            User ad=service.updateStatus(id,status);
+            Teacher ad=service.updateTeacherStatus(id,status);
             return ResponseEntity.status(HttpStatus.OK).body("Status Changed");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not Changed");
         }
     }
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assign/{classId}/{sectionId}")
     public ResponseEntity<?> assignTeacher(@PathVariable Long classId,

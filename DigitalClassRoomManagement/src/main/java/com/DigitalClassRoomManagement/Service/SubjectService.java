@@ -13,6 +13,9 @@ public interface SubjectService {
     String updateSubject(SubjectDto dto, Long subjectId);
     String deleteSubject(Long subjectId);
 
+    List<SubjectDto> getSubjectsForStudent(Long studentRegId);
+
+    SubjectDto assignSubjectToClass(Long subjectId, Long classId);
 
 
 

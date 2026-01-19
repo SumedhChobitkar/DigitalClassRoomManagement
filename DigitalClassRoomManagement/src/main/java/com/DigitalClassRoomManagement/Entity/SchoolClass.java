@@ -3,14 +3,12 @@ package com.DigitalClassRoomManagement.Entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-        import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-
-        import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 @Table(name = "school_classes")
 @Getter
@@ -41,7 +39,7 @@ public class SchoolClass {
     private LocalDateTime updatedAt;
 
     //Ignored Section mapping
-    @OneToMany(mappedBy = "schoolClass", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "schoolClass", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Section> sections = new ArrayList<>();
 
@@ -53,11 +51,20 @@ public class SchoolClass {
     @OneToMany(mappedBy = "schoolClass")
     private List<Timetable> timetables;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "subjectId")
+    @JsonIgnore
+    private Subject  subject;
+
     // student mapping
     @OneToMany(mappedBy = "schoolClass", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Student> students = new ArrayList<>();
 
+    // ---Sessions mapping (one class can have many sessions)---
+    @OneToMany(mappedBy = "schoolClass", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Session> sessions = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
