@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Controller;
 
+import com.DigitalClassRoomManagement.Dto.ExamQuestionDto;
 import com.DigitalClassRoomManagement.Entity.ExamQuestion;
 import com.DigitalClassRoomManagement.Entity.ExamSubmission;
 import com.DigitalClassRoomManagement.Service.ExamQuestionService;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -77,4 +79,27 @@ public class TeacherExamController {
             return ResponseEntity.status(500).body("Failed to fetch submissions: " + e.getMessage());
         }
     }
+
+
+    //<------------------------GET ALL QUESTIONS ------------------------------>
+    @Operation(summary = "Get All Questions", description = "Fetch all questions")
+    @ApiResponse(responseCode = "200", description = "Questions fetched successfully")
+    @ApiResponse(responseCode = "500", description = "Failed to fetch questions")
+    @PreAuthorize("hasAnyRole('TEACHER','ADMIN','PRINCIPAL')")
+    @GetMapping("/GetAllQuestion")
+    public ResponseEntity<List<ExamQuestionDto>> getAllQuestions() {
+
+        log.info("API call: Get All Questions");
+        try {
+            List<ExamQuestionDto> questions = questionRequestService.getAllQuestions();
+            log.info("Questions fetched successfully. Count: {}", questions.size());
+            return ResponseEntity.ok(questions);
+        } catch (Exception e) {
+            log.error("Error occurred while fetching questions", e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
 }
+

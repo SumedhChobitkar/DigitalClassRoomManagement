@@ -93,10 +93,12 @@ public class SecurityConfig {
 
                                 //Exam
                                 "/api/exam/TeacherSaveExam",
+                                "/api/exam/schedule/{examId}",
                                 "/api/exam/UpdateByExamId/{examId}",
+                                "/api/exam/by-question/{questionId}",
                                 "/api/exam/GetByExamId/{id}",
-                                "/api/getByTeacher/{teacherId}",
-                                "/api/exam/GetAllExam",
+                                "/api/exam/getByTeacher/{teacherId}",
+                                "/api/exam/getAllExam",
                                 "/api/exam/DeleteByExamId/{id}",
 
                                 // Teacher
@@ -118,15 +120,20 @@ public class SecurityConfig {
                                 "/api/profile/dashboard/{id}/remove-profile-picture",
 
                                 // Student Related
-                                "/api/students/saveStudent",
+                              //  "/api/students/saveStudent",
 
                                 // Subject Related
                                 "/api/subject/**",
+                                "/api/teacher/exam/GetAllQuestion",
+
+
+                                "/api/results/top",
+                                "/api/results/Create-result",
+                                "/api/results/{id}",
+                                "/api/results/GetAll",
 
                                 "/api/teacher/delete",
 
-                                //ContactUs
-                                "/api/contact/**",
 
                                 //Assignment
                                 "/api/assignments/create",
@@ -204,6 +211,10 @@ public class SecurityConfig {
 
 
 
+                                "/api/teacher/delete",
+
+                                //ContactUs
+                                "/api/contact/**",
 
 
 
@@ -262,12 +273,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/student/exam/result").hasAnyRole("STUDENT", "PARENT")
 
                         //Result
-                        .requestMatchers(HttpMethod.POST, "/api/results/Create-result").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.GET, "/api/results/{id}").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
-                        .requestMatchers(HttpMethod.GET, "/api/results/GetAll").hasAnyRole("ADMIN", "TEACHER")
+                        //.requestMatchers(HttpMethod.POST, "/api/results/Create-result").hasAnyRole("ADMIN", "TEACHER")
+                       // .requestMatchers(HttpMethod.GET, "/api/results/{id}").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+                        //.requestMatchers(HttpMethod.GET, "/api/results/GetAll").hasAnyRole("ADMIN", "TEACHER")
                         .requestMatchers(HttpMethod.PUT, "/api/results/Update_by/{id}").hasAnyRole("ADMIN", "TEACHER")
                         .requestMatchers(HttpMethod.DELETE, "/api/results/Delete/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/results/top").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+                        //.requestMatchers(HttpMethod.GET, "/api/results/top").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
 
 
                         //  Feedback

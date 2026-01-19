@@ -15,6 +15,7 @@ public class ResultDto {
     private Long resultId;
     private Long studentId;
     private Long examId;
+    private  String name;
     private BigDecimal obtainedMarks;
     private BigDecimal percentage;
     private String grade;
