@@ -21,6 +21,8 @@ public class Result {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resultId;
 
+    private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", referencedColumnName = "studentRegId")
     private Student student;

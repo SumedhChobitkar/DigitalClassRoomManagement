@@ -10,7 +10,9 @@ public interface ExamService {
 
     ExamDto getExamById(Long examId);
 
-    List<ExamDto> getAllExams();
+    ExamDto getExamByQuestionId(Long questionId);
+
+    List<ExamDto> getAllExamList();
 
     void deleteExam(Long examId);
 
@@ -21,6 +23,10 @@ public interface ExamService {
     ExamDto adminCreateExam(ExamDto examDto);
 
     List<ExamDto> adminGetAllExams();
+
+    ExamDto getExamScheduleByExamId(Long examId);
+
+
 
 
 

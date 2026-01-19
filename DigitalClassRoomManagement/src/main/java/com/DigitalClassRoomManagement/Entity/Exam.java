@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Entity;
 
+import com.DigitalClassRoomManagement.Enum.ExamStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class Exam {
         @Column(name = "exam_id")
         private Long examId;
 
-       @ManyToOne(fetch = FetchType.LAZY)
+       @ManyToOne(fetch = FetchType.LAZY, optional = false)
        @JoinColumn(name = "admin_id", nullable = false)
        private Admin admin;
 
@@ -59,4 +61,14 @@ public class Exam {
         @UpdateTimestamp
         @Column(name = "updated_at")
         private LocalDateTime updatedAt;
+
+       @Enumerated(EnumType.STRING)
+       @Column(nullable = false)
+       private ExamStatus status;
+
+       private LocalDate examDate;
+       private String day;
+
+
+
 }

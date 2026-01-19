@@ -75,38 +75,28 @@ public class StudentExamController {
 
 
     // <------------------- Get Scheduled Exams ---------------------->
-    @Operation(summary = "Get Scheduled Exams", description = "Fetches all exams that are upcoming or ongoing for students")
-    @ApiResponse(responseCode = "200", description = "Exams fetched successfully")
-    @ApiResponse(responseCode = "500", description = "Failed to fetch exams")
-    @PreAuthorize("hasAnyRole('STUDENT','TEACHER','ADMIN', 'PRINCIPAL' )")
+    @Operation(summary = "Get Scheduled Exams", description = "Fetch all upcoming and ongoing exams")
+    @ApiResponse(responseCode = "200", description = "Scheduled exams fetched successfully")
+    @ApiResponse(responseCode = "500", description = "Failed to fetch scheduled exams")
+    @PreAuthorize("hasAnyRole('STUDENT','TEACHER','ADMIN','PRINCIPAL')")
     @GetMapping("/scheduled")
-    public ResponseEntity<?> getScheduledExams() {
+    public ResponseEntity<List<ExamDto>> getScheduledExams() {
 
-        log.info("Fetching scheduled exams for students");
+        log.info("Request received: Fetch scheduled exams");
 
         try {
-            List<ExamDto> allExams = examService.getAllExams();
-            LocalDateTime now = LocalDateTime.now();
+            List<ExamDto> exams = examService.getAllExamList();
 
-            List<ExamDto> scheduledExams = allExams.stream()
-                    .filter(exam ->
-                            exam.getStartTime().isAfter(now) ||
-                                    (exam.getStartTime().isBefore(now) &&
-                                            exam.getEndTime().isAfter(now))
-                    )
-                    .collect(Collectors.toList());
+            log.info("Scheduled exams fetched successfully. Count: {}", exams.size());
 
-            if (scheduledExams.isEmpty()) {
-                log.info("No scheduled or ongoing exams found");
-                return ResponseEntity.ok("No scheduled exams found");
-            }
-
-            log.info("Scheduled exams retrieved successfully. Count: {}", scheduledExams.size());
-            return ResponseEntity.ok(scheduledExams);
+            return ResponseEntity.ok(exams);
 
         } catch (Exception e) {
-            log.error("Error fetching scheduled exams: {}", e.getMessage(), e);
-            return ResponseEntity.status(500).body("Error fetching scheduled exams: " + e.getMessage());
+            log.error("Error occurred while fetching scheduled exams", e);
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 

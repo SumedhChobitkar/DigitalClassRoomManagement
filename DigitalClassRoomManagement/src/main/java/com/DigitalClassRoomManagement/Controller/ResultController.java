@@ -27,7 +27,7 @@ public class ResultController {
 
     //<------------------CREATE RESULT----------------->
     @PostMapping("/Create-result")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+   // @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @Operation(summary = "Create a Result", description = "Create a new exam result for a student")
     @ApiResponse(responseCode = "201", description = "Result created successfully")
     public ResponseEntity<?> createResult(@Valid @RequestBody ResultDto dto) {
@@ -43,7 +43,7 @@ public class ResultController {
 
     //<---------------GET RESULT BY ID-------------------->
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
+    //@PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     @Operation(summary = "Get Result by ID", description = "Fetch a single result by its ID")
     @ApiResponse(responseCode = "200", description = "Result retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Result not found")
@@ -60,7 +60,7 @@ public class ResultController {
 
     //<-------------------------GET ALL RESULTS--------------------->
     @GetMapping("/GetAll")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+   // @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @Operation(summary = "Get all Results", description = "Fetch all exam results")
     @ApiResponse(responseCode = "200", description = "Results retrieved successfully")
     public ResponseEntity<?> getAllResults() {
@@ -110,7 +110,7 @@ public class ResultController {
 
     //<-------------------GET TOP MARKS RESULTS------------------->
     @GetMapping("/top")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
+    //@PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     @Operation(summary = "Get Top Marks Results", description = "Fetch results sorted by highest marks")
     @ApiResponse(responseCode = "200", description = "Top results retrieved successfully")
     public ResponseEntity<?> getTopMarksResults() {
