@@ -63,6 +63,27 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
         }
     }
 
+    @Override
+    public List<ExamQuestionDto> getQuestionsByTeacherId(Long teacherId) {
+
+        log.info("Fetching questions for teacherId: {}", teacherId);
+
+        try {
+            List<ExamQuestion> questions = questionRequestRepository.findByExam_TeacherId(teacherId);
+
+            log.info("Total questions found for teacherId {}: {}", teacherId, questions.size());
+
+            return questions.stream()
+                    .map(this::mapToDto)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Error fetching questions for teacherId {}", teacherId, e);
+            throw new RuntimeException("Failed to fetch questions by teacherId", e);
+        }
+    }
+
+
     // Mapper
     private ExamQuestionDto mapToDto(ExamQuestion question) {
         return ExamQuestionDto.builder()
