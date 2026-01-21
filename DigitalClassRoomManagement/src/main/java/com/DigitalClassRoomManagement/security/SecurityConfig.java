@@ -183,12 +183,12 @@ public class SecurityConfig {
 
 
                                 //Result
-                                "/api/results/SaverResult",
-                                "/api/results/GetResult/{id}",
-                                "/api/results/getAllResult",
-                                "/api/results/UpdateResult/{id}",
-                                "api/results/DeleteById/{id}",
-                                "/api/results/top",
+//                                "/api/results/Create-result",
+//                                "/api/results/GetResult/{id}",
+//                                "/api/results/getAllResult",
+//                                "/api/results/UpdateResult/{id}",
+//                                "api/results/DeleteById/{id}",
+//                                "/api/results/top",
 
 
                                 //StudentExam
@@ -198,8 +198,11 @@ public class SecurityConfig {
 
 
                                 //TeacherExam
-                                "/api/TeacherExam/{examId}/questions",
-                                "/api/TeacherExam/submissions",
+//                               "/api/teacher/exam/{examId}/questions",
+//                                "/api/teacher/exam/submissions",
+//                                "/api/teacher/exam/GetAllQuestion",
+//                                "/api/teacher/exam/teacher/{teacherId}/questions",
+
 
 
                                 //Admin Exam
@@ -264,21 +267,24 @@ public class SecurityConfig {
 
 
                         //Teacher Exam
-                        .requestMatchers(HttpMethod.POST, "/api/teacher/exam/{examId}/questions").hasAnyRole("TEACHER", "PRINCIPAL")
-                        .requestMatchers(HttpMethod.GET, "/api/teacher/exam/submissions").hasRole("TEACHER")
-                        .requestMatchers("/chat/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/teacher/exam/{examId}/questions").hasAnyRole("TEACHER", "PRINCIPAL", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/teacher/exam/submissions").hasAnyRole("TEACHER","ADMIN","PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/teacher/exam/GetAllQuestion").hasAnyRole("STUDENT", "TEACHER", "ADMIN", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/teacher/exam/{teacherId}/questions").hasAnyRole("STUDENT", "TEACHER", "ADMIN", "PRINCIPAL")
+
+
                         // Student Exam
                         .requestMatchers(HttpMethod.POST, "/api/student/exam/submit").hasRole("STUDENT")
                         .requestMatchers(HttpMethod.GET, "/api/student/exam/scheduled").hasAnyRole("STUDENT", "TEACHER", "ADMIN", "PRINCIPAL")
                         .requestMatchers(HttpMethod.GET, "/api/student/exam/result").hasAnyRole("STUDENT", "PARENT")
 
                         //Result
-                        //.requestMatchers(HttpMethod.POST, "/api/results/Create-result").hasAnyRole("ADMIN", "TEACHER")
-                       // .requestMatchers(HttpMethod.GET, "/api/results/{id}").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
-                        //.requestMatchers(HttpMethod.GET, "/api/results/GetAll").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.PUT, "/api/results/Update_by/{id}").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/results/Delete/{id}").hasRole("ADMIN")
-                        //.requestMatchers(HttpMethod.GET, "/api/results/top").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/api/results/Create-result").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/results/GetResult/{id}").hasAnyRole("ADMIN", "TEACHER", "STUDENT","PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/results/getAllResult").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/results/UpdateResult/{id}").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "api/results/DeleteById/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/results/top").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
 
 
                         //  Feedback

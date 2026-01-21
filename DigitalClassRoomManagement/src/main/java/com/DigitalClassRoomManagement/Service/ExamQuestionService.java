@@ -11,6 +11,8 @@ public interface ExamQuestionService {
 
     List<ExamQuestionDto> getAllQuestions();
 
+    List<ExamQuestionDto> getQuestionsByTeacherId(Long teacherId);
+
 
     //ExamQuestionDto addQuestion(ExamQuestionDto dto);
 }
