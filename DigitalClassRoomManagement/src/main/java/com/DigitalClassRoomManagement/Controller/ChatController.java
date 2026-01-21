@@ -2,17 +2,21 @@ package com.DigitalClassRoomManagement.Controller;
 
 import com.DigitalClassRoomManagement.Dto.ChatMessageDto;
 import com.DigitalClassRoomManagement.Dto.ChatMessageResponseDto;
+import com.DigitalClassRoomManagement.Dto.KafkaNotificationDto;
 import com.DigitalClassRoomManagement.Entity.ChatMessage;
 import com.DigitalClassRoomManagement.Mapper.ChatMapper;
 import com.DigitalClassRoomManagement.Service.ChatService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -22,6 +26,10 @@ public class ChatController {
     private final ChatService chatService;
     private final SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate;
+
+
     public ChatController(ChatService chatService,
                           SimpMessagingTemplate messagingTemplate) {
         this.chatService = chatService;
@@ -30,53 +38,120 @@ public class ChatController {
 
 
     @PreAuthorize("hasAnyRole('STUDENT','TEACHER','PARENT')")
-    @MessageMapping("/chat/send")
-    public void send(ChatMessageDto dto) {
-        try {
-            log.info(" Incoming chat message: sender={}, teacherId={}, studentId={}, parentId={}",
-                    dto.getSender(), dto.getTeacherId(), dto.getStudentRegId(), dto.getParentId());
+@MessageMapping("/chat/send")
+public void send(ChatMessageDto dto) {
 
-            ChatMessage savedMessage = chatService.save(dto);
+    try {
+        log.info("Incoming chat message: sender={}, teacherId={}, studentId={}, parentId={}",
+                dto.getSender(), dto.getTeacherId(), dto.getStudentRegId(), dto.getParentId());
 
-            ChatMessageResponseDto response = new ChatMessageResponseDto(
-                    savedMessage.getMessageId(),
-                    savedMessage.getStudent() != null ? savedMessage.getStudent().getStudentRegId() : null,
-                    savedMessage.getParent() != null ? savedMessage.getParent().getParentId() : null,
-                    savedMessage.getTeacher().getId(),
-                    savedMessage.getSender(),
-                    savedMessage.getMessage(),
-                    savedMessage.getTimestamp()
-            );
+        // 1️⃣ Save chat message
+        ChatMessage savedMessage = chatService.save(dto);
 
+        ChatMessageResponseDto response = new ChatMessageResponseDto(
+                savedMessage.getMessageId(),
+                savedMessage.getStudent() != null ? savedMessage.getStudent().getStudentRegId() : null,
+                savedMessage.getParent() != null ? savedMessage.getParent().getParentId() : null,
+                savedMessage.getTeacher().getId(),
+                savedMessage.getSender(),
+                savedMessage.getMessage(),
+                savedMessage.getTimestamp()
+        );
 
+        log.warn("🧪 DB sender value = {}", savedMessage.getSender());
+
+        // 2️⃣ Capture sender role ONCE (immutable)
+        final String senderRole = savedMessage.getSender().toUpperCase();
+
+        // ================= CHAT DELIVERY =================
+
+        if ("STUDENT".equals(senderRole) || "PARENT".equals(senderRole)) {
+            // Student / Parent → Teacher
             messagingTemplate.convertAndSend(
                     "/topic/chat/teacher/" + savedMessage.getTeacher().getId(),
                     response
             );
 
+        } else if ("TEACHER".equals(senderRole)) {
 
-            if (savedMessage.getStudent() != null && "TEACHER".equals(savedMessage.getSender())) {
+            // Teacher → Student
+            if (savedMessage.getStudent() != null) {
                 messagingTemplate.convertAndSend(
                         "/topic/chat/student/" + savedMessage.getStudent().getStudentRegId(),
                         response
                 );
-                log.info(" Sent message to STUDENT {}", savedMessage.getStudent().getStudentRegId());
             }
 
-
-            if (savedMessage.getParent() != null && "TEACHER".equals(savedMessage.getSender())) {
+            // Teacher → Parent
+            if (savedMessage.getParent() != null) {
                 messagingTemplate.convertAndSend(
                         "/topic/chat/parent/" + savedMessage.getParent().getParentId(),
                         response
                 );
-                log.info(" Sent message to PARENT {}", savedMessage.getParent().getParentId());
+            }
+        }
+
+        // ================= NOTIFICATION LOGIC =================
+
+        String senderId;
+        String receiverId;
+        String receiverRole;
+
+        // ---- Sender identity ----
+        switch (senderRole) {
+            case "TEACHER" -> senderId = savedMessage.getTeacher().getId().toString();
+            case "STUDENT" -> senderId = savedMessage.getStudent().getStudentRegId().toString();
+            case "PARENT"  -> senderId = savedMessage.getParent().getParentId().toString();
+            default -> {
+                log.warn("Unknown sender role {}", senderRole);
+                return;
+            }
+        }
+
+        // ---- Receiver identity ----
+        if ("TEACHER".equals(senderRole)) {
+
+            if (savedMessage.getStudent() != null) {
+                receiverId = savedMessage.getStudent().getStudentRegId().toString();
+                receiverRole = "STUDENT";
+            } else {
+                receiverId = savedMessage.getParent().getParentId().toString();
+                receiverRole = "PARENT";
             }
 
-        } catch (Exception e) {
-            log.error(" Error while sending chat message", e);
+        } else {
+            receiverId = savedMessage.getTeacher().getId().toString();
+            receiverRole = "TEACHER";
         }
-    }
 
+        // ---- Role-aware self-notification guard ----
+        String senderIdentity   = senderRole + ":" + senderId;
+        String receiverIdentity = receiverRole + ":" + receiverId;
+
+        if (senderIdentity.equals(receiverIdentity)) {
+            log.info("🚫 Notification skipped (same logical user)");
+            return;
+        }
+
+        // ---- Build notification DTO (SAFE via setters) ----
+        KafkaNotificationDto notificationEvent = new KafkaNotificationDto();
+        notificationEvent.setUserId(receiverId);                 // RECEIVER ID
+        notificationEvent.setReceiverRole(receiverRole);          // RECEIVER ROLE
+        notificationEvent.setTitle("New Message");
+        notificationEvent.setMessage("You have a new message from " + senderRole);
+        notificationEvent.setSource("CHAT");
+        notificationEvent.setSenderId(senderId);                  // SENDER ID
+
+        // ---- Send to Kafka ----
+        kafkaTemplate.send("notifications", notificationEvent);
+
+        log.info("📤 Notification sent to Kafka | {} → {}",
+                senderIdentity, receiverIdentity);
+
+    } catch (Exception e) {
+        log.error("Error while sending chat message", e);
+    }
+}
 
     @GetMapping("/student-messages")
     @PreAuthorize("hasRole('TEACHER')")

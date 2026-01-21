@@ -13,32 +13,25 @@
     </style>
 </head>
 
-<body>
+<body onload="connect()">
 
 <h2>Teacher Console</h2>
 
 <label>Teacher ID:</label>
-<input id="teacherId" value="1">
-<button onclick="connect()">Connect</button>
+<input id="teacherId" value="27"><br>
 
 <hr>
 
-<h3>Reply</h3>
-
-<label>Reply To:</label>
 <select id="replyType">
     <option value="STUDENT">Student</option>
     <option value="PARENT">Parent</option>
 </select><br>
 
-<label>Student Reg ID:</label>
-<input id="studentRegId" placeholder="For Student reply"><br>
-
-<label>Parent ID:</label>
-<input id="parentId" placeholder="For Parent reply"><br>
+<input id="studentRegId" placeholder="Student Reg ID">
+<input id="parentId" placeholder="Parent ID"><br>
 
 <input id="message" placeholder="Type reply message">
-<button onclick="sendReply()">Send Reply</button>
+<button onclick="sendReply()">Send</button>
 
 <hr>
 
@@ -47,103 +40,67 @@
 
 <script>
     let stompClient = null;
+    let connected = false;
 
     function connect() {
+        if (connected) return;
+
         const teacherId = document.getElementById("teacherId").value;
-
-        // Load history
-      fetch(`/api/chat/teacher/messages?teacherId=${teacherId}`)
-    .then(res => {
-        if (!res.ok) {
-            throw new Error("Failed to load messages");
-        }
-        return res.json();
-    })
-    .then(messages => {
-
-        if (!Array.isArray(messages)) {
-            console.error("Expected array, got:", messages);
-            return;
-        }
-
         const log = document.getElementById("log");
-        log.innerHTML = "";
 
-        messages.forEach(m => {
-            log.innerHTML += `${m.sender}: ${m.message}\n`;
-        });
-    })
-    .catch(err => {
-        console.error("Message load error:", err);
-    });
+        fetch(`/api/chat/teacher/messages?teacherId=${teacherId}`)
+            .then(res => res.json())
+            .then(messages => {
+                log.innerHTML = "";
+                if (Array.isArray(messages)) {
+                    messages.forEach(m => log.innerHTML += `${m.sender}: ${m.message}\n`);
+                }
+            });
 
-
-        // Mark as read
-        fetch(`/api/chat/teacher/open?teacherId=${teacherId}`, {
-    method: "POST"
-});
-
+        fetch(`/api/chat/teacher/open?teacherId=${teacherId}`, { method: "POST" });
 
         const socket = new SockJS("http://localhost:9090/chat");
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, () => {
-            console.log("Teacher connected");
+            connected = true;
+            console.log("✅ Teacher WebSocket connected");
 
             stompClient.subscribe(
-                "/topic/chat/teacher/" + teacherId,
-                (msg) => {
+                `/topic/chat/teacher/${teacherId}`,
+                msg => {
                     const data = JSON.parse(msg.body);
-                    document.getElementById("log").innerHTML +=
-                        `${data.sender}: ${data.message}\n`;
+                    log.innerHTML += `${data.sender}: ${data.message}\n`;
+                }
+            );
+
+            stompClient.subscribe(
+                `/topic/notifications/teacher/${teacherId}`,
+                msg => {
+                    const n = JSON.parse(msg.body);
+                    alert("🔔 " + n.title + " : " + n.message);
                 }
             );
         });
     }
 
     function sendReply() {
-        if (!stompClient) {
-            alert("Connect first");
-            return;
-        }
+        if (!connected) return;
 
         const teacherId = document.getElementById("teacherId").value;
         const replyType = document.getElementById("replyType").value;
         const message = document.getElementById("message").value.trim();
+        if (!message) return;
 
-        if (!message) {
-            alert("Message cannot be empty");
-            return;
-        }
-
-        let payload = {
-            teacherId,
-            sender: "TEACHER",
-            message
-        };
+        let payload = { teacherId, sender: "TEACHER", message };
 
         if (replyType === "STUDENT") {
-            const studentRegId = document.getElementById("studentRegId").value;
-            if (!studentRegId) {
-                alert("Student Reg ID required");
-                return;
-            }
-            payload.studentRegId = studentRegId;
-            payload.parentId = null;
+            payload.studentRegId = document.getElementById("studentRegId").value;
+        } else {
+            payload.parentId = document.getElementById("parentId").value;
         }
 
-        if (replyType === "PARENT") {
-            const parentId = document.getElementById("parentId").value;
-            if (!parentId) {
-                alert("Parent ID required");
-                return;
-            }
-            payload.parentId = parentId;
-            payload.studentRegId = null;
-        }
-
-        stompClient.send(
-            "/app/chat/send",
+        stompClient.send("/app/chat/send",
             { "content-type": "application/json" },
             JSON.stringify(payload)
         );
