@@ -45,7 +45,7 @@ public void send(ChatMessageDto dto) {
         log.info("Incoming chat message: sender={}, teacherId={}, studentId={}, parentId={}",
                 dto.getSender(), dto.getTeacherId(), dto.getStudentRegId(), dto.getParentId());
 
-        // 1️⃣ Save chat message
+        //  Save chat message
         ChatMessage savedMessage = chatService.save(dto);
 
         ChatMessageResponseDto response = new ChatMessageResponseDto(
@@ -58,9 +58,9 @@ public void send(ChatMessageDto dto) {
                 savedMessage.getTimestamp()
         );
 
-        log.warn("🧪 DB sender value = {}", savedMessage.getSender());
+        log.warn(" DB sender value = {}", savedMessage.getSender());
 
-        // 2️⃣ Capture sender role ONCE (immutable)
+        //  Capture sender role ONCE (immutable)
         final String senderRole = savedMessage.getSender().toUpperCase();
 
         // ================= CHAT DELIVERY =================
@@ -129,7 +129,7 @@ public void send(ChatMessageDto dto) {
         String receiverIdentity = receiverRole + ":" + receiverId;
 
         if (senderIdentity.equals(receiverIdentity)) {
-            log.info("🚫 Notification skipped (same logical user)");
+            log.info(" Notification skipped (same logical user)");
             return;
         }
 
@@ -145,7 +145,7 @@ public void send(ChatMessageDto dto) {
         // ---- Send to Kafka ----
         kafkaTemplate.send("notifications", notificationEvent);
 
-        log.info("📤 Notification sent to Kafka | {} → {}",
+        log.info(" Notification sent to Kafka | {} → {}",
                 senderIdentity, receiverIdentity);
 
     } catch (Exception e) {
