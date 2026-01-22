@@ -49,11 +49,14 @@ public class SecurityConfig {
                                 "/public/**",
                                 "/resources/**",
                                 "/favicon.ico",
-                                "/chat/**",
+                                        "/chat/**",       // 🔥 websocket endpoint
+                                        "/ws/**",
                                 "/api/chat/**",
+                                        "/ws-chat/**",
                                 "/student.html",
                                 "/parent.html",
                                 "/teacher.html",
+                                        "/api/notifications/**",
                                 // for chat
                               //  "/api/chat/student/open",
 
@@ -250,10 +253,17 @@ public class SecurityConfig {
                                 "/api/admissions/getAllAdmissions",
                                 "/api/admissions/getByIdAdmissions/{id}",
                                 "/api/admissions/updateAdmissions/{id}",
-                                "/api/admissions/deleteAdmissions/{id}"
+                                "/api/admissions/deleteAdmissions/{id}",
+
+
+                                        //websocket chatbot
+                                        "api/chat/parent/open",
+                                        "api/chat/parent-teacher"
+
 
 
                         ).permitAll()
+
 
                          //SESSION APIs
                          // READ sessions -> PUBLIC
@@ -419,6 +429,26 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getAllLibraryMembers").hasAnyRole("ADMIN", "TEACHER")
 
                         .requestMatchers(HttpMethod.POST, "/api/admissions/createAdmissions").hasRole("PRINCIPAL")
+
+
+                                // ================= CHAT CONTROLLER =================
+                        .requestMatchers("/chat/**", "/ws/**", "/ws-chat/**").permitAll()
+                                // WebSocket message mapping (STOMP)
+                                .requestMatchers("/app/chat/send").authenticated()
+
+                                 // Parent ↔ Teacher
+                                .requestMatchers(HttpMethod.GET, "/api/chat/parent-teacher").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/chat/parent/open").authenticated()
+
+                                 // Student ↔ Teacher
+                                .requestMatchers(HttpMethod.GET, "/api/chat/student-teacher").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/chat/student/open").authenticated()
+
+                                 // Teacher views
+                                .requestMatchers(HttpMethod.GET, "/api/chat/student-messages").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/chat/parent-messages").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/chat/teacher/messages").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/chat/teacher/open").authenticated()
 
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

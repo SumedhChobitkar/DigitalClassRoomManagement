@@ -2,6 +2,7 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.ChatMessageDto;
 import com.DigitalClassRoomManagement.Dto.ChatMessageResponseDto;
+import com.DigitalClassRoomManagement.Dto.KafkaNotificationDto;
 import com.DigitalClassRoomManagement.Entity.ChatMessage;
 import com.DigitalClassRoomManagement.Entity.Parent;
 import com.DigitalClassRoomManagement.Entity.Student;
@@ -14,6 +15,8 @@ import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Service.ChatService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +42,10 @@ public class ChatServiceImpl implements ChatService {
         this.teacherRepo = teacherRepo;
         this.chatRepo = chatRepo;
     }
+
+
+
+
 
     @Override
     public ChatMessage save(ChatMessageDto dto) {
@@ -86,7 +93,6 @@ public class ChatServiceImpl implements ChatService {
             log.info(" Chat message saved with ID {}", saved.getMessageId());
 
             return saved;
-
         } catch (Exception e) {
             log.error(" Failed to save chat message", e);
             throw e;
