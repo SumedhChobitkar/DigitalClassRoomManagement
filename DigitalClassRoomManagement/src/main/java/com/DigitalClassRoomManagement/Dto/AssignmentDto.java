@@ -1,11 +1,15 @@
 package com.DigitalClassRoomManagement.Dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.constraints.NotNull;
+
+import lombok.*;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class AssignmentDto {
 
     private Long assignmentId;
@@ -23,19 +28,23 @@ public class AssignmentDto {
     @NotBlank(message = "Description cannot be blank")
     private String description;
 
-     //File Details
-//    private String fileName;     //  "assignment1.pdf"
-//    private String fileType;     //  "application/pdf"
-    private String fileData;     //  "uploaded"
+    // ---------------- FILE UPLOAD ----------------
 
-
-    // file upload with @ModelAttribute
+    // MultipartFile instead of String
+    @JsonIgnore
     private MultipartFile file;
+
+    // optional metadata (OK to keep)
+
+    private String fileStatus;   // uploaded / not_uploaded
+    private String fileName;
+
+    // ------------------------------------------------
 
     @NotNull(message = "Due date cannot be null")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime dueDate;
 
+    private LocalDateTime dueDate;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -51,4 +60,6 @@ public class AssignmentDto {
 
     @NotNull(message = "Teacher ID cannot be null")
     private Long teacherId;
+
 }
+

@@ -37,7 +37,7 @@ public class ReportCardService {
         reportCard.setSubmission(submission);
         return reportCardRepo.save(reportCard);
     }
-
+    
 
     // GET ALL
     public List<ReportCard> getAllReportCards() {
