@@ -4,8 +4,6 @@ package com.DigitalClassRoomManagement.Entity;
 import com.DigitalClassRoomManagement.Enum.SubmissionStatus;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.sql.Blob;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -18,32 +16,38 @@ import java.time.LocalDateTime;
         uniqueConstraints = @UniqueConstraint(columnNames = {"assignment_id", "student_id"}))
 public class AssignmentSubmission {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long submissionId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long submissionId;
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "assignment_id", nullable = false)
-        private Assignment assignment;
+    @ManyToOne
+    @JoinColumn(name = "assignment_id", nullable = false)
+    private Assignment assignment;
 
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "student_id", nullable = false)
-        private Student student;
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
 
-        private Blob fileUrl;
+    //  FILE STORED AS BYTES
+    @Lob
+    @Column(name = "file_data", columnDefinition = "LONGBLOB", nullable = false)
+    private byte[] fileData;
 
-        private LocalDateTime submittedAt;
+    // FILENAME
+    @Column(name = "file_name", nullable = false)
+    private String fileName;
 
-        @Enumerated(EnumType.STRING)
-        private SubmissionStatus status;
+    private LocalDateTime submittedAt;
 
-        @Column(nullable = false)
-        private Double marks;
+    @Enumerated(EnumType.STRING)
+    private SubmissionStatus status;
 
-        @Column(columnDefinition = "TEXT", nullable = false)
-        private String feedback;
+    @Column(nullable = false)
+    private Double marks;
 
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String feedback;
 
     }
 

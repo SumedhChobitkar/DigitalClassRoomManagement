@@ -1,6 +1,7 @@
 package com.DigitalClassRoomManagement.Service;
 
 import com.DigitalClassRoomManagement.Dto.AssignmentDto;
+import com.DigitalClassRoomManagement.Entity.Assignment;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -41,5 +42,5 @@ public interface AssignmentService {
     List<AssignmentDto> getAssignmentsByClassId(Long classId);
 
     // Get assignment file by assignment ID
-    byte[] getFileByAssignmentId(Long assignmentId);
+    public Assignment getAssignmentFileData(Long assignmentId);
 }

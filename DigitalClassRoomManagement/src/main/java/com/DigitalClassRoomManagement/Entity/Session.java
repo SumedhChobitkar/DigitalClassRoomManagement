@@ -34,22 +34,22 @@ public class Session {
     private Long sessionId;
 
     // One-to-one with Timetable (owner side)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "timetableId", nullable = false)
     private Timetable timetable;
 
     // Many sessions can belong to one class
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "classId", nullable = false)
     private SchoolClass schoolClass;
 
     // Many sessions can belong to one section
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "sectionId", nullable = false)
     private Section section;
 
     // Many sessions taught by one teacher
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "teacherId", nullable = false)
     private Teacher teacher;
 

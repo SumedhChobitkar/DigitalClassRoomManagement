@@ -11,17 +11,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-    public class AssignmentSubmissionDTO {
+public class AssignmentSubmissionDTO {
 
     private Long submissionId;
     private Long studentId;
     private Long assignmentId;
-    private MultipartFile file;
+
+
+    private String fileName;
+    //  file status (NOT bytes)
+    private String  file;
     private LocalDateTime submittedAt;
     private SubmissionStatus status;
     private Double marks;
     private String feedback;
 
-    }
-
+}
 

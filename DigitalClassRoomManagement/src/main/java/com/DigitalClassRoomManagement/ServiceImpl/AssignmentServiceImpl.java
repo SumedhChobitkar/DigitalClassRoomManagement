@@ -218,31 +218,38 @@ public class AssignmentServiceImpl implements AssignmentService {
         assignmentRepository.deleteByAssignmentIdAndTeacherId(assignmentId, teacherId);
     }
 
-    // ---------------- GET FILE ----------------
+    // ---------------- GET FILE ---------------
+
     @Override
-    public byte[] getFileByAssignmentId(Long assignmentId) {
+    public Assignment getAssignmentFileData(Long assignmentId) {
         Assignment assignment = assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new RuntimeException("Assignment not found"));
-        if (assignment.getFileData() == null)
+
+        if (assignment.getFileData() == null) {
             throw new RuntimeException("No file found for this assignment");
-        return assignment.getFileData();
+        }
+
+        return assignment;
     }
+
 
     // ---------------- DTO CONVERTER ----------------
     private AssignmentDto convertToDto(Assignment assignment) {
-        String fileStatus = (assignment.getFileData() != null) ? "uploaded" : null;
+
+        boolean hasFile = assignment.getFileData() != null;
 
         return AssignmentDto.builder()
                 .assignmentId(assignment.getAssignmentId())
                 .title(assignment.getTitle())
                 .description(assignment.getDescription())
-                .fileData(fileStatus)
+                .fileStatus(hasFile ? "uploaded" : "not_uploaded")
+                .fileName(hasFile ? assignment.getFileName() : null)
                 .dueDate(assignment.getDueDate())
                 .createdAt(assignment.getCreatedAt())
                 .updatedAt(assignment.getUpdatedAt())
                 .classId(assignment.getSchoolClass().getClassId())
-                .subjectId(assignment.getSubject().getSubjectId())
                 .sectionId(assignment.getSection().getSectionId())
+                .subjectId(assignment.getSubject().getSubjectId())
                 .teacherId(assignment.getTeacher().getId())
                 .build();
     }
