@@ -21,7 +21,9 @@ public class ParentDTO {
     // Name validation
     @NotBlank(message = "Name is required.")
     @Pattern(regexp = "^[A-Za-z ]{2,50}$", message = "Name must contain only letters and spaces (2–50 characters).")
-    private String name;
+    //private String name;
+    private String firstName;
+    private String lastName;
 
     //  Email validation
     @NotBlank(message = "Email is required.")
