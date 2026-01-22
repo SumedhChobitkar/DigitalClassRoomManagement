@@ -124,7 +124,9 @@ public class ParentServiceImpl implements ParentService {
                     .orElseThrow(() -> new RuntimeException("Student not found"));
 
             // Update fields
-            existingParent.setName(parentDetails.getName());
+           // existingParent.setName(parentDetails.getName());
+            existingParent.setFirstName(parentDetails.getFirstName());
+            existingParent.setLastName(parentDetails.getLastName());
             existingParent.setEmail(parentDetails.getEmail());
             existingParent.setPhone(parentDetails.getPhone());
             existingParent.setAddress(parentDetails.getAddress());
@@ -193,13 +195,35 @@ public class ParentServiceImpl implements ParentService {
     private void validateParent(Parent parent) {
 
         // Validate Parent Name
-        if (parent.getName() == null ||
+        /*if (parent.getName() == null ||
                 !ValidationClass.PARENT_NAME_PATTERN.matcher(parent.getName()).matches()) {
 
             throw new IllegalArgumentException(
                     "Invalid Parent Name. It must start with a capital letter and be 2–50 characters."
             );
+        }*/
+        // Validate Parent First Name
+        if (parent.getFirstName() == null ||
+                !ValidationClass.PARENT_NAME_PATTERN
+                        .matcher(parent.getFirstName())
+                        .matches()) {
+
+            throw new IllegalArgumentException(
+                    "Invalid Parent First Name. It must start with a capital letter and be 2–50 characters."
+            );
         }
+
+        // Validate Parent Last Name
+        if (parent.getLastName() == null ||
+                !ValidationClass.PARENT_NAME_PATTERN
+                        .matcher(parent.getLastName())
+                        .matches()) {
+
+            throw new IllegalArgumentException(
+                    "Invalid Parent Last Name. It must start with a capital letter and be 2–50 characters."
+            );
+        }
+
 
         // Validate Email
         if (parent.getEmail() == null ||

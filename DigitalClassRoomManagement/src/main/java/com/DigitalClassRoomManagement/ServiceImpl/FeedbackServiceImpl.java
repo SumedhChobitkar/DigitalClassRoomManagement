@@ -118,8 +118,21 @@ public class FeedbackServiceImpl implements FeedbackService {
         try {
             log.info("Fetching feedback for parentId: {} with name: {}", parentId, parentName);
 
+            //  ADD THESE 3 LINES
+            String[] nameParts = parentName.trim().split("\\s+", 2);
+            String firstName = nameParts[0].trim();
+            String lastName = nameParts.length > 1 ? nameParts[1].trim() : "";
+
             List<Feedback> feedbackList =
-                    feedbackRepository.findByParent_ParentIdAndParent_Name(parentId, parentName);
+                   // feedbackRepository.findByParent_ParentIdAndParent_Name(parentId, parentName);
+                    feedbackRepository
+                            .findByParent_ParentIdAndParent_FirstNameAndParent_LastName(
+                                    parentId,
+                                    firstName,
+                                    lastName
+                            );
+
+
 
             return feedbackList.stream()
                     .map(this::toDto)
