@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Dto;
 
+import com.DigitalClassRoomManagement.Enum.ExamMode;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,4 +25,7 @@ public class ExamDto {
     private LocalDateTime endTime;
     private Integer duration;
     private BigDecimal totalMarks;
+    private Long locationId;
+    private ExamMode examMode;
+
 }

@@ -70,6 +70,9 @@ public class Student {
     @JsonIgnore
     private Teacher teacher;
 
+    @ManyToOne
+    private Location location;
+
 
 
 

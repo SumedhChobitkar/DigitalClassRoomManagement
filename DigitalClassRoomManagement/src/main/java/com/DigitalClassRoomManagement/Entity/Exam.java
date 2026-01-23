@@ -1,5 +1,8 @@
 package com.DigitalClassRoomManagement.Entity;
 
+import com.DigitalClassRoomManagement.Enum.ExamMode;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.AllArgsConstructor;
@@ -59,4 +62,14 @@ public class Exam {
         @UpdateTimestamp
         @Column(name = "updated_at")
         private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
+    //@JsonBackReference
+    @JsonIgnore
+    private Location location;
+
+    @Enumerated(EnumType.STRING)
+    private ExamMode examMode;
+
 }

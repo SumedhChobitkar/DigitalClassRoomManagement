@@ -49,6 +49,12 @@ public class StudentDTO {
     //--------------------profile----------------------
     private String profile;
 
+    // -------------------- LOCATION --------------------
+    private Long locationId;      // For request
+    private Location location;    // For response
+
+
+
 
     // ---------------------------------------------
     // Constructor for simple student list

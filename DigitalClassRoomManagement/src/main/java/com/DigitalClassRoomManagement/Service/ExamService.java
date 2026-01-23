@@ -22,6 +22,8 @@ public interface ExamService {
 
     List<ExamDto> adminGetAllExams();
 
+    ExamDto getExamForStudent(Long studentId, Long examId);
+
 
 
 }

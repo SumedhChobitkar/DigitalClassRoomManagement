@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -64,15 +65,29 @@ public class TimetableController {
 //        }
 //    }
 
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping("/getAll")
+//    public ResponseEntity<?> getAll() {
+//        try {
+//            List<TimetableDTO> list = timetableService.getAllTimetables();
+//            return new ResponseEntity<>(list, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(" Failed to fetch timetables: " + e.getMessage(),
+//                    HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAll")
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<?> getAllTimetables() {
         try {
-            List<TimetableDTO> list = timetableService.getAllTimetables();
+            List<HashMap<String, Object>> list = timetableService.getAllTimetables();
             return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(" Failed to fetch timetables: " + e.getMessage(),
-                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(
+                    "Failed to fetch timetables: " + e.getMessage(),
+                    HttpStatus.BAD_REQUEST
+            );
         }
     }
 

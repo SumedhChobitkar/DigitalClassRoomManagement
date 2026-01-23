@@ -46,6 +46,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private SchoolClassRepository schoolClassRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
     //  Save a new student
 
     // Save a new student
@@ -117,11 +120,28 @@ public class StudentServiceImpl implements StudentService {
         }
 
         // SECTION MAPPING
+//        if (dto.getSectionId() != null) {
+//            Section section = sectionRepository.findById(dto.getSectionId())
+//                    .orElseThrow(() -> new RuntimeException("Section not found"));
+//            student.setSection(section);
+//        }
+
+        // SECTION MAPPING
         if (dto.getSectionId() != null) {
             Section section = sectionRepository.findById(dto.getSectionId())
                     .orElseThrow(() -> new RuntimeException("Section not found"));
             student.setSection(section);
         }
+
+// LOCATION MAPPING  ✅ ADD HERE
+        if (dto.getLocationId() != null) {
+            Location location = locationRepository.findById(dto.getLocationId())
+                    .orElseThrow(() -> new RuntimeException("Location not found"));
+            student.setLocation(location);
+        } else {
+            throw new RuntimeException("Location ID is required");
+        }
+
 
         // PROFILE (BLOB)
         if (profileFile != null && !profileFile.isEmpty()) {
@@ -341,6 +361,41 @@ public class StudentServiceImpl implements StudentService {
         } catch (Exception e) {
 //            logger.err("Error while fetching leave status {}", leaveRequestId, e);
             throw e;
+        }
+    }
+
+    @Override
+    public Student updatelocation(Long studentId, Long locationId) {
+
+        logger.info("Updating location for studentId: " + studentId);
+
+        try {
+            // 1️⃣ Fetch Student
+            Student student = studentRepository.findById(studentId)
+                    .orElseThrow(() -> new RuntimeException(
+                            "Student not found with ID: " + studentId
+                    ));
+
+            // 2️⃣ Fetch Location
+            Location location = locationRepository.findById(locationId)
+                    .orElseThrow(() -> new RuntimeException(
+                            "Location not found with ID: " + locationId
+                    ));
+
+            // 3️⃣ Assign location to student
+            student.setLocation(location);
+
+            // 4️⃣ Save updated student
+            Student updatedStudent = studentRepository.save(student);
+
+            logger.info("Location updated successfully for studentId: " + studentId);
+
+            return updatedStudent;
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE,
+                    "Error updating location for studentId: " + studentId + " | " + e.getMessage(), e);
+            throw new RuntimeException("Failed to update student location");
         }
     }
 
