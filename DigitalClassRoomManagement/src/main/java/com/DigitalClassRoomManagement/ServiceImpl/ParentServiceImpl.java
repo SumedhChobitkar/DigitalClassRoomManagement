@@ -6,6 +6,7 @@ import com.DigitalClassRoomManagement.Entity.Student;
 import com.DigitalClassRoomManagement.Entity.User;
 
 import com.DigitalClassRoomManagement.Enum.Relationship;
+import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Exception.ParentNotFoundException;
 import com.DigitalClassRoomManagement.Repository.ParentRepository;
 import com.DigitalClassRoomManagement.Repository.StudentRepository;
@@ -63,6 +64,8 @@ public class ParentServiceImpl implements ParentService {
             parent.setUser(existingUser);
             parent.setStudent(existingStudent);
 
+            // set default status       new line add
+            parent.setStatus(Status.UNAPPROVED);
 
             //  Save the parent
             Parent savedParent = parentRepository.save(parent);
@@ -131,8 +134,14 @@ public class ParentServiceImpl implements ParentService {
             existingParent.setPhone(parentDetails.getPhone());
             existingParent.setAddress(parentDetails.getAddress());
             existingParent.setRelationship(parentDetails.getRelationship());
+            //new line
+            existingParent.setStatus(parentDetails.getStatus());
+
             existingParent.setUser(existingUser);
             existingParent.setStudent(existingStudent);
+            // new line add
+            existingParent.setStatus(Status.APPROVED);
+
 
             // validateParent(parent);
             // Save updated parent

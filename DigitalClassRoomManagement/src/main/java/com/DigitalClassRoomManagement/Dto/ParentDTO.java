@@ -38,4 +38,14 @@ public class ParentDTO {
 
     // Relationship — Enum (FATHER, MOTHER, GUARDIAN)
     private Relationship relationship;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ParentResponseDTO {
+
+        private String status;   // SUCCESS / FAILED
+        private String message;
+        private Object data;     // Parent or List<Parent>
+    }
 }
