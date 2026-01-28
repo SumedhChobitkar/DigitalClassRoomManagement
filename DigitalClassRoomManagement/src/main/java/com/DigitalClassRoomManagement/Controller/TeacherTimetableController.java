@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -31,28 +32,61 @@ public class TeacherTimetableController {
     @Autowired
     private SectionService sectionService;
 
-    @PreAuthorize("hasRole('TEACHER')")
-    //  GET Timetable by Teacher ID
+//    @PreAuthorize("hasRole('TEACHER')")
+//    //  GET Timetable by Teacher ID
+//    @GetMapping("/{teacherId}/timetable")
+//    public ResponseEntity<?> getTimetableByTeacherId(@PathVariable Long teacherId) {
+//        logger.info("Fetching timetable for teacherId: {}", teacherId);
+//
+//        try {
+//            List<Timetable> timetableList = timetableService.getTimetableByTeacherId(teacherId);
+//
+//            if (timetableList == null || timetableList.isEmpty()) {
+//                logger.warn("No timetable found for teacherId: {}", teacherId);
+//                return ResponseEntity.status(404).body("No timetable found for this teacher");
+//            }
+//
+//            logger.info("Timetable fetched successfully for teacherId: {}", teacherId);
+//            return ResponseEntity.ok(timetableList);
+//
+//        } catch (Exception e) {
+//            logger.error("Error fetching timetable for teacherId: {} | Message: {}", teacherId, e.getMessage());
+//            return ResponseEntity.status(500).body("Failed to fetch timetable. Please try again.");
+//        }
+//    }
+
+//    @PreAuthorize("hasRole('TEACHER')")
+@PreAuthorize("permitAll()")
     @GetMapping("/{teacherId}/timetable")
     public ResponseEntity<?> getTimetableByTeacherId(@PathVariable Long teacherId) {
+
         logger.info("Fetching timetable for teacherId: {}", teacherId);
 
         try {
-            List<Timetable> timetableList = timetableService.getTimetableByTeacherId(teacherId);
+            List<HashMap<String, Object>> timetableList =
+                    timetableService.getTimetableByTeacherId(teacherId);
 
             if (timetableList == null || timetableList.isEmpty()) {
                 logger.warn("No timetable found for teacherId: {}", teacherId);
-                return ResponseEntity.status(404).body("No timetable found for this teacher");
+                return ResponseEntity
+                        .status(404)
+                        .body("No timetable found for this teacher");
             }
 
             logger.info("Timetable fetched successfully for teacherId: {}", teacherId);
             return ResponseEntity.ok(timetableList);
 
         } catch (Exception e) {
-            logger.error("Error fetching timetable for teacherId: {} | Message: {}", teacherId, e.getMessage());
-            return ResponseEntity.status(500).body("Failed to fetch timetable. Please try again.");
+            logger.error(
+                    "Error fetching timetable for teacherId: {} | Message: {}",
+                    teacherId, e.getMessage()
+            );
+            return ResponseEntity
+                    .status(500)
+                    .body("Failed to fetch timetable. Please try again.");
         }
     }
+
 
 
     @PreAuthorize("hasRole('TEACHER')")

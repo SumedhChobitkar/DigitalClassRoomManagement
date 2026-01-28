@@ -1,5 +1,7 @@
 package com.DigitalClassRoomManagement.Dto;
 
+import com.DigitalClassRoomManagement.Enum.ExamMode;
+import jakarta.validation.constraints.NotNull;
 import com.DigitalClassRoomManagement.Enum.ExamStatus;
 import com.DigitalClassRoomManagement.Enum.SubmissionStatus;
 import jakarta.persistence.EnumType;
@@ -31,6 +33,8 @@ public class ExamDto {
     private LocalDateTime endTime;
     private Integer duration;
     private BigDecimal totalMarks;
+    private Long locationId;
+    private ExamMode examMode;
     private List<ExamQuestionDto> questions;
     @Enumerated(EnumType.STRING)
     private ExamStatus status;

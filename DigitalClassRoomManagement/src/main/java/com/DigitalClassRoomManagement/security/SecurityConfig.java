@@ -357,8 +357,12 @@ public class SecurityConfig {
                         //TeacherTimetable Related
                         .requestMatchers(HttpMethod.GET, "/api/teacherTimetable/{teacherId}/timetable").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.GET,"/api/teacherTimetable/{teacherId}/sections").hasRole("TEACHER")
+//                                .requestMatchers(HttpMethod.GET,
+//                                        "/api/teacherTimetable/*/timetable"
+//                                ).permitAll()
 
-                        //StudentTimetable Related
+
+                                //StudentTimetable Related
                         .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/timetable").hasRole("STUDENT")
                         .requestMatchers(HttpMethod.GET,"/api/studentTimetable/{sectionId}/section").hasRole("STUDENT")
 
@@ -368,6 +372,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/students/getAllStudent").hasAnyRole("TEACHER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/students/updateStudentById/**").hasAnyRole("TEACHER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/students/deleteStudentById/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/students/{studentId}/location/{locationId}").permitAll()
+
 
                         // parent
                         .requestMatchers(HttpMethod.POST, "/api/parents/saveParent").hasRole("ADMIN")
@@ -437,6 +443,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/Librarymembers/getAllLibraryMembers").hasAnyRole("ADMIN", "TEACHER")
 
                         .requestMatchers(HttpMethod.POST, "/api/admissions/createAdmissions").hasRole("PRINCIPAL")
+
+                                // Student Exam
+                                .requestMatchers(HttpMethod.POST, "/api/student/exam/submit").hasRole("STUDENT")
+                                // Student - Get specific exam
+                                .requestMatchers(HttpMethod.GET, "/api/exam/student/*/exam/*").hasRole("ADMIN")
+
 
 
                                 // ================= CHAT CONTROLLER =================
