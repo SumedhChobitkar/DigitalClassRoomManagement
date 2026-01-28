@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -113,4 +114,22 @@ public class AdminSubjectController {
                     .body("Failed to delete subject: " + e.getMessage());
         }
     }
+
+    @GetMapping("/student/{studentRegId}/subjects")
+//    @PreAuthorize("hasRole('STUDENT')")
+    public List<SubjectDto> getSubjectsForStudent(
+            @PathVariable Long studentRegId
+    ) {
+        return sservice.getSubjectsForStudent(studentRegId);
+    }
+
+
+    @PutMapping("/assign/{subjectId}/class/{classId}")
+    public SubjectDto assignSubjectToClass(
+            @PathVariable Long subjectId,
+            @PathVariable Long classId
+    ) {
+        return sservice.assignSubjectToClass(subjectId, classId);
+    }
+
 }

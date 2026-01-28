@@ -2,6 +2,7 @@ package com.DigitalClassRoomManagement.Entity;
 
 import com.DigitalClassRoomManagement.Enum.Role;
 import com.DigitalClassRoomManagement.Enum.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,5 +39,10 @@ public class Admin {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
 }

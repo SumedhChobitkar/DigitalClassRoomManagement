@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parent Chat</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        #log {
+            border: 1px solid #ccc;
+            height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+        input, button { margin-top: 6px; padding: 5px; }
+    </style>
+</head>
+
+<body>
+
+<h2>Parent Chat</h2>
+
+<label>Parent ID:</label>
+<input id="parentId" value="1"><br>
+
+<label>Teacher ID:</label>
+<input id="teacherId" value="1"><br>
+
+<body onload="connect()">
+
+<hr>
+
+<input id="message" placeholder="Type message">
+<button onclick="sendMessage()">Send</button>
+
+<hr>
+
+<h3>Messages</h3>
+<pre id="log"></pre>
+
+<script>
+    let stompClient = null;
+
+    function appendMessage(text) {
+        const log = document.getElementById("log");
+        log.innerHTML += text + "\n";
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function connect() {
+        const parentId = document.getElementById("parentId").value;
+        const teacherId = document.getElementById("teacherId").value;
+
+        const log = document.getElementById("log");
+        log.innerHTML = "";
+
+        /* ============================
+           1️⃣ Load chat history safely
+        ============================= */
+        fetch(`/api/chat/parent-teacher?teacherId=${teacherId}&parentId=${parentId}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Failed to load chat history");
+                }
+                return res.json();
+            })
+            .then(messages => {
+                if (Array.isArray(messages)) {
+                    messages.forEach(m => {
+                        appendMessage(`${m.sender}: ${m.message}`);
+                    });
+                } else {
+                    console.error("Expected array, got:", messages);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                appendMessage("⚠ Unable to load previous messages");
+            });
+
+        /* ============================
+           2️⃣ Mark messages as read
+        ============================= */
+        fetch(`/api/chat/parent/open?teacherId=${teacherId}&parentId=${parentId}`, {
+            method: "POST"
+        }).catch(err => console.error("Mark read failed", err));
+
+        /* ============================
+           3️⃣ WebSocket connection
+        ============================= */
+        const socket = new SockJS("http://localhost:9090/chat");
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, () => {
+            console.log("Parent connected via WebSocket");
+
+            stompClient.subscribe(
+                `/topic/chat/parent/${parentId}`,
+                (msg) => {
+                    const data = JSON.parse(msg.body);
+                    appendMessage(`${data.sender}: ${data.message}`);
+                }
+            );
+
+            stompClient.subscribe(
+                 `/topic/notifications/parent/${parentId}`,
+                  (msg) => {
+            console.log("Notification received:",msg.body);
+
+            const notification = JSON.parse(msg.body);
+            alert(" " + notification.title + " : " + notification.message);
+        }
+    );
+        }, (error) => {
+            console.error("WebSocket error:", error);
+            appendMessage(" WebSocket connection failed");
+        });
+    }
+
+    function sendMessage() {
+        if (!stompClient || !stompClient.connected) {
+            alert("Please connect first");
+            return;
+        }
+
+        const parentId = document.getElementById("parentId").value;
+        const teacherId = document.getElementById("teacherId").value;
+        const messageInput = document.getElementById("message");
+        const message = messageInput.value.trim();
+
+        if (!message) {
+            alert("Message cannot be empty");
+            return;
+        }
+
+        stompClient.send(
+            "/app/chat/send",
+            { "content-type": "application/json" },
+            JSON.stringify({
+                parentId,
+                teacherId,
+                sender: "PARENT",
+                message
+            })
+        );
+
+        messageInput.value = "";
+    }
+</script>
+</body>
+</html>

@@ -35,7 +35,7 @@ public class AdminParentController {
     // CREATE Parent
     @PostMapping("/saveParent")
     public ResponseEntity<?> createParent(@RequestBody Parent parent) {
-        logger.info("Request received to create parent: " + parent.getName());
+        logger.info("Request received to create parent: " + parent.getFirstName() + " " + parent.getLastName());
 
         try {
             Parent createdParent = parentService.createParent(parent);
@@ -55,7 +55,7 @@ public class AdminParentController {
 
         try {
             Parent parent = parentService.getParentById(id);
-            logger.info("Parent found: " + parent.getName());
+            logger.info("Parent found: " + parent.getFirstName() + " " + parent.getLastName());
             return new ResponseEntity<>(parent, HttpStatus.OK);
         } catch (Exception e) {
             logger.log(Level.WARNING, "Parent not found with ID: " + id, e);

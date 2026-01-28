@@ -44,6 +44,21 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/swagger-config/**",
                                 "/payment.html",
+                                "/",
+                                "/static/**",
+                                "/public/**",
+                                "/resources/**",
+                                "/favicon.ico",
+                                        "/chat/**",       // 🔥 websocket endpoint
+                                        "/ws/**",
+                                "/api/chat/**",
+                                        "/ws-chat/**",
+                                "/student.html",
+                                "/parent.html",
+                                "/teacher.html",
+                                        "/api/notifications/**",
+                                // for chat
+                              //  "/api/chat/student/open",
 
                                 // OAuth endpoints (make these publicly accessible)
                                 //OAuth
@@ -81,10 +96,12 @@ public class SecurityConfig {
 
                                 //Exam
                                 "/api/exam/TeacherSaveExam",
+                                "/api/exam/schedule/{examId}",
                                 "/api/exam/UpdateByExamId/{examId}",
+                                "/api/exam/by-question/{questionId}",
                                 "/api/exam/GetByExamId/{id}",
-                                "/api/getByTeacher/{teacherId}",
-                                "/api/exam/GetAllExam",
+                                "/api/exam/getByTeacher/{teacherId}",
+                                "/api/exam/getAllExam",
                                 "/api/exam/DeleteByExamId/{id}",
 
                                 // Teacher
@@ -106,25 +123,38 @@ public class SecurityConfig {
                                 "/api/profile/dashboard/{id}/remove-profile-picture",
 
                                 // Student Related
-                                "/api/students/saveStudent",
+                              //  "/api/students/saveStudent",
 
                                 // Subject Related
                                 "/api/subject/**",
+                                "/api/teacher/exam/GetAllQuestion",
+
+
+                                "/api/results/top",
+                                "/api/results/Create-result",
+                                "/api/results/{id}",
+                                "/api/results/GetAll",
 
                                 "/api/teacher/delete",
 
-                                //ContactUs
-                                "/api/contact/**",
 
                                 //Assignment
                                 "/api/assignments/create",
                                 "/api/assignments/updateAssignmentById/{id}",
                                 "/api/assignments/getAllAssignments",
-                                "/api/assignments/getAssignmentById/{id}",
+                                "/api/assignments/getAssignmentsById/{id}",
                                 "/api/assignments/getAllAssignmentsByTeacherId/{teacherId}",
                                 "/api/assignments/getAssignmentsByIdAndTeacherId/{assignmentId}/{teacherId}",
                                 "/api/assignments/deleteAssignmentByIdAndTeacherId/{assignmentId}/{teacherId}",
                                 "/api/assignments/getAssignmentsFileByAssignmentId/{assignmentId}",
+
+                                //AssignmentSubmission
+                                        "/api/submissions/submit",
+                                "/api/submissions/getSubmissionsById/{id}",
+                                "/api/submissions/updateSubmissionFileById/{id}",
+                                "/api/submissions/updateFeedbackAndMarksById/{id}",
+                                "/api/submissions/deleteSubmissionById/{id}",
+
 
                                 //TeacherAssignmentSubmission
                                 "/api/teacher/assignments/create",
@@ -132,6 +162,7 @@ public class SecurityConfig {
                                 "/api/teacher/assignments/getAllAssignments",
                                 "/api/teacher/assignments/getAssignmentById/{id}",
                                 "/api/teacher/assignments/deleteAssignmentById/{id}",
+                                        "/api/teacher/assignments/getAssignmentFileByTeacherAssignmentId/{Id}",
 
                                 // Homework
                                 "/api/homeworks/saveHomework",
@@ -163,12 +194,12 @@ public class SecurityConfig {
 
 
                                 //Result
-                                "/api/results/SaverResult",
-                                "/api/results/GetResult/{id}",
-                                "/api/results/getAllResult",
-                                "/api/results/UpdateResult/{id}",
-                                "api/results/DeleteById/{id}",
-                                "/api/results/top",
+//                                "/api/results/Create-result",
+//                                "/api/results/GetResult/{id}",
+//                                "/api/results/getAllResult",
+//                                "/api/results/UpdateResult/{id}",
+//                                "api/results/DeleteById/{id}",
+//                                "/api/results/top",
 
 
                                 //StudentExam
@@ -178,13 +209,29 @@ public class SecurityConfig {
 
 
                                 //TeacherExam
-                                "/api/TeacherExam/{examId}/questions",
-                                "/api/TeacherExam/submissions",
+//                               "/api/teacher/exam/{examId}/questions",
+//                                "/api/teacher/exam/submissions",
+//                                "/api/teacher/exam/GetAllQuestion",
+//                                "/api/teacher/exam/teacher/{teacherId}/questions",
+
 
 
                                 //Admin Exam
                                 "/api/Create-exam/CreateExam",
                                 "/api/Create-exam/getAll",
+
+
+
+
+
+
+                                "/api/teacher/delete",
+
+                                //ContactUs
+                                "/api/contact/**",
+
+
+
 
                                 //ReportCard
 
@@ -214,10 +261,17 @@ public class SecurityConfig {
                                 "/api/admissions/getAllAdmissions",
                                 "/api/admissions/getByIdAdmissions/{id}",
                                 "/api/admissions/updateAdmissions/{id}",
-                                "/api/admissions/deleteAdmissions/{id}"
+                                "/api/admissions/deleteAdmissions/{id}",
+
+
+                                        //websocket chatbot
+                                        "api/chat/parent/open",
+                                        "api/chat/parent-teacher"
+
 
 
                         ).permitAll()
+
 
                          //SESSION APIs
                          // READ sessions -> PUBLIC
@@ -231,8 +285,11 @@ public class SecurityConfig {
 
 
                         //Teacher Exam
-                        .requestMatchers(HttpMethod.POST, "/api/teacher/exam/{examId}/questions").hasAnyRole("TEACHER", "PRINCIPAL")
-                        .requestMatchers(HttpMethod.GET, "/api/teacher/exam/submissions").hasRole("TEACHER")
+                        .requestMatchers(HttpMethod.POST, "/api/teacher/exam/{examId}/questions").hasAnyRole("TEACHER", "PRINCIPAL", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/teacher/exam/submissions").hasAnyRole("TEACHER","ADMIN","PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/teacher/exam/GetAllQuestion").hasAnyRole("STUDENT", "TEACHER", "ADMIN", "PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/teacher/exam/{teacherId}/questions").hasAnyRole("STUDENT", "TEACHER", "ADMIN", "PRINCIPAL")
+
 
                         // Student Exam
                         .requestMatchers(HttpMethod.POST, "/api/student/exam/submit").hasRole("STUDENT")
@@ -241,10 +298,10 @@ public class SecurityConfig {
 
                         //Result
                         .requestMatchers(HttpMethod.POST, "/api/results/Create-result").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.GET, "/api/results/{id}").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
-                        .requestMatchers(HttpMethod.GET, "/api/results/GetAll").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.PUT, "/api/results/Update_by/{id}").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/results/Delete/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/results/GetResult/{id}").hasAnyRole("ADMIN", "TEACHER", "STUDENT","PRINCIPAL")
+                        .requestMatchers(HttpMethod.GET, "/api/results/getAllResult").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/results/UpdateResult/{id}").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "api/results/DeleteById/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/results/top").hasAnyRole("ADMIN", "TEACHER", "STUDENT")
 
 
@@ -393,6 +450,25 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/exam/student/*/exam/*").hasRole("ADMIN")
 
 
+
+                                // ================= CHAT CONTROLLER =================
+                        .requestMatchers("/chat/**", "/ws/**", "/ws-chat/**").permitAll()
+                                // WebSocket message mapping (STOMP)
+                                .requestMatchers("/app/chat/send").authenticated()
+
+                                 // Parent ↔ Teacher
+                                .requestMatchers(HttpMethod.GET, "/api/chat/parent-teacher").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/chat/parent/open").authenticated()
+
+                                 // Student ↔ Teacher
+                                .requestMatchers(HttpMethod.GET, "/api/chat/student-teacher").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/chat/student/open").authenticated()
+
+                                 // Teacher views
+                                .requestMatchers(HttpMethod.GET, "/api/chat/student-messages").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/chat/parent-messages").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/chat/teacher/messages").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/chat/teacher/open").authenticated()
 
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

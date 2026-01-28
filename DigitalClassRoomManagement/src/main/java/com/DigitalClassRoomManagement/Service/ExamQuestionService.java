@@ -9,5 +9,10 @@ public interface ExamQuestionService {
 
     void addQuestions(Long examId, List<ExamQuestion> questions, Long teacherId);
 
+    List<ExamQuestionDto> getAllQuestions();
+
+    List<ExamQuestionDto> getQuestionsByTeacherId(Long teacherId);
+
+
     //ExamQuestionDto addQuestion(ExamQuestionDto dto);
 }

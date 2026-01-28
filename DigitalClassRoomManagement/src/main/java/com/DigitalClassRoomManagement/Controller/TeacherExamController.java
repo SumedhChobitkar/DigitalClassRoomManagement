@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Controller;
 
+import com.DigitalClassRoomManagement.Dto.ExamQuestionDto;
 import com.DigitalClassRoomManagement.Entity.ExamQuestion;
 import com.DigitalClassRoomManagement.Entity.ExamSubmission;
 import com.DigitalClassRoomManagement.Service.ExamQuestionService;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +30,12 @@ public class TeacherExamController {
     @Autowired
     private ExamSubmissionService examSubmissionService;
 
+
     // ------------------ Add Questions to Exam ------------------
     @Operation(summary = "Add Questions", description = "Allows a teacher to add multiple questions to a specific exam")
     @ApiResponse(responseCode = "200", description = "Questions added successfully")
     @ApiResponse(responseCode = "400", description = "Failed to add questions")
-    @PreAuthorize("hasAnyRole('TEACHER','PRINCIPAL')")
+    @PreAuthorize("hasAnyRole('TEACHER','PRINCIPAL','ADMIN')")
     @PostMapping("/{examId}/questions")
     public ResponseEntity<?> addQuestions(
             @PathVariable Long examId,
@@ -56,7 +59,7 @@ public class TeacherExamController {
     @Operation(summary = "Get Exam Submissions", description = "Fetches all student submissions for a specific exam")
     @ApiResponse(responseCode = "200", description = "Submissions fetched successfully")
     @ApiResponse(responseCode = "500", description = "Failed to fetch submissions")
-    @PreAuthorize("hasRole('TEACHER')")
+    @PreAuthorize(" hasAnyRole('TEACHER','ADMIN','PRINCIPAL') ")
     @GetMapping("/submissions")
     public ResponseEntity<?> getSubmissions(@RequestParam Long examId) {
         log.info("Fetching submissions for examId: {}", examId);
@@ -77,4 +80,57 @@ public class TeacherExamController {
             return ResponseEntity.status(500).body("Failed to fetch submissions: " + e.getMessage());
         }
     }
+
+
+    //<------------------------GET ALL QUESTIONS ------------------------------>
+    @Operation(summary = "Get All Questions", description = "Fetch all questions")
+    @ApiResponse(responseCode = "200", description = "Questions fetched successfully")
+    @ApiResponse(responseCode = "500", description = "Failed to fetch questions")
+    @PreAuthorize("hasAnyRole('TEACHER','ADMIN','PRINCIPAL')")
+    @GetMapping("/GetAllQuestion")
+    public ResponseEntity<List<ExamQuestionDto>> getAllQuestions() {
+
+        log.info("API call: Get All Questions");
+        try {
+            List<ExamQuestionDto> questions = questionRequestService.getAllQuestions();
+            log.info("Questions fetched successfully. Count: {}", questions.size());
+            return ResponseEntity.ok(questions);
+        } catch (Exception e) {
+            log.error("Error occurred while fetching questions", e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    // ------------------ Get Questions by Teacher ------------------
+    @Operation(summary = "Get Questions by Teacher", description = "Fetch all questions created by a specific teacher")
+    @ApiResponse(responseCode = "200", description = "Questions fetched successfully")
+    @ApiResponse(responseCode = "500", description = "Failed to fetch questions")
+    @PreAuthorize("hasAnyRole('TEACHER','ADMIN','PRINCIPAL')")
+    @GetMapping("/teacher/{teacherId}/questions")
+    public ResponseEntity<?> getQuestionsByTeacher(@PathVariable Long teacherId) {
+
+        log.info("API call: Get Questions by Teacher ID {}", teacherId);
+
+        try {
+            List<ExamQuestionDto> questions = questionRequestService.getQuestionsByTeacherId(teacherId);
+
+            if (questions.isEmpty()) {
+                log.info("No questions found for teacherId: {}", teacherId);
+                return ResponseEntity.ok("No questions found for this teacher.");
+            }
+
+            log.info("Questions fetched successfully. Count: {}", questions.size());
+            return ResponseEntity.ok(questions);
+
+        } catch (Exception e) {
+            log.error("Error occurred while fetching questions for teacherId {}: {}", teacherId, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch questions: " + e.getMessage());
+        }
+    }
+
+
 }
+

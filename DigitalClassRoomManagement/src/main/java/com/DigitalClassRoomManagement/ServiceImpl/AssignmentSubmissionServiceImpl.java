@@ -14,10 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.sql.rowset.serial.SerialBlob;
-import java.sql.Blob;
 import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -27,23 +24,42 @@ public class AssignmentSubmissionServiceImpl implements AssignmentSubmissionServ
     private final AssignmentRepository assignmentRepository;
     private final StudentRepository studentRepository;
 
-    // ====================== SUBMIT ASSIGNMENT =====================
+    // ====================== SUBMIT ASSIGNMENT ======================
     @Override
-    public AssignmentSubmissionDTO submitAssignment(Long studentId, Long assignmentId, MultipartFile file) {
+    public AssignmentSubmissionDTO submitAssignment(
+            Long studentId,
+            Long assignmentId,
+            MultipartFile file
+    ) {
+
+        if (studentId == null) {
+            throw new RuntimeException("VALIDATION_FAILED: studentId is null");
+        }
+
+        if (assignmentId == null) {
+            throw new RuntimeException("VALIDATION_FAILED: assignmentId is null");
+        }
+
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("VALIDATION_FAILED: Uploaded file is empty or missing");
+        }
 
         Assignment assignment = assignmentRepository.findById(assignmentId)
-                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+                .orElseThrow(() ->
+                        new RuntimeException("DATA_NOT_FOUND: Assignment not found for id=" + assignmentId)
+                );
 
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() ->
+                        new RuntimeException("DATA_NOT_FOUND: Student not found for id=" + studentId)
+                );
 
         try {
-            Blob fileBlob = new SerialBlob(file.getBytes());
-
             AssignmentSubmission submission = AssignmentSubmission.builder()
                     .assignment(assignment)
                     .student(student)
-                    .fileUrl(fileBlob)
+                    .fileData(file.getBytes())
+                    .fileName(file.getOriginalFilename())
                     .submittedAt(LocalDateTime.now())
                     .status(SubmissionStatus.SUBMITTED)
                     .marks(0.0)
@@ -51,75 +67,131 @@ public class AssignmentSubmissionServiceImpl implements AssignmentSubmissionServ
                     .build();
 
             repository.save(submission);
-
             return convertToDTO(submission);
 
         } catch (Exception e) {
-            log.error("Submission failed: {}", e.getMessage());
-            throw new RuntimeException("Error while submitting assignment");
+            log.error("SUBMIT_ASSIGNMENT_FAILED", e);
+            throw new RuntimeException(
+                    "SUBMIT_ASSIGNMENT_FAILED: Unable to save submission. Reason: " + e.getMessage(),
+                    e
+            );
         }
     }
 
-    // ====================== GET SUBMISSION =====================
+    // ====================== GET SUBMISSION ======================
     @Override
-    public AssignmentSubmissionDTO getSubmission(Long submissionId) {
+    public AssignmentSubmissionDTO getSubmission(Long id) {
 
-        AssignmentSubmission submission = repository.findById(submissionId)
-                .orElseThrow(() -> new RuntimeException("Submission not found"));
+        if (id == null) {
+            throw new RuntimeException("VALIDATION_FAILED: submissionId is null");
+        }
+
+        AssignmentSubmission submission = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("DATA_NOT_FOUND: Submission not found for id=" + id)
+                );
 
         return convertToDTO(submission);
     }
 
-    // ====================== UPDATE FILE =====================
+    // ====================== UPDATE FILE ======================
     @Override
-    public AssignmentSubmissionDTO updateSubmissionFile(Long submissionId, MultipartFile file) {
+    public AssignmentSubmissionDTO updateSubmissionFile(
+            Long id,
+            MultipartFile file
+    ) {
 
-        AssignmentSubmission submission = repository.findById(submissionId)
-                .orElseThrow(() -> new RuntimeException("Submission not found"));
+        if (id == null) {
+            throw new RuntimeException("VALIDATION_FAILED: submissionId is null");
+        }
+
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("VALIDATION_FAILED: Uploaded file is empty or missing");
+        }
+
+        AssignmentSubmission submission = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("DATA_NOT_FOUND: Submission not found for id=" + id)
+                );
 
         try {
-            submission.setFileUrl(new SerialBlob(file.getBytes()));
+            submission.setFileData(file.getBytes());
+            submission.setFileName(file.getOriginalFilename());
             submission.setSubmittedAt(LocalDateTime.now());
 
             repository.save(submission);
-
             return convertToDTO(submission);
 
         } catch (Exception e) {
-            log.error("File update failed: {}", e.getMessage());
-            throw new RuntimeException("Error updating submission file");
+            log.error("UPDATE_FILE_FAILED", e);
+            throw new RuntimeException(
+                    "UPDATE_FILE_FAILED: Unable to update file for submissionId=" + id +
+                            ". Reason: " + e.getMessage(),
+                    e
+            );
         }
     }
 
-    // ====================== UPDATE MARKS & FEEDBACK =====================
+    // ====================== UPDATE MARKS & FEEDBACK ======================
     @Override
-    public AssignmentSubmissionDTO updateFeedbackAndMarks(Long submissionId, Double marks, String feedback) {
+    public AssignmentSubmissionDTO updateFeedbackAndMarks(
+            Long id,
+            Double marks,
+            String feedback
+    ) {
 
-        AssignmentSubmission submission = repository.findById(submissionId)
-                .orElseThrow(() -> new RuntimeException("Submission not found"));
+        if (id == null) {
+            throw new RuntimeException("VALIDATION_FAILED: submissionId is null");
+        }
+
+        if (marks == null || marks < 0) {
+            throw new RuntimeException("VALIDATION_FAILED: marks must be >= 0");
+        }
+
+        AssignmentSubmission submission = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("DATA_NOT_FOUND: Submission not found for id=" + id)
+                );
 
         submission.setMarks(marks);
         submission.setFeedback(feedback);
         submission.setStatus(SubmissionStatus.GRADED);
 
         repository.save(submission);
-
         return convertToDTO(submission);
     }
 
-    // ====================== DELETE SUBMISSION =====================
+    // ====================== DELETE SUBMISSION ======================
     @Override
-    public void deleteSubmission(Long submissionId) {
-        repository.deleteById(submissionId);
+    public void deleteSubmission(Long id) {
+
+        if (id == null) {
+            throw new RuntimeException("VALIDATION_FAILED: submissionId is null");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("DATA_NOT_FOUND: Submission not found for id=" + id);
+        }
+
+        repository.deleteById(id);
     }
 
-    // ====================== DTO MAPPER =====================
+    // ====================== DTO MAPPER ======================
     private AssignmentSubmissionDTO convertToDTO(AssignmentSubmission submission) {
+
         AssignmentSubmissionDTO dto = new AssignmentSubmissionDTO();
 
         dto.setSubmissionId(submission.getSubmissionId());
         dto.setStudentId(submission.getStudent().getStudentId());
         dto.setAssignmentId(submission.getAssignment().getAssignmentId());
+        dto.setFileName(submission.getFileName());
+
+        dto.setFile(
+                (submission.getFileData() != null && submission.getFileData().length > 0)
+                        ? "UPLOADED"
+                        : "NOT_UPLOADED"
+        );
+
         dto.setSubmittedAt(submission.getSubmittedAt());
         dto.setStatus(submission.getStatus());
         dto.setMarks(submission.getMarks());

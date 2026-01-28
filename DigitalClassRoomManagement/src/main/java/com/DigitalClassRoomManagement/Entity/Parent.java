@@ -21,8 +21,15 @@ public class Parent {
     @JoinColumn(name = "user_id")
     private User user;
 
+    //@Column(nullable = false)
+    //private String name;
+
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
 
     @Column(nullable = false, unique = true)
     private String email;

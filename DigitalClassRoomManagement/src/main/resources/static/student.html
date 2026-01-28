@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Chat</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        #log { border: 1px solid #ccc; height: 250px; overflow-y: auto; padding: 10px; }
+        input, button { margin-top: 6px; padding: 5px; }
+    </style>
+</head>
+
+<body onload="connect()">
+
+<h2>Student Chat</h2>
+
+<label>Student Reg ID:</label>
+<input id="studentRegId" value="10"><br>
+
+<label>Teacher ID:</label>
+<input id="teacherId" value="1"><br>
+
+<hr>
+
+<input id="message" placeholder="Type message">
+<button onclick="send()">Send</button>
+
+<hr>
+
+<h3>Messages</h3>
+<pre id="log"></pre>
+
+<script>
+    let stompClient = null;
+    let connected = false;
+
+    function connect() {
+        if (connected) return;
+
+        const studentRegId = document.getElementById("studentRegId").value;
+        const teacherId = document.getElementById("teacherId").value;
+        const log = document.getElementById("log");
+
+        // Load history
+        fetch(`/api/chat/student-teacher?teacherId=${teacherId}&studentRegId=${studentRegId}`)
+            .then(res => res.json())
+            .then(messages => {
+                log.innerHTML = "";
+                if (Array.isArray(messages)) {
+                    messages.forEach(m => log.innerHTML += `${m.sender}: ${m.message}\n`);
+                }
+            });
+
+        // Mark as read
+        fetch(`/api/chat/student/open?teacherId=${teacherId}&studentRegId=${studentRegId}`, {
+            method: "POST"
+        });
+
+        const socket = new SockJS("http://localhost:9090/chat");
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, () => {
+            connected = true;
+            console.log("✅ Student WebSocket connected");
+
+            // CHAT
+            stompClient.subscribe(
+                `/topic/chat/student/${studentRegId}`,
+                msg => {
+                    const data = JSON.parse(msg.body);
+                    log.innerHTML += `${data.sender}: ${data.message}\n`;
+                }
+            );
+
+            // 🔔 NOTIFICATIONS
+            stompClient.subscribe(
+                `/topic/notifications/student/${studentRegId}`,
+                msg => {
+                    const n = JSON.parse(msg.body);
+                    alert("🔔 " + n.title + " : " + n.message);
+                }
+            );
+        });
+    }
+
+    function send() {
+        if (!connected) return;
+
+        const studentRegId = document.getElementById("studentRegId").value;
+        const teacherId = document.getElementById("teacherId").value;
+        const message = document.getElementById("message").value.trim();
+        if (!message) return;
+
+        stompClient.send(
+            "/app/chat/send",
+            { "content-type": "application/json" },
+            JSON.stringify({
+                studentRegId,
+                teacherId,
+                sender: "STUDENT",
+                message
+            })
+        );
+
+        document.getElementById("message").value = "";
+    }
+</script>
+
+</body>
+</html>

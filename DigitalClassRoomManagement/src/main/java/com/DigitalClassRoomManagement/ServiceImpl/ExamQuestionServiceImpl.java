@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -40,6 +41,60 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
             log.error("Error adding multiple questions for examId {}: {}", examId, e.getMessage(), e);
             throw e;
         }
+    }
+
+    @Override
+    public List<ExamQuestionDto> getAllQuestions() {
+
+        log.info("Fetching all questions");
+
+        try {
+            List<ExamQuestion> questions = questionRequestRepository.findAll();
+
+            log.info("Total questions found: {}", questions.size());
+
+            return questions.stream()
+                    .map(this::mapToDto)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Error while fetching all questions", e);
+            throw new RuntimeException("Failed to fetch questions", e);
+        }
+    }
+
+    @Override
+    public List<ExamQuestionDto> getQuestionsByTeacherId(Long teacherId) {
+
+        log.info("Fetching questions for teacherId: {}", teacherId);
+
+        try {
+            List<ExamQuestion> questions = questionRequestRepository.findByExam_TeacherId(teacherId);
+
+            log.info("Total questions found for teacherId {}: {}", teacherId, questions.size());
+
+            return questions.stream()
+                    .map(this::mapToDto)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Error fetching questions for teacherId {}", teacherId, e);
+            throw new RuntimeException("Failed to fetch questions by teacherId", e);
+        }
+    }
+
+
+    // Mapper
+    private ExamQuestionDto mapToDto(ExamQuestion question) {
+        return ExamQuestionDto.builder()
+                .questionId(question.getId())
+                .questionText(question.getQuestionText())
+                .marks(question.getMarks())
+                .examId(question.getExam() != null
+                                ? question.getExam().getExamId()
+                                : null
+                )
+                .build();
     }
 
 }

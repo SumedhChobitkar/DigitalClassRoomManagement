@@ -23,7 +23,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Override
+    //    @Override
 //    public LeaveRequest createLeaveRequest(LeaveRequest leaveRequest) {
 //        try {
 //
@@ -42,37 +42,37 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 //            throw new RuntimeException("Failed to create leave request");
 //        }
 //    }
-@Override
-public LeaveRequest createLeaveRequest(LeaveRequestDto dto) {
-    try {
-        log.info("starting leave request "+dto.getUserId());
-        // Fetch User
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + dto.getUserId()));
-        log.info("after chaking leave request "+dto.getUserId());
-        // Build LeaveRequest entity
-        LeaveRequest leaveRequest = LeaveRequest.builder()
+    @Override
+    public LeaveRequest createLeaveRequest(LeaveRequestDto dto) {
+        try {
+            log.info("starting leave request " + dto.getUserId());
+            // Fetch User
+            User user = userRepository.findById(dto.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + dto.getUserId()));
+            log.info("after chaking leave request " + dto.getUserId());
+            // Build LeaveRequest entity
+            LeaveRequest leaveRequest = LeaveRequest.builder()
 
-                .user(user)
-                .leaveType(dto.getLeaveType())
-                .fromDate(dto.getFromDate())
-                .toDate(dto.getToDate())
-                .reason(dto.getReason())
-                .status(LeaveRequestStatus.PENDING)
-                .appliedOn(LocalDate.now())
-                .remarks(dto.getRemarks())
-                .build();
-        log.info("end leave request "+dto.getUserId());
-        LeaveRequest saved = leaveRequestRepository.save(leaveRequest);
+                    .user(user)
+                    .leaveType(dto.getLeaveType())
+                    .fromDate(dto.getFromDate())
+                    .toDate(dto.getToDate())
+                    .reason(dto.getReason())
+                    .status(LeaveRequestStatus.PENDING)
+                    .appliedOn(LocalDate.now())
+                    .remarks(dto.getRemarks())
+                    .build();
+            log.info("end leave request " + dto.getUserId());
+            LeaveRequest saved = leaveRequestRepository.save(leaveRequest);
 
-        log.info("Leave request created successfully with ID: {}", saved.getLeaveId());
-        return saved;
+            log.info("Leave request created successfully with ID: {}", saved.getLeaveId());
+            return saved;
 
-    } catch (Exception e) {
-        log.error("Error creating leave request: {}", e.getMessage());
-        throw new RuntimeException("Failed to create leave request");
+        } catch (Exception e) {
+            log.error("Error creating leave request: {}", e.getMessage());
+            throw new RuntimeException("Failed to create leave request");
+        }
     }
-}
 
 
     @Override
@@ -102,7 +102,7 @@ public LeaveRequest createLeaveRequest(LeaveRequestDto dto) {
         }
     }
 
-//    @Override
+    //    @Override
 //    public LeaveRequest updateLeaveRequest(Long id, LeaveRequest leaveRequest) {
 //        try {
 //            LeaveRequest existing = getLeaveRequestById(id);
@@ -126,20 +126,19 @@ public LeaveRequest createLeaveRequest(LeaveRequestDto dto) {
 //            throw new RuntimeException("Failed to update leave request");
 //        }
 //    }
-@Override
-public LeaveRequest updateLeaveRequest(Long id, LeaveRequestDto dto) {
-    LeaveRequest existing = leaveRequestRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Leave Request Not Found"));
-    // Only update allowed fields
-    existing.setLeaveType(dto.getLeaveType());
-    existing.setFromDate(dto.getFromDate());
-    existing.setToDate(dto.getToDate());
-    existing.setReason(dto.getReason());
-    existing.setRemarks(dto.getRemarks());
+    @Override
+    public LeaveRequest updateLeaveRequest(Long id, LeaveRequestDto dto) {
+        LeaveRequest existing = leaveRequestRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Leave Request Not Found"));
+        // Only update allowed fields
+        existing.setLeaveType(dto.getLeaveType());
+        existing.setFromDate(dto.getFromDate());
+        existing.setToDate(dto.getToDate());
+        existing.setReason(dto.getReason());
+        existing.setRemarks(dto.getRemarks());
 
-    return leaveRequestRepository.save(existing);
-}
-
+        return leaveRequestRepository.save(existing);
+    }
 
 
     @Override
@@ -202,5 +201,18 @@ public LeaveRequest updateLeaveRequest(Long id, LeaveRequestDto dto) {
             throw e;
         }
     }
+
+    @Override
+    public List<LeaveRequest> getLeavesByStudentId(Long studentId) {
+
+        List<LeaveRequest> leaveList = leaveRequestRepository.findByUser_UserId(studentId);
+
+        if (leaveList.isEmpty()) {
+            throw new RuntimeException("No leave requests found for student ID: " + studentId);
+        }
+
+        return leaveList;
+    }
 }
+
 
