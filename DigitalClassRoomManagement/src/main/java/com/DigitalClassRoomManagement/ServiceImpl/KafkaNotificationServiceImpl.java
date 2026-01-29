@@ -6,9 +6,12 @@ import com.DigitalClassRoomManagement.Entity.Notification;
 import com.DigitalClassRoomManagement.Repository.KafkaNotificationRepository;
 import com.DigitalClassRoomManagement.Service.KafkaNotificationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class KafkaNotificationServiceImpl implements KafkaNotificationService {
 
     private final KafkaNotificationRepository notificationRepository;
@@ -73,5 +77,17 @@ public class KafkaNotificationServiceImpl implements KafkaNotificationService {
                         startDate,
                         endDate
                 );
+    }
+
+    @Override
+    @Scheduled(cron = "0 */1 * * * ?")
+    @Transactional
+    public void deleteOldNotifications() {
+
+        LocalDateTime cutoffDate = LocalDateTime.now().minusDays(7);
+
+        int deletedCount = notificationRepository.deleteOlderThan(cutoffDate);
+
+        log.info(" Deleted {} notifications older than 7 days", deletedCount);
     }
 }

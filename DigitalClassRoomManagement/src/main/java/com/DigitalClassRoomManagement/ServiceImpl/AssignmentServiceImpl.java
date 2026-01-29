@@ -253,7 +253,7 @@ public class AssignmentServiceImpl implements AssignmentService {
                 .build();
     }
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     @Override
     public void sendAssignmentDueDateReminders() {
 
