@@ -2,12 +2,8 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.ExamDto;
 import com.DigitalClassRoomManagement.Dto.ExamQuestionDto;
-import com.DigitalClassRoomManagement.Entity.Admin;
-import com.DigitalClassRoomManagement.Entity.Exam;
-import com.DigitalClassRoomManagement.Entity.ExamQuestion;
-import com.DigitalClassRoomManagement.Entity.Teacher;
-import com.DigitalClassRoomManagement.Enum.ExamStatus;
-import com.DigitalClassRoomManagement.Enum.SubmissionStatus;
+import com.DigitalClassRoomManagement.Dto.KafkaNotificationDto;
+import com.DigitalClassRoomManagement.Entity.*;
 import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Repository.AdminRepository;
 import com.DigitalClassRoomManagement.Repository.ExamQuestionRepository;
@@ -15,17 +11,17 @@ import com.DigitalClassRoomManagement.Repository.ExamRepository;
 import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Service.ExamService;
 
-import org.apache.catalina.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +41,12 @@ public class ExamServiceImpl implements ExamService {
 
     @Autowired
     private AdminRepository adminRepository;
+
+    private final KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate;
+
+    public ExamServiceImpl(KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
 
     // ------------------- CREATE EXAM --------------------------
@@ -422,5 +424,31 @@ public class ExamServiceImpl implements ExamService {
                 .build();
     }
 
+    @Scheduled(cron = "0 0 9 * * ?")
+    @Override
+    public void sendUpcomingExamReminders() {
 
-}
+        LocalDate reminderDate = LocalDate.now().plusDays(10);
+
+        List<Object[]> exams =
+                examRepository.findExamDataForReminder(LocalDate.now().plusDays(10));
+
+        for (Object[] row : exams) {
+
+            Long teacherId = (Long) row[3];
+
+            KafkaNotificationDto dto = KafkaNotificationDto.builder()
+                    .userId(String.valueOf(teacherId))
+                    .receiverRole("STUDENT")
+                    .title(" Upcoming Exam Reminder")
+                    .message("Exam is scheduled on " + row[1])
+                    .source("EXAM")
+                    .build();
+
+            kafkaTemplate.send("notification-topic", dto);
+        }
+
+    }
+    }
+
+

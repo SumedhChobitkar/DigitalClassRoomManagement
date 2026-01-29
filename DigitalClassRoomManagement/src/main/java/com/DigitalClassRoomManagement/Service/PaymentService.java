@@ -4,6 +4,8 @@ package com.DigitalClassRoomManagement.Service;
 import com.DigitalClassRoomManagement.Dto.PaymentRequestDTO;
 import com.DigitalClassRoomManagement.Entity.Payment;
 import com.DigitalClassRoomManagement.Enum.PaymentStatus;
+import org.springframework.scheduling.annotation.Scheduled;
+
 import java.util.List;
 import java.util.Map;
 
@@ -29,4 +31,7 @@ public interface PaymentService {
     Map<String,Object> fetchPaymentInfo(Long studentId, Long parentId);
 
     String deletePaymentByOrderId(String orderId);
+
+    @Scheduled(cron ="0 0 9 * * ?")
+    void sendPaymentEndDateReminders();
 }

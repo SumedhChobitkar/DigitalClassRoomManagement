@@ -1,6 +1,7 @@
 package com.DigitalClassRoomManagement.Service;
 
 import com.DigitalClassRoomManagement.Dto.AssignmentDto;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -42,4 +43,8 @@ public interface AssignmentService {
 
     // Get assignment file by assignment ID
     byte[] getFileByAssignmentId(Long assignmentId);
+
+    // Daily at 9 AM
+    @Scheduled(cron = "0 0 9 * * ?")
+    void sendAssignmentDueDateReminders();
 }

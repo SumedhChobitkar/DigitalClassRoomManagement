@@ -117,10 +117,10 @@ public class SecurityConfig {
                                 "/api/teacher/deleteTeacherById/{id}",
                                 "/api/teacher/update/status/{id}",
                                 //Teacher profile dashboard
-                                "/api/profile/dashboard/{id}/add-profile-picture",
-                                "/api/profile/dashboard/{id}/update-profile-picture",
-                                "/api/profile/dashboard/{id}/get-profile-picture",
-                                "/api/profile/dashboard/{id}/remove-profile-picture",
+                                "/api/profile/dashboard/*/add-profile-picture",
+                                "/api/profile/dashboard/*/update-profile-picture",
+                                "/api/profile/dashboard/*/get-profile-picture",
+                                "/api/profile/dashboard/*/remove-profile-picture",
 
                                 // Student Related
                               //  "/api/students/saveStudent",
@@ -449,6 +449,31 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/chat/parent-messages").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/chat/teacher/messages").authenticated()
                                 .requestMatchers(HttpMethod.POST, "/api/chat/teacher/open").authenticated()
+                                //Payment
+                                .requestMatchers(HttpMethod.POST,
+                                "/api/payment/create-class-payment-request"
+                        ).hasRole("PRINCIPAL")
+
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/payment/delete-payment/**"
+                        ).hasRole("PRINCIPAL")
+
+                        //  PARENT only
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/payment/createOrder",
+                                "/api/payment/verify"
+                        ).hasRole("PARENT")
+
+                        //  ADMIN + PRINCIPAL
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/payment/allPayments",
+                                "/api/payment/status/**"
+                        ).hasAnyRole("ADMIN", "PRINCIPAL")
+
+                        // STUDENT / PARENT / PRINCIPAL
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/payment/fetch"
+                        ).hasAnyRole("STUDENT", "PARENT", "PRINCIPAL")
 
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

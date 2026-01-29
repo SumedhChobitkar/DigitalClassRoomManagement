@@ -4,8 +4,10 @@ import com.DigitalClassRoomManagement.Entity.PaymentRequest;
 import com.DigitalClassRoomManagement.Enum.PaymentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +22,21 @@ public interface PaymentRequestRepository extends JpaRepository<PaymentRequest,L
     Optional<PaymentRequest> findLatestRequest(Long studentId, Long parentId);
 
     List<PaymentRequest> findByStatus(PaymentStatus paymentStatus);
+
+    @Query("""
+SELECT DISTINCT s.parent.id, pr.endDate, pr.amount
+FROM PaymentRequest pr
+JOIN Student s ON s.schoolClass = pr.schoolClass
+WHERE pr.endDate >= :start
+  AND pr.endDate < :end
+  AND pr.status = 'PENDING'
+  AND s.parent IS NOT NULL
+""")
+    List<Object[]> findParentsForPaymentReminder(
+            @Param("start") LocalDate start,
+            @Param("end") LocalDate end
+    );
+
+
+
 }
