@@ -72,7 +72,7 @@ import java.util.function.Function;
         public String generateToken(String email, Role role) {
             return Jwts.builder()
                     .setSubject(email)
-                    .claim("role", role)
+                    .claim("role", "ROLE_" + role.name())
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                     .signWith(SECRET_KEY, SignatureAlgorithm.HS256)

@@ -1,6 +1,8 @@
 package com.DigitalClassRoomManagement.Service;
 
 import com.DigitalClassRoomManagement.Dto.ExamDto;
+import org.springframework.scheduling.annotation.Scheduled;
+
 import java.util.List;
 
 public interface ExamService {
@@ -28,7 +30,7 @@ public interface ExamService {
     ExamDto getExamScheduleByExamId(Long examId);
 
 
-
-
-
+    // Daily at 9 AM
+    @Scheduled(cron = "0 * * * * ?")
+    void sendUpcomingExamReminders();
 }

@@ -12,4 +12,5 @@ public interface KafkaNotificationService {
 
     // Get notifications for yesterday and today for a user
     List<KafkaNotification> getNotificationsForYesterdayAndToday(String userId);
+    void deleteOldNotifications();
 }

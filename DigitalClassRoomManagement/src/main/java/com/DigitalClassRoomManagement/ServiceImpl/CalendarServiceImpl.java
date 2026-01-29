@@ -2,15 +2,17 @@ package com.DigitalClassRoomManagement.ServiceImpl;
 
 
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Service.CalendarService;
 import com.DigitalClassRoomManagement.Dto.*;
 import com.DigitalClassRoomManagement.Entity.*;
 import com.DigitalClassRoomManagement.Repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,6 +24,8 @@ public class CalendarServiceImpl implements CalendarService {
     private final AcademicCalendarRepository calendarRepo;
     private final EventRepository eventRepo;
     private final HolidayRepository holidayRepo;
+    private final KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate;
+
 
     @Override
     public CalendarDto createAcademicCalender(CreateAcademicCalenderRequest request, String username) {
@@ -301,5 +305,29 @@ public class CalendarServiceImpl implements CalendarService {
     @Override
     public List<Event> viewTeacherCalendarEvents(){
         return eventRepo.findAll();
+    }
+
+
+
+    @Scheduled(cron = "0 0 9 * * ?")
+    @Override
+    public void sendHolidayReminder() {
+
+        LocalDate reminderDate = LocalDate.now().plusDays(2);
+
+        List<Holiday> holidays =
+                holidayRepo.findByHolidayDate(reminderDate);
+
+        for (Holiday h : holidays) {
+
+            KafkaNotificationDto dto = KafkaNotificationDto.builder()
+                    .title(" Upcoming Holiday")
+                    .message("Reminder: " + h.getHolidayName()
+                            + " on " + h.getHolidayDate())
+                    .source("HOLIDAY")
+                    .build();
+
+            kafkaTemplate.send("notification-topic", dto);
+        }
     }
 }
