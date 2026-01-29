@@ -1,11 +1,15 @@
 package com.DigitalClassRoomManagement.Controller;
 
+import com.DigitalClassRoomManagement.Entity.Assignment;
+import com.DigitalClassRoomManagement.Service.AssignmentService;
 import com.DigitalClassRoomManagement.Service.AssignmentSubmissionService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +26,7 @@ public class AssignmentSubmissionController {
     @Autowired
     private AssignmentSubmissionService service;
 
-//-------submitAssignment------------------------------
+    //-------submitAssignment------------------------------
     @PostMapping("/submit")
     public ResponseEntity<?> submitAssignment(
             @RequestParam("studentId") Long studentId,
@@ -89,6 +93,7 @@ public class AssignmentSubmissionController {
         }
     }
 
+
     //---------- deleteSubmission ----------------------------
 
     @DeleteMapping("/deleteSubmissionById/{id}")
@@ -98,11 +103,11 @@ public class AssignmentSubmissionController {
         try {
             service.deleteSubmission(id);
             return ResponseEntity.ok(Map.of("message", "Submission deleted successfully"));
-        } catch (Exception e) {
-            log.error("Error deleting submission: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", e.getMessage()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.ok(Map.of("message", e.getMessage()));
         }
     }
+
+
 }
 

@@ -31,7 +31,7 @@ public class FeedbackController {
     @ApiResponse(responseCode = "201", description = "Feedback created successfully")
     @ApiResponse(responseCode = "500", description = "Failed to create feedback")
     @PostMapping("/FeedbackCreate")
-    @PreAuthorize("hasAnyRole('STUDENT', 'PARENT')")
+    @PreAuthorize("hasAnyRole('STUDENT', 'PARENT','ADMIN')")
     public ResponseEntity<?> createFeedback(@Valid @RequestBody FeedbackDto feedbackDto) {
         log.info("Request to create feedback: {}", feedbackDto);
         try {

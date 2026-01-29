@@ -1,6 +1,10 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.ExamDto;
+import com.DigitalClassRoomManagement.Entity.*;
+import com.DigitalClassRoomManagement.Enum.ExamMode;
+import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
+import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Dto.ExamQuestionDto;
 import com.DigitalClassRoomManagement.Dto.KafkaNotificationDto;
 import com.DigitalClassRoomManagement.Entity.*;
@@ -47,11 +51,85 @@ public class ExamServiceImpl implements ExamService {
     public ExamServiceImpl(KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
+    @Autowired
+    private LocationRepository locationRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
 
-    // ------------------- CREATE EXAM --------------------------
+//    // ------------------- CREATE EXAM --------------------------
+//    @Override
+//    public ExamDto createExam(ExamDto examDto) {
+//        log.info("Attempting to create exam for teacherId: {}", examDto.getTeacherId());
+//
+//        try {
+//            Teacher teacher = teacherRepository.findById(examDto.getTeacherId())
+//                    .orElseThrow(() -> {
+//                        log.error("Teacher not found with ID: {}", examDto.getTeacherId());
+//                        return new ResourceNotFoundException("Teacher not found with ID: " + examDto.getTeacherId());
+//                    });
+//            Location location = locationRepository.findById(examDto.getLocationId())
+//                    .orElseThrow(() -> new RuntimeException("Location not found"));
+//
+//
+//            Exam exam = new Exam();
+//            exam.setLocation(location);
+//            exam.setTeacher(teacher);
+//            exam.setTerm(examDto.getTerm());
+//            exam.setStartTime(examDto.getStartTime());
+//            exam.setEndTime(examDto.getEndTime());
+//            exam.setDuration(examDto.getDuration());
+//            exam.setTotalMarks(examDto.getTotalMarks());
+//
+//            Exam savedExam = examRepository.save(exam);
+//
+//            log.info("Exam created successfully with ID: {}", savedExam.getExamId());
+//
+//            return mapToDto(savedExam);
+//
+//        } catch (Exception e) {
+//            log.error("Error while creating exam", e);
+//            throw new RuntimeException("Error while creating exam: " + e.getMessage(), e);
+//        }
+//    }
+
+
     @Override
     public ExamDto createExam(ExamDto examDto) {
+
+        log.info("Attempting to create exam for teacherId: {}", examDto.getTeacherId());
+
+        try {
+            // 1. Teacher
+            Teacher teacher = teacherRepository.findById(examDto.getTeacherId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Teacher not found with ID: " + examDto.getTeacherId()));
+
+            // 2. Location
+            Location location = locationRepository.findById(examDto.getLocationId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Location not found with ID: " + examDto.getLocationId()));
+
+            // 3. Admin  ✅ THIS WAS MISSING
+            Admin admin = adminRepository.findById(examDto.getAdminId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Admin not found with ID: " + examDto.getAdminId()));
+
+            // 4. Create Exam
+            Exam exam = new Exam();
+            exam.setTeacher(teacher);
+            exam.setLocation(location);
+            exam.setExamMode(examDto.getExamMode());
+            exam.setAdmin(admin);   // ⭐ MOST IMPORTANT LINE
+            exam.setTerm(examDto.getTerm());
+            exam.setStartTime(examDto.getStartTime());
+            exam.setEndTime(examDto.getEndTime());
+            exam.setDuration(examDto.getDuration());
+            exam.setTotalMarks(examDto.getTotalMarks());
+
+            // 5. Save
+            Exam savedExam = examRepository.save(exam);
 
         log.info("Attempting to create exam for teacherId={}, adminId={}",
                 examDto.getTeacherId(), examDto.getAdminId());
@@ -396,7 +474,7 @@ public class ExamServiceImpl implements ExamService {
                 .examId(entity.getExamId())
                 .teacherId(entity.getTeacher() != null ? entity.getTeacher().getId() : null)
                 .adminId(entity.getAdmin() != null ? entity.getAdmin().getAdminId() : null)
-                .term(entity.getTerm())
+                 .term(entity.getTerm())
                 .startTime(entity.getStartTime())
                 .endTime(entity.getEndTime())
                 .day(entity.getDay())
@@ -412,6 +490,70 @@ public class ExamServiceImpl implements ExamService {
                 .build();
     }
 
+
+//    public ExamDto getExamForStudent(Long studentId, Long examId) {
+//
+//        Student student = studentRepository.findById(studentId)
+//                .orElseThrow(() -> new RuntimeException("Student not found"));
+//
+//        Exam exam = examRepository.findById(examId)
+//                .orElseThrow(() -> new RuntimeException("Exam not found"));
+//
+//        // 🔥 LOCATION CHECK
+//        if (!student.getLocation().getLocationId()
+//                .equals(exam.getLocation().getLocationId())) {
+//
+//            throw new RuntimeException(
+//                    "Access denied: Exam location and Student location do not match"
+//            );
+//        }
+//
+//        return mapToDto(exam);
+//    }
+
+    public ExamDto getExamForStudent(Long studentId, Long examId) {
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        Exam exam = examRepository.findById(examId)
+                .orElseThrow(() -> new RuntimeException("Exam not found"));
+
+        // ✅ ONLINE EXAM → Direct access
+        if (exam.getExamMode() == ExamMode.ONLINE) {
+            return mapToDto(exam);
+        }
+
+        // ✅ OFFLINE EXAM → Location validation
+        if (exam.getExamMode() == ExamMode.OFFLINE) {
+
+            if (student.getLocation() == null) {
+                throw new RuntimeException(
+                        "Access denied: Student location not assigned"
+                );
+            }
+
+            if (exam.getLocation() == null) {
+                throw new RuntimeException(
+                        "Access denied: Exam location not assigned"
+                );
+            }
+
+            if (!student.getLocation().getLocationId()
+                    .equals(exam.getLocation().getLocationId())) {
+
+                throw new RuntimeException(
+                        "Access denied: Exam location and Student location do not match"
+                );
+            }
+
+            return mapToDto(exam);
+        }
+
+        throw new RuntimeException("Invalid exam mode configured");
+    }
+
+}
     private ExamQuestionDto mapToQuestionDto(ExamQuestion question) {
         return ExamQuestionDto.builder()
                 .questionId(question.getId())
@@ -452,3 +594,4 @@ public class ExamServiceImpl implements ExamService {
     }
 
 
+}

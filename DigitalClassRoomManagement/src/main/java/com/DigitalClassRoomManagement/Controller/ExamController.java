@@ -189,6 +189,21 @@ public class ExamController {
         }
     }
 
+    @GetMapping("/student/{studentId}/exam/{examId}")
+    public ResponseEntity<?> getExamForStudent(
+            @PathVariable Long studentId,
+            @PathVariable Long examId) {
+
+        try {
+            ExamDto exam = examService.getExamForStudent(studentId, examId);
+            return ResponseEntity.ok(exam);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(e.getMessage());
+        }
+    }
+
     // ------------------- GET EXAM SCHEDULE BY EXAM ID -------------------
     @GetMapping("/schedule/{examId}")
     public ResponseEntity<?> getExamScheduleByExamId(@PathVariable Long examId) {

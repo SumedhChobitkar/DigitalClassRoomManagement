@@ -1,22 +1,24 @@
 package com.DigitalClassRoomManagement.Controller;
 
 import com.DigitalClassRoomManagement.Dto.AssignmentDto;
+import com.DigitalClassRoomManagement.Entity.Assignment;
 import com.DigitalClassRoomManagement.Service.AssignmentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/api/assignments")
+@CrossOrigin("*")
 @Slf4j
 public class AssignmentController {
 
@@ -159,23 +161,22 @@ public class AssignmentController {
     }
 
     // -------------------- GET FILE BY ASSIGNMENT ID -------------------------
-    @GetMapping("/getAssignmentsFileByAssignmentId/{Id}")
-    public ResponseEntity<?> getFileByAssignmentId(@PathVariable ("Id") Long assignmentId) {
 
-        log.info("API - Download file for assignment ID: {}", assignmentId);
+    @GetMapping("/getAssignmentsFileByAssignmentId/{id}")
+    public ResponseEntity<byte[]> getFileByAssignmentId(@PathVariable Long id) {
 
-        try {
-            byte[] fileData = assignmentService.getFileByAssignmentId(assignmentId);
+        log.info("API - Download file for assignment ID: {}", id);
 
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .header("Content-Disposition", "attachment; filename=\"assignment_file\"")
-                    .body(fileData);
+        Assignment assignment = assignmentService.getAssignmentFileData(id);
 
-        } catch (RuntimeException e) {
-            log.error("Error retrieving file for assignment ID {}: {}", assignmentId, e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(assignment.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + assignment.getFileName() + "\"")
+                .body(assignment.getFileData());
     }
+
+
+
+
 }

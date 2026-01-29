@@ -1,6 +1,7 @@
 package com.DigitalClassRoomManagement.Entity;
 
 import com.DigitalClassRoomManagement.Enum.Relationship;
+import com.DigitalClassRoomManagement.Enum.Status;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -21,8 +22,18 @@ public class Parent {
     @JoinColumn(name = "user_id")
     private User user;
 
+    //@Column(nullable = false)
+    //private String name;
+
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.UNAPPROVED;
+
 
     @Column(nullable = false, unique = true)
     private String email;
