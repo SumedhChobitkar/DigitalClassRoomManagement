@@ -80,7 +80,7 @@ public class KafkaNotificationServiceImpl implements KafkaNotificationService {
     }
 
     @Override
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 0 2 * * ?")
     @Transactional
     public void deleteOldNotifications() {
 
