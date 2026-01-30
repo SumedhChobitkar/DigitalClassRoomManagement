@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -16,14 +15,19 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="Attendance")
+@Table(name="Attendance",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"sessionId", "email"})
+        })
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attendanceId;
 
-//    @Column(nullable = false)
-    private LocalDate date;
+    //NEW / IMPORTANT
+    // Session date (used for "classes attended" count – day wise)
+    @Column(nullable = false)
+    private LocalDate classDate;
 
     private LocalDateTime joinTime;
 
@@ -31,11 +35,14 @@ public class Attendance {
 
     private Long durationMinutes;
 
+    // Session reference (no FK for now – existing structure safe)
+    @Column(nullable = false)
     private Long sessionId;
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    @Column(unique = true)
+
+    @Column(nullable = false)
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -51,12 +58,23 @@ public class Attendance {
 
     @PrePersist
     protected void onCreate() {
+
         this.createdAt = LocalDateTime.now();
+
+        // safety defaults
+        if (this.joinTime == null) {
+            this.joinTime = LocalDateTime.now();
+        }
+        if (this.classDate == null) {
+            this.classDate = LocalDate.now();
+        }
+
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+
     }
 
 //    @PrePersist

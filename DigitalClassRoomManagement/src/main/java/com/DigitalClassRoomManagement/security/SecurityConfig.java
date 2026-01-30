@@ -272,6 +272,27 @@ public class SecurityConfig {
 
                         ).permitAll()
 
+                                // ================= ATTENDANCE APIs =================
+                                // Student actions
+                                .requestMatchers(HttpMethod.POST, "/api/attendance/join/**").hasRole("STUDENT")
+                                .requestMatchers(HttpMethod.POST, "/api/attendance/leave/**").hasRole("STUDENT")
+                                .requestMatchers(HttpMethod.POST, "/api/attendance/leave/apply/**").hasRole("STUDENT")
+
+                                 // Teacher actions
+                                .requestMatchers(HttpMethod.POST, "/api/attendance/absent/**").hasRole("TEACHER")
+                                .requestMatchers(HttpMethod.GET,  "/api/attendance/session/**").hasAnyRole("TEACHER", "ADMIN")
+
+                                // Reports / counts
+                                .requestMatchers(HttpMethod.GET, "/api/attendance/periods/**").hasRole("STUDENT")
+                                .requestMatchers(HttpMethod.GET, "/api/attendance/classes/**").hasRole("STUDENT")
+
+
+                               // Admin / Teacher manual operations (not recommended but allowed)
+                               .requestMatchers(HttpMethod.POST,   "/api/attendance/saveAttendance").hasAnyRole("ADMIN", "TEACHER")
+                               .requestMatchers(HttpMethod.PUT,    "/api/attendance/updateAttendanceById/**").hasAnyRole("ADMIN", "TEACHER")
+                               .requestMatchers(HttpMethod.DELETE, "/api/attendance/deleteAttendenceById/**").hasAnyRole("ADMIN", "TEACHER")
+                               .requestMatchers(HttpMethod.GET,    "/api/attendance/getAllAttendance").hasAnyRole("ADMIN", "TEACHER")
+                                .requestMatchers(HttpMethod.GET,    "/api/attendance/getAttendanceById/**").hasAnyRole("ADMIN", "TEACHER")
 
                          //SESSION APIs
                          // READ sessions -> PUBLIC
