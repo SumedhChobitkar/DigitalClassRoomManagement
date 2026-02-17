@@ -1,5 +1,7 @@
 package com.DigitalClassRoomManagement.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,21 +23,22 @@ public class ReportCard {
 
 
         // Link to Student entity
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne()
         @JoinColumn(name = "student_id", nullable = false)
         private Student student;
 
         // Optional: link to Subject entity (if report card is subject-wise)
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne()
         @JoinColumn(name = "subject_id", nullable = false)
         private Subject subject;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne()
         @JoinColumn(name = "result_id", nullable = false)
         private Result result; //
 
       @ManyToOne(fetch = FetchType.LAZY)
       @JoinColumn(name = "submission_id", nullable = false)
+      @JsonIgnore
       private ExamSubmission submission;
 
 
@@ -51,5 +55,3 @@ public class ReportCard {
         @PrePersist
         public void prePersist() { generatedAt = LocalDateTime.now(); }
     }
-
-

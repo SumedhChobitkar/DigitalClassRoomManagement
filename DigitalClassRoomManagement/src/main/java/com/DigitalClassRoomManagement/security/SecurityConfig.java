@@ -198,11 +198,11 @@ public class SecurityConfig {
                                 //ReportCard
 
                                 "/api/reportCards/create",
-                                "/api/reportcards/getReportCardById/{id}",
-                                "/api/reportcards/getAllReportCards",
-                                "/api/reportcards/getReportCardByStudentId/{studentId}",
-                                "/api/reportcards/updateReportCardById/{id}",
-                                "/api/reportcards/deleteReportCardById/{id}",
+                                "/api/reportCards/getReportCardById/{id}",
+                                "/api/reportCards/getAllReportCards",
+                                "/api/reportCards/getReportCardByStudentId/{studentId}",
+                                "/api/reportCards/updateReportCardById/{id}",
+                                "/api/reportCards/deleteReportCardById/{id}",
 //
 //                                // AuditLog
 //                                "/api/auditlogs/saveAuditlog",

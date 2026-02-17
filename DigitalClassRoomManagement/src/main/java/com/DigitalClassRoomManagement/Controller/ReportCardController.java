@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Controller;
 
+import com.DigitalClassRoomManagement.Dto.ReportCardDto;
 import com.DigitalClassRoomManagement.Entity.ReportCard;
 import com.DigitalClassRoomManagement.Service.ReportCardService;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class ReportCardController {
             logger.info("Creating new ReportCard for student ID: {}",
                     reportCard.getStudent().getStudentId());
 
-            ReportCard created = service.createReportCard(reportCard);
+            ReportCardDto created = service.createReportCard(reportCard);
             return ResponseEntity.ok(created);
 
         } catch (Exception e) {
@@ -40,7 +41,8 @@ public class ReportCardController {
     public ResponseEntity<?> getAllReportCards() {
         try {
             logger.info("Fetching all report cards");
-            return ResponseEntity.ok(service.getAllReportCards());
+            List<ReportCardDto> list = service.getAllReportCards();
+            return ResponseEntity.ok(list);
 
         } catch (Exception e) {
             logger.error("Error fetching report cards", e);
@@ -49,11 +51,12 @@ public class ReportCardController {
     }
 
     // GET BY ID
-    @GetMapping("getReportCardById/{id}")
+    @GetMapping("/getReportCardById/{id}")
     public ResponseEntity<?> getReportCardById(@PathVariable Long id) {
         try {
             logger.info("Fetching report card by ID: {}", id);
-            return ResponseEntity.ok(service.getReportCardById(id));
+            ReportCardDto rc = service.getReportCardById(id);
+            return ResponseEntity.ok(rc);
 
         } catch (Exception e) {
             logger.error("Report card not found for ID {}", id, e);
@@ -66,7 +69,7 @@ public class ReportCardController {
     public ResponseEntity<?> getReportCardsByStudent(@PathVariable Long studentId) {
         try {
             logger.info("Fetching report cards for student ID: {}", studentId);
-            List<ReportCard> cards = service.getReportCardsByStudent(studentId);
+            List<ReportCardDto> cards = service.getReportCardsByStudent(studentId);
             return ResponseEntity.ok(cards);
 
         } catch (Exception e) {
@@ -85,6 +88,9 @@ public class ReportCardController {
             logger.info("Updating report card ID: {}", id);
             return ResponseEntity.ok(service.updateReportCard(id, updatedReportCard));
 
+        } catch (IllegalArgumentException e) {
+            logger.error("Validation error updating report card ID {}: {}", id, e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             logger.error("Error updating report card ID {}", id, e);
             return ResponseEntity.badRequest().body("Failed to update report card");
