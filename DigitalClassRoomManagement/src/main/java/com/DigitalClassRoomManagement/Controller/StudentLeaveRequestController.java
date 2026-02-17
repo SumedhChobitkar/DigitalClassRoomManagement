@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/student/leaves")
@@ -83,6 +85,29 @@ private LeaveRequestService leaveRequestService;
             log.error("Error while fetching leave status {}", leaveRequestId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Something went wrong while fetching leave status");
+        }
+    }
+    //  Get All Leaves for a Student
+    @Operation(
+            summary = "Get all leave requests by studentId",
+            description = "Fetch list of all leave requests for a student",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Leave list retrieved")
+            }
+    )
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<?> getAllLeavesByStudent(@PathVariable Long studentId) {
+        try {
+            List<LeaveRequest> leaves = leaveRequestService.getLeavesByStudentId(studentId);
+            if (leaves.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No leave requests found for studentId: " + studentId);
+            }
+            return ResponseEntity.ok(leaves);
+        } catch (Exception e) {
+            log.error("Error fetching leaves for studentId {}", studentId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong while fetching leaves");
         }
     }
 }

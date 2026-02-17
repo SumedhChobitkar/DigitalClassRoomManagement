@@ -118,27 +118,96 @@ public class AttendanceController {
         }
     }
 
-   /// ///////////////////////////////////////////
+    /// ///////////////////////////////////////////
     @PostMapping("/join/{sessionId}/{email}")
-    public String join(@PathVariable Long sessionId,
-                       @PathVariable String email) {
-        return service.joinSession(email, sessionId);
+    public ResponseEntity<?> join(@PathVariable Long sessionId,
+                                  @PathVariable String email) {
+        try {
+            log.info("Join request received | sessionId={} | email={}", sessionId, email);
+            return ResponseEntity.ok(service.joinSession(email, sessionId));
+        } catch (Exception e) {
+            log.error("Error while joining session | sessionId={} | email={}", sessionId, email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to join session");
+        }
     }
 
     @PostMapping("/leave/{sessionId}/{email}")
-    public String leave(@PathVariable Long sessionId,
-                        @PathVariable String email) {
-        return service.leaveSession(email, sessionId);
+    public ResponseEntity<?> leave(@PathVariable Long sessionId,
+                                   @PathVariable String email) {
+        try {
+            log.info("Leave request received | sessionId={} | email={}", sessionId, email);
+            return ResponseEntity.ok(service.leaveSession(email, sessionId));
+        } catch (Exception e) {
+            log.error("Error while leaving session | sessionId={} | email={}", sessionId, email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to leave session");
+        }
     }
 
     @PostMapping("/absent/{sessionId}/{email}")
-    public String absent(@PathVariable Long sessionId,
-                         @PathVariable String email) {
-        return service.markAbsent(sessionId, email);
+    public ResponseEntity<?> absent(@PathVariable Long sessionId,
+                                    @PathVariable String email) {
+        try {
+            log.info("Absent mark request | sessionId={} | email={}", sessionId, email);
+            return ResponseEntity.ok(service.markAbsent(sessionId, email));
+        } catch (Exception e) {
+            log.error("Error while marking absent | sessionId={} | email={}", sessionId, email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to mark absent");
+        }
     }
 
     @GetMapping("/session/{sessionId}")
-    public List<Attendance> getList(@PathVariable Long sessionId) {
-        return service.getStudentsBySession(sessionId);
+    public ResponseEntity<?> getList(@PathVariable Long sessionId) {
+        try {
+            log.info("Fetching attendance list | sessionId={}", sessionId);
+            List<Attendance> list = service.getStudentsBySession(sessionId);
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            log.error("Error while fetching attendance list | sessionId={}", sessionId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch attendance list");
+        }
     }
+
+    // NEW APIs
+    @GetMapping("/periods/{email}")
+    public ResponseEntity<?> getPeriodsAttended(@PathVariable String email) {
+        try {
+            log.info("Fetching total periods attended | email={}", email);
+            return ResponseEntity.ok(service.getTotalPeriodsAttended(email));
+        } catch (Exception e) {
+            log.error("Error while fetching periods | email={}", email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch total periods attended");
+        }
+    }
+
+    @GetMapping("/classes/{email}")
+    public ResponseEntity<?> getClassesAttended(@PathVariable String email) {
+        try {
+            log.info("Fetching total classes attended | email={}", email);
+            return ResponseEntity.ok(service.getTotalClassesAttended(email));
+        } catch (Exception e) {
+            log.error("Error while fetching classes | email={}", email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch total classes attended");
+        }
+    }
+
+    @PostMapping("/leave/apply/{sessionId}/{email}")
+    public ResponseEntity<?> applyLeave(@PathVariable Long sessionId,
+                                        @PathVariable String email,
+                                        @RequestParam String reason) {
+        try {
+            log.info("Applying leave | sessionId={} | email={}", sessionId, email);
+            return ResponseEntity.ok(service.applyLeave(sessionId, email, reason));
+        } catch (Exception e) {
+            log.error("Error while applying leave | sessionId={} | email={}", sessionId, email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to apply leave");
+        }
+    }
+
 }

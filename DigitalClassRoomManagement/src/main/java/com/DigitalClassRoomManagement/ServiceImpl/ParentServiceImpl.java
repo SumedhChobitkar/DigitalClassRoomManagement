@@ -6,6 +6,7 @@ import com.DigitalClassRoomManagement.Entity.Student;
 import com.DigitalClassRoomManagement.Entity.User;
 
 import com.DigitalClassRoomManagement.Enum.Relationship;
+import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Exception.ParentNotFoundException;
 import com.DigitalClassRoomManagement.Repository.ParentRepository;
 import com.DigitalClassRoomManagement.Repository.StudentRepository;
@@ -63,6 +64,8 @@ public class ParentServiceImpl implements ParentService {
             parent.setUser(existingUser);
             parent.setStudent(existingStudent);
 
+            // set default status       new line add
+            parent.setStatus(Status.UNAPPROVED);
 
             //  Save the parent
             Parent savedParent = parentRepository.save(parent);
@@ -124,13 +127,21 @@ public class ParentServiceImpl implements ParentService {
                     .orElseThrow(() -> new RuntimeException("Student not found"));
 
             // Update fields
-            existingParent.setName(parentDetails.getName());
+           // existingParent.setName(parentDetails.getName());
+            existingParent.setFirstName(parentDetails.getFirstName());
+            existingParent.setLastName(parentDetails.getLastName());
             existingParent.setEmail(parentDetails.getEmail());
             existingParent.setPhone(parentDetails.getPhone());
             existingParent.setAddress(parentDetails.getAddress());
             existingParent.setRelationship(parentDetails.getRelationship());
+            //new line
+            existingParent.setStatus(parentDetails.getStatus());
+
             existingParent.setUser(existingUser);
             existingParent.setStudent(existingStudent);
+            // new line add
+            existingParent.setStatus(Status.APPROVED);
+
 
             // validateParent(parent);
             // Save updated parent
@@ -193,13 +204,35 @@ public class ParentServiceImpl implements ParentService {
     private void validateParent(Parent parent) {
 
         // Validate Parent Name
-        if (parent.getName() == null ||
+        /*if (parent.getName() == null ||
                 !ValidationClass.PARENT_NAME_PATTERN.matcher(parent.getName()).matches()) {
 
             throw new IllegalArgumentException(
                     "Invalid Parent Name. It must start with a capital letter and be 2–50 characters."
             );
+        }*/
+        // Validate Parent First Name
+        if (parent.getFirstName() == null ||
+                !ValidationClass.PARENT_NAME_PATTERN
+                        .matcher(parent.getFirstName())
+                        .matches()) {
+
+            throw new IllegalArgumentException(
+                    "Invalid Parent First Name. It must start with a capital letter and be 2–50 characters."
+            );
         }
+
+        // Validate Parent Last Name
+        if (parent.getLastName() == null ||
+                !ValidationClass.PARENT_NAME_PATTERN
+                        .matcher(parent.getLastName())
+                        .matches()) {
+
+            throw new IllegalArgumentException(
+                    "Invalid Parent Last Name. It must start with a capital letter and be 2–50 characters."
+            );
+        }
+
 
         // Validate Email
         if (parent.getEmail() == null ||

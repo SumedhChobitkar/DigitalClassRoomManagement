@@ -1,14 +1,22 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.SubjectDto;
+import com.DigitalClassRoomManagement.Entity.SchoolClass;
+import com.DigitalClassRoomManagement.Entity.Student;
 import com.DigitalClassRoomManagement.Entity.Subject;
+import com.DigitalClassRoomManagement.Entity.Teacher;
 import com.DigitalClassRoomManagement.Exception.SubjectNotFoundException;
+import com.DigitalClassRoomManagement.Repository.SchoolClassRepository;
+import com.DigitalClassRoomManagement.Repository.StudentRepository;
 import com.DigitalClassRoomManagement.Repository.SubjectRepository;
+import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Service.SubjectService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,9 +26,24 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Autowired
     private SubjectRepository srepo;
+
+    @Autowired
+    private StudentRepository studentRepo;
+    @Autowired
+    private SchoolClassRepository schoolClassRepo;
+    @Autowired
+    private TeacherRepository teacherRepo;
     @Override
     public String addSubject( SubjectDto sdto){
         log.info("Adding new subject with code: {}"+ sdto.getSubjectCode());
+
+        SchoolClass schoolClass = schoolClassRepo
+                .findById(sdto.getClassId())
+                .orElseThrow(() -> new RuntimeException("Class not found"));
+        Teacher teacher = teacherRepo.findById(sdto.getId())
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
+
         Subject subject = new Subject();
         subject.setSubjectCode(sdto.getSubjectCode());
         subject.setSubjectName(sdto.getSubjectName());
@@ -28,8 +51,8 @@ public class SubjectServiceImpl implements SubjectService {
         subject.setMaxMarks(sdto.getMaxMarks());
         subject.setIsActive(sdto.getIsActive());
         subject.setCreatedAt(sdto.getCreatedAt());
-        subject.setTeacher(sdto.getTeacher());
-        subject.setSchoolClass(sdto.getSchoolClass());
+        subject.setTeacher(teacher);
+        subject.setSchoolClass(schoolClass);
         subject.setUpdatedAt(sdto.getUpdatedAt());
         Subject savedSubject=srepo.save(subject);
         return "New subject added successfully with id:"+savedSubject.getSubjectId();
@@ -58,22 +81,32 @@ public class SubjectServiceImpl implements SubjectService {
     public String updateSubject(SubjectDto sdto, Long subjectId){
         try{
             Subject existing = srepo.findById(subjectId)
-                    .orElseThrow(()->{
-                        log.error("No subject present  with id:"+subjectId);
-                        return new SubjectNotFoundException("NO subject fuound with id :"+subjectId);
-                    });
+                    .orElseThrow(() -> new RuntimeException("Subject not found"));
+
+
             existing.setSubjectCode(sdto.getSubjectCode());
             existing.setSubjectName(sdto.getSubjectName());
             existing.setDescription(sdto.getDescription());
             existing.setMaxMarks(sdto.getMaxMarks());
             existing.setIsActive(sdto.getIsActive());
-            existing.setCreatedAt(sdto.getCreatedAt());
-            existing.setTeacher(sdto.getTeacher());
-            existing.setSchoolClass(sdto.getSchoolClass());
-            existing.setUpdatedAt(sdto.getUpdatedAt());
-            srepo.save(existing);
-            log.info("Subject information is updated with id:{}", subjectId);
-            return "Updation Successfull";
+
+
+            if (sdto.getId() != null) {
+                Teacher teacher = teacherRepo.findById(sdto.getId())
+                        .orElseThrow(() -> new RuntimeException("Teacher not found"));
+                existing.setTeacher(teacher);
+            }
+
+
+            if (sdto.getClassId() != null) {
+                SchoolClass schoolClass = schoolClassRepo.findById(sdto.getClassId())
+                        .orElseThrow(() -> new RuntimeException("Class not found"));
+                existing.setSchoolClass(schoolClass);
+            }
+
+            Subject saved = srepo.save(existing);
+
+            return "updated successfully;";
         }catch(SubjectNotFoundException se){
             log.warn("Attempted to update subjet with non existing id:{}", subjectId);
             throw  se;
@@ -103,6 +136,78 @@ public class SubjectServiceImpl implements SubjectService {
             throw new RuntimeException("Deletion failed: " + e.getMessage());
         }
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SubjectDto> getSubjectsForStudent(Long studentRegId) {
+
+        log.info("Fetching subjects for studentRegId={}", studentRegId);
+
+        Student student = studentRepo.findByStudentRegId(studentRegId)
+                .orElseThrow(() -> {
+                    log.error("Student not found with regId={}", studentRegId);
+                    return new RuntimeException("Student not found");
+                });
+
+        SchoolClass schoolClass = student.getSchoolClass();
+
+        if (schoolClass == null) {
+            log.warn("Student {} has no class assigned", studentRegId);
+            return List.of();
+        }
+
+        log.info(
+                "Student {} belongs to classId={}, className={}",
+                studentRegId,
+                schoolClass.getClassId(),
+                schoolClass.getClassName()
+        );
+
+        List<Subject> subjects =
+                srepo.findBySchoolClassAndIsActiveTrue(schoolClass);
+
+        log.info("Total subjects found={}", subjects.size());
+
+        return subjects.stream()
+                .map(subject -> SubjectDto.builder()
+                        .subjectId(subject.getSubjectId())
+                        .subjectName(subject.getSubjectName())
+                        .subjectCode(subject.getSubjectCode())
+                        .classId(subject.getSchoolClass().getClassId())
+                        .className(subject.getSchoolClass().getClassName())
+                        .id(subject.getTeacher().getId())
+                        .maxMarks(subject.getMaxMarks())
+                        .isActive(subject.getIsActive())
+                        .build()
+                )
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public SubjectDto assignSubjectToClass(Long subjectId, Long classId) {
+
+        Subject subject = srepo.findById(subjectId)
+                .orElseThrow(() -> new RuntimeException("Subject not found"));
+
+        SchoolClass schoolClass = schoolClassRepo.findById(classId)
+                .orElseThrow(() -> new RuntimeException("School class not found"));
+
+
+        subject.setSchoolClass(schoolClass);
+
+        Subject updated = srepo.save(subject);
+
+        return SubjectDto.builder()
+                .subjectId(updated.getSubjectId())
+                .subjectName(updated.getSubjectName())
+                .subjectCode(updated.getSubjectCode())
+                .classId(schoolClass.getClassId())
+                .className(schoolClass.getClassName())
+                .build();
+    }
+
 
 
 }

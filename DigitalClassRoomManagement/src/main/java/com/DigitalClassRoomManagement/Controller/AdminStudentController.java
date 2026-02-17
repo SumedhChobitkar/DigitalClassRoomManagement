@@ -290,6 +290,25 @@ public class AdminStudentController {
     }
 
 
+    @PutMapping("/{studentId}/location/{locationId}")
+    public ResponseEntity<?> updateStudentLocation(
+            @PathVariable Long studentId,
+            @PathVariable Long locationId) {
+
+        try {
+            Student updatedStudent =
+                    studentService.updatelocation(studentId, locationId);
+
+            return ResponseEntity.ok(updatedStudent);
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(500)
+                    .body("Failed to update location: " + e.getMessage());
+        }
+    }
+
+
 
 
 

@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
+import com.DigitalClassRoomManagement.Dto.KafkaNotificationDto;
 import com.DigitalClassRoomManagement.Dto.PaymentRequestDTO;
 import com.DigitalClassRoomManagement.Entity.*;
 import com.DigitalClassRoomManagement.Enum.InvoiceStatus;
@@ -7,13 +8,15 @@ import com.DigitalClassRoomManagement.Enum.PaymentMode;
 import com.DigitalClassRoomManagement.Enum.PaymentStatus;
 import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Service.PaymentService;
+//import com.razorpay.Order;
+//import com.razorpay.RazorpayClient;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -45,6 +48,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private  FeeStructureRepository feeStructureRepo;
+    private final KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate;
 
     @Value("${razorpay.key.id}")
     private String razorpayKeyId;
@@ -52,6 +56,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${razorpay.key.secret}")
     private String razorpayKeySecret;
 
+    public PaymentServiceImpl(KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
 
     @Override
@@ -358,5 +365,48 @@ public class PaymentServiceImpl implements PaymentService {
 
         return "Payment deleted successfully for Order ID: " + orderId;
     }
+
+
+    @Override
+    @Scheduled(cron = "0 0 9 * * ?")
+    public void sendPaymentEndDateReminders() {
+
+        LocalDate reminderDate = LocalDate.now().plusDays(10);
+
+        LocalDate start = reminderDate;
+        LocalDate end = reminderDate.plusDays(1);
+
+        List<Object[]> rows =
+                paymentRequestRepo.findParentsForPaymentReminder(start, end);
+
+        System.out.println("Payment reminders found = " + rows.size());
+
+        for (Object[] row : rows) {
+
+            String parentId = row[0].toString();
+            LocalDate endDate = (LocalDate) row[1];
+            BigDecimal amount = (BigDecimal) row[2];
+
+            System.out.println(
+                    " Sending payment reminder to parentId=" + parentId
+            );
+
+            KafkaNotificationDto dto = KafkaNotificationDto.builder()
+                    .userId(parentId)
+                    .receiverRole("PARENT")
+                    .title(" Fee Payment Reminder")
+                    .message(
+                            "Fee payment of ₹" + amount +
+                                    " is due by " + endDate
+                    )
+                    .source("PAYMENT")
+                    .build();
+
+            kafkaTemplate.send("notification-topic", dto);
+        }
+    }
+
+
+
 }
 

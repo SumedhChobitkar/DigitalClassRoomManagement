@@ -38,4 +38,7 @@ public class ExamQuestion {
     private String correctAnswer;
 
     private BigDecimal marks;
+
+    @OneToOne
+    private Location location;
 }

@@ -41,6 +41,8 @@ import java.util.Optional;
        // StudentDTO.EnrollmentRequest.StudentCreateResponse enrollStudent(Long studentId, StudentDTO.EnrollmentRequest request);
        StudentDTO.StudentCreateResponse enrollStudent(Long studentId, StudentDTO.EnrollmentRequest request);
 
+        Student updatelocation(Long studentId, Long locationId);
+
 
 
 

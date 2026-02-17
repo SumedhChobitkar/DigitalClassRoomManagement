@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -32,28 +33,56 @@ public class StudentTimetableController {
     private SectionService sectionService;
 
 
+//    @PreAuthorize("hasRole('STUDENT')")
+//    //  GET Student Timetable by Section ID
+//    @GetMapping("/{sectionId}/timetable")
+//    public ResponseEntity<?> getStudentTimetableBySectionId(@PathVariable Long sectionId) {
+//        logger.info("Fetching student timetable for sectionId: {}", sectionId);
+//
+//        try {
+//            List<Timetable> timetableList = timetableService.getTimetableBySectionId(sectionId);
+//
+//            if (timetableList == null || timetableList.isEmpty()) {
+//                logger.warn("No timetable found for sectionId: {}", sectionId);
+//                return ResponseEntity.status(404).body("No timetable found for this section");
+//            }
+//
+//            logger.info("Timetable fetched successfully for sectionId: {}", sectionId);
+//            return ResponseEntity.ok(timetableList);
+//
+//        } catch (Exception e) {
+//            logger.error("Error fetching timetable for sectionId: {} | Message: {}", sectionId, e.getMessage());
+//            return ResponseEntity.status(500).body("Failed to fetch timetable. Please try again.");
+//        }
+//    }
+
     @PreAuthorize("hasRole('STUDENT')")
-    //  GET Student Timetable by Section ID
     @GetMapping("/{sectionId}/timetable")
     public ResponseEntity<?> getStudentTimetableBySectionId(@PathVariable Long sectionId) {
+
         logger.info("Fetching student timetable for sectionId: {}", sectionId);
 
         try {
-            List<Timetable> timetableList = timetableService.getTimetableBySectionId(sectionId);
+            List<HashMap<String, Object>> timetableList =
+                    timetableService.getTimetableBySectionId(sectionId);
 
             if (timetableList == null || timetableList.isEmpty()) {
                 logger.warn("No timetable found for sectionId: {}", sectionId);
-                return ResponseEntity.status(404).body("No timetable found for this section");
+                return ResponseEntity.status(404)
+                        .body("No timetable found for this section");
             }
 
             logger.info("Timetable fetched successfully for sectionId: {}", sectionId);
             return ResponseEntity.ok(timetableList);
 
         } catch (Exception e) {
-            logger.error("Error fetching timetable for sectionId: {} | Message: {}", sectionId, e.getMessage());
-            return ResponseEntity.status(500).body("Failed to fetch timetable. Please try again.");
+            logger.error("Error fetching timetable for sectionId: {} | Message: {}",
+                    sectionId, e.getMessage());
+            return ResponseEntity.status(500)
+                    .body("Failed to fetch timetable. Please try again.");
         }
     }
+
 
 
     @PreAuthorize("hasRole('STUDENT')")

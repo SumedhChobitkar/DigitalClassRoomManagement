@@ -41,6 +41,7 @@ public class ResultServiceImpl implements ResultService {
 
             Result result = Result.builder()
                     .student(student)
+                    .name(dto.getName())
                     .exam(exam)
                     .obtainedMarks(dto.getObtainedMarks())
                     .percentage(dto.getPercentage())
@@ -93,7 +94,7 @@ public class ResultServiceImpl implements ResultService {
             Result existing = getResult(id);
             Student student = getStudent(dto.getStudentId());
             Exam exam = getExam(dto.getExamId());
-
+            existing.setName(dto.getName());
             existing.setStudent(student);
             existing.setExam(exam);
             existing.setObtainedMarks(dto.getObtainedMarks());
@@ -172,6 +173,7 @@ public class ResultServiceImpl implements ResultService {
                     .grade(result.getGrade())
                     .status(result.getStatus())
                     .publishedAt(result.getPublishedAt())
+                    .name(result.getName())
                     .build();
         } catch (Exception e) {
             log.error("Error converting Result entity to DTO for ID={}", result.getResultId(), e);
@@ -232,6 +234,7 @@ public class ResultServiceImpl implements ResultService {
                         .obtainedMarks(result.getObtainedMarks())
                         .percentage(result.getPercentage())
                         .grade(result.getGrade())
+                        .name(result.getName())
                         .status(result.getStatus())
                         .publishedAt(result.getPublishedAt())
                         .build())

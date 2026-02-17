@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -131,78 +132,239 @@ public Timetable createTimetable(TimetableDTO dto) {
 //        }
 //    }
 
-    @Override
-    public List<TimetableDTO> getAllTimetables() {
-        try {
-            log.info("Fetching all timetables");
-            List<Timetable> list = timetableRepository.findAll();
-            List<TimetableDTO> dtoList = new ArrayList<>();
+//    @Override
+//    public List<TimetableDTO> getAllTimetables() {
+//        try {
+//            log.info("Fetching all timetables");
+//            List<Timetable> list = timetableRepository.findAll();
+//            List<TimetableDTO> dtoList = new ArrayList<>();
+//
+//            for (Timetable tt : list) {
+//                TimetableDTO dto = new TimetableDTO();
+//
+//                dto.setTimetableId(tt.getTimetableId());
+//
+//                if (tt.getSchoolClass() != null)
+//                    dto.setClassId(tt.getSchoolClass().getClassId());
+//
+//                if (tt.getSection() != null)
+//                    dto.setSectionId(tt.getSection().getSectionId());
+//
+//                if (tt.getSubject() != null)
+//                    dto.setSubjectId(tt.getSubject().getSubjectId());
+//
+//                if (tt.getTeacher() != null)
+//                    dto.setTeacherId(tt.getTeacher().getId());
+//
+//                dto.setDayOfWeek(tt.getDayOfWeek());
+//                dto.setDate(tt.getDate());
+//                dto.setStartTime(tt.getStartTime());
+//                dto.setEndTime(tt.getEndTime());
+//
+//                dtoList.add(dto);
+//            }
+//
+//            return dtoList;
+//
+//        } catch (Exception e) {
+//            log.error("Error fetching timetable list: {}", e.getMessage());
+//            throw new RuntimeException("Failed to fetch timetable list");
+//        }
+//    }
+//
+@Override
+public List<HashMap<String, Object>> getAllTimetables() {
 
-            for (Timetable tt : list) {
-                TimetableDTO dto = new TimetableDTO();
+    try {
+        log.info("Fetching all timetables with subject name");
 
-                dto.setTimetableId(tt.getTimetableId());
+        List<Timetable> list = timetableRepository.findAll();
+        List<HashMap<String, Object>> responseList = new ArrayList<>();
 
-                if (tt.getSchoolClass() != null)
-                    dto.setClassId(tt.getSchoolClass().getClassId());
+        for (Timetable tt : list) {
 
-                if (tt.getSection() != null)
-                    dto.setSectionId(tt.getSection().getSectionId());
+            HashMap<String, Object> map = new HashMap<>();
 
-                if (tt.getSubject() != null)
-                    dto.setSubjectId(tt.getSubject().getSubjectId());
+            map.put("timetableId", tt.getTimetableId());
+            map.put("classId", tt.getSchoolClass() != null ? tt.getSchoolClass().getClassId() : null);
+            map.put("sectionId", tt.getSection() != null ? tt.getSection().getSectionId() : null);
+            map.put("subjectId", tt.getSubject() != null ? tt.getSubject().getSubjectId() : null);
+            map.put("subjectName", tt.getSubject() != null ? tt.getSubject().getSubjectName() : null);
+            map.put("teacherId", tt.getTeacher() != null ? tt.getTeacher().getId() : null);
 
-                if (tt.getTeacher() != null)
-                    dto.setTeacherId(tt.getTeacher().getId());
+            map.put("dayOfWeek", tt.getDayOfWeek());
+            map.put("date", tt.getDate());
+            map.put("startTime", tt.getStartTime());
+            map.put("endTime", tt.getEndTime());
 
-                dto.setDayOfWeek(tt.getDayOfWeek());
-                dto.setDate(tt.getDate());
-                dto.setStartTime(tt.getStartTime());
-                dto.setEndTime(tt.getEndTime());
-
-                dtoList.add(dto);
-            }
-
-            return dtoList;
-
-        } catch (Exception e) {
-            log.error("Error fetching timetable list: {}", e.getMessage());
-            throw new RuntimeException("Failed to fetch timetable list");
+            responseList.add(map);
         }
-    }
 
+        return responseList;
+
+    } catch (Exception e) {
+        log.error("Error fetching timetable list: {}", e.getMessage());
+        throw new RuntimeException("Failed to fetch timetable list");
+    }
+}
+
+
+
+
+
+//    @Override
+//    public List<Timetable> getTimetableByTeacherId(Long teacherId) {
+//        try {
+//            log.info("Fetching timetable for teacher ID: {}", teacherId);
+//            return timetableRepository.findByTeacher_Id(teacherId);
+//        } catch (Exception e) {
+//            log.error("Error fetching timetable: {}", e.getMessage());
+//            throw new RuntimeException("Failed to fetch timetable for teacher");
+//        }
+//    }
 
     @Override
-    public List<Timetable> getTimetableByTeacherId(Long teacherId) {
+    @org.springframework.transaction.annotation.Transactional
+    public List<HashMap<String, Object>> getTimetableByTeacherId(Long teacherId) {
+
         try {
             log.info("Fetching timetable for teacher ID: {}", teacherId);
-            return timetableRepository.findByTeacher_Id(teacherId);
+
+            List<Timetable> timetableList =
+                    timetableRepository.findByTeacher_Id(teacherId);
+
+            List<HashMap<String, Object>> responseList = new ArrayList<>();
+
+            for (Timetable tt : timetableList) {
+
+                HashMap<String, Object> map = new HashMap<>();
+
+                map.put("timetableId", tt.getTimetableId());
+                map.put("dayOfWeek", tt.getDayOfWeek());
+                map.put("startTime", tt.getStartTime());
+                map.put("endTime", tt.getEndTime());
+
+                // subject
+                HashMap<String, Object> subjectMap = new HashMap<>();
+                subjectMap.put("subjectId", tt.getSubject().getSubjectId());
+                subjectMap.put("subjectName", tt.getSubject().getSubjectName());
+                map.put("subject", subjectMap);
+
+                // teacher
+                HashMap<String, Object> teacherMap = new HashMap<>();
+                //teacherMap.put("teacherId", tt.getTeacher().getTeacherId());
+               // teacherMap.put("fullName", tt.getTeacher().getFullName());
+                map.put("teacher", teacherMap);
+
+                // section
+                HashMap<String, Object> sectionMap = new HashMap<>();
+                sectionMap.put("sectionId", tt.getSection().getSectionId());
+                sectionMap.put("sectionName", tt.getSection().getSectionName());
+                map.put("section", sectionMap);
+
+                // class
+                HashMap<String, Object> classMap = new HashMap<>();
+                classMap.put("classId", tt.getSchoolClass().getClassId());
+                classMap.put("className", tt.getSchoolClass().getClassName());
+                map.put("schoolClass", classMap);
+
+                responseList.add(map);
+            }
+
+            return responseList;
+
         } catch (Exception e) {
             log.error("Error fetching timetable: {}", e.getMessage());
             throw new RuntimeException("Failed to fetch timetable for teacher");
         }
     }
 
+
+//    @Override
+//    public List<Timetable> getTimetableBySectionId(Long sectionId) {
+//        logger.info("Fetching timetable for sectionId: {}", sectionId);
+//
+//        try {
+//            List<Timetable> timetableList = timetableRepository.findBySection_SectionId(sectionId);
+//
+//            if (timetableList == null || timetableList.isEmpty()) {
+//                logger.warn("No timetable found for sectionId: {}", sectionId);
+//            } else {
+//                logger.info("Timetable fetched successfully for sectionId: {}", sectionId);
+//            }
+//
+//            return timetableList;
+//
+//        } catch (Exception e) {
+//            logger.error("Error fetching timetable for sectionId: {} | Message: {}", sectionId, e.getMessage());
+//            throw new RuntimeException("Error fetching timetable for sectionId: " + sectionId);
+//        }
+//    }
+
     @Override
-    public List<Timetable> getTimetableBySectionId(Long sectionId) {
+    @org.springframework.transaction.annotation.Transactional
+    public List<HashMap<String, Object>> getTimetableBySectionId(Long sectionId) {
+
         logger.info("Fetching timetable for sectionId: {}", sectionId);
 
         try {
-            List<Timetable> timetableList = timetableRepository.findBySection_SectionId(sectionId);
+            List<Timetable> timetableList =
+                    timetableRepository.findBySection_SectionId(sectionId);
+
+            List<HashMap<String, Object>> responseList = new ArrayList<>();
 
             if (timetableList == null || timetableList.isEmpty()) {
                 logger.warn("No timetable found for sectionId: {}", sectionId);
-            } else {
-                logger.info("Timetable fetched successfully for sectionId: {}", sectionId);
+                return responseList;
             }
 
-            return timetableList;
+            for (Timetable tt : timetableList) {
+
+                HashMap<String, Object> map = new HashMap<>();
+
+                // timetable fields
+                map.put("timetableId", tt.getTimetableId());
+                map.put("dayOfWeek", tt.getDayOfWeek());
+                map.put("startTime", tt.getStartTime());
+                map.put("endTime", tt.getEndTime());
+
+                // subject
+                HashMap<String, Object> subjectMap = new HashMap<>();
+                subjectMap.put("subjectId", tt.getSubject().getSubjectId());
+                subjectMap.put("subjectName", tt.getSubject().getSubjectName());
+                map.put("subject", subjectMap);
+
+                // teacher
+                HashMap<String, Object> teacherMap = new HashMap<>();
+               // teacherMap.put("teacherId", tt.getTeacher().getTeacherId());
+               // teacherMap.put("fullName", tt.getTeacher().getFullName());
+                map.put("teacher", teacherMap);
+
+                // section
+                HashMap<String, Object> sectionMap = new HashMap<>();
+                sectionMap.put("sectionId", tt.getSection().getSectionId());
+                sectionMap.put("sectionName", tt.getSection().getSectionName());
+                map.put("section", sectionMap);
+
+                // class
+                HashMap<String, Object> classMap = new HashMap<>();
+                classMap.put("classId", tt.getSchoolClass().getClassId());
+                classMap.put("className", tt.getSchoolClass().getClassName());
+                map.put("schoolClass", classMap);
+
+                responseList.add(map);
+            }
+
+            logger.info("Timetable fetched successfully for sectionId: {}", sectionId);
+            return responseList;
 
         } catch (Exception e) {
-            logger.error("Error fetching timetable for sectionId: {} | Message: {}", sectionId, e.getMessage());
+            logger.error("Error fetching timetable for sectionId: {} | Message: {}",
+                    sectionId, e.getMessage());
             throw new RuntimeException("Error fetching timetable for sectionId: " + sectionId);
         }
     }
+
 
 
     @Override

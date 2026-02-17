@@ -4,6 +4,7 @@ import com.DigitalClassRoomManagement.Dto.*;
 import com.DigitalClassRoomManagement.Entity.AcademicCalendar;
 import com.DigitalClassRoomManagement.Entity.Event;
 import com.DigitalClassRoomManagement.Entity.Holiday;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.List;
 
@@ -49,4 +50,7 @@ public interface CalendarService {
     List<Holiday>  viewTeacherCalendarHoliday();
     public List<Event> viewTeacherCalendarEvents();
 
+    // Runs every day at 9 AM
+    @Scheduled(cron = "0 0 9 * * ?")
+    void sendHolidayReminder();
 }

@@ -23,7 +23,10 @@ public class TeacherProfileDashboardController {
     private TeacherService teacherService;
 
 
-    @PostMapping("/{id}/add-profile-picture")
+    @PostMapping(
+            value = "/{id}/add-profile-picture",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<String> uploadProfile(
             @PathVariable Long id,
             @RequestParam("file") MultipartFile file) {

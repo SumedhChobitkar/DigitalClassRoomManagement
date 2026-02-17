@@ -6,6 +6,7 @@ import com.DigitalClassRoomManagement.Entity.Student;
 import com.DigitalClassRoomManagement.Enum.LeaveRequestStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 import java.util.List;
 
@@ -13,5 +14,7 @@ import java.util.List;
     public interface StudentRepository extends JpaRepository<Student, Long> {
         List<Student> findByAcademicYear(String academicYear);
         List<Student> findBySchoolClass_ClassId(Long classId);
+        Optional<Student> findByStudentRegId(Long studentRegId);
+
         List<Student> findBySection(Section section);
 }

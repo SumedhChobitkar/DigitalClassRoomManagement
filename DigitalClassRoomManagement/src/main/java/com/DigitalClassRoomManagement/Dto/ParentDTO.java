@@ -21,7 +21,9 @@ public class ParentDTO {
     // Name validation
     @NotBlank(message = "Name is required.")
     @Pattern(regexp = "^[A-Za-z ]{2,50}$", message = "Name must contain only letters and spaces (2–50 characters).")
-    private String name;
+    //private String name;
+    private String firstName;
+    private String lastName;
 
     //  Email validation
     @NotBlank(message = "Email is required.")
@@ -36,4 +38,14 @@ public class ParentDTO {
 
     // Relationship — Enum (FATHER, MOTHER, GUARDIAN)
     private Relationship relationship;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ParentResponseDTO {
+
+        private String status;   // SUCCESS / FAILED
+        private String message;
+        private Object data;     // Parent or List<Parent>
+    }
 }
