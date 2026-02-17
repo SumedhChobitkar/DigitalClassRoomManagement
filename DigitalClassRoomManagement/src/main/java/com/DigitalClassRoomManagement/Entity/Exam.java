@@ -1,5 +1,6 @@
 package com.DigitalClassRoomManagement.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.DigitalClassRoomManagement.Enum.ExamMode;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Builder
 @Table(name = "exams")
