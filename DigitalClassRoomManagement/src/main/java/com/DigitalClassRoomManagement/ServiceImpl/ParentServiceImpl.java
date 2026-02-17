@@ -111,6 +111,22 @@ public class ParentServiceImpl implements ParentService {
         }
     }
 
+    //new line
+    // GET Parents By Status (APPROVED / UNAPPROVED)
+    @Override
+    public List<Parent> getParentsByStatus(Status status) {
+        try {
+            logger.info("Fetching parents with status: " + status);
+            List<Parent> parents = parentRepository.findByStatus(status);
+            logger.info("Total parents found with status " + status + ": " + parents.size());
+            return parents;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error fetching parents by status: " + e.getMessage(), e);
+            throw new RuntimeException("Unable to fetch parents by status.");
+        }
+    }
+
+
     //  UPDATE Parent
     @Override
     public Parent updateParent(Long id, Parent parentDetails) {

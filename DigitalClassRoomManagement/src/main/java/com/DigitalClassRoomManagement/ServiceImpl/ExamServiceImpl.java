@@ -6,8 +6,12 @@ import com.DigitalClassRoomManagement.Enum.ExamMode;
 import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Dto.ExamQuestionDto;
-import com.DigitalClassRoomManagement.Dto.KafkaNotificationDto;
-import com.DigitalClassRoomManagement.Entity.*;
+import com.DigitalClassRoomManagement.Entity.Admin;
+import com.DigitalClassRoomManagement.Entity.Exam;
+import com.DigitalClassRoomManagement.Entity.ExamQuestion;
+import com.DigitalClassRoomManagement.Entity.Teacher;
+import com.DigitalClassRoomManagement.Enum.ExamStatus;
+import com.DigitalClassRoomManagement.Enum.SubmissionStatus;
 import com.DigitalClassRoomManagement.Exception.ResourceNotFoundException;
 import com.DigitalClassRoomManagement.Repository.AdminRepository;
 import com.DigitalClassRoomManagement.Repository.ExamQuestionRepository;
@@ -15,17 +19,17 @@ import com.DigitalClassRoomManagement.Repository.ExamRepository;
 import com.DigitalClassRoomManagement.Repository.TeacherRepository;
 import com.DigitalClassRoomManagement.Service.ExamService;
 
+import org.apache.catalina.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,11 +50,6 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     private AdminRepository adminRepository;
 
-    private final KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate;
-
-    public ExamServiceImpl(KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
     @Autowired
     private LocationRepository locationRepository;
 
@@ -95,46 +94,126 @@ public class ExamServiceImpl implements ExamService {
 //    }
 
 
+//    @Override
+//    public ExamDto createExam(ExamDto examDto) {
+//
+//        log.info("Attempting to create exam for teacherId: {}", examDto.getTeacherId());
+//
+//        try {
+//            // 1. Teacher
+//            Teacher teacher = teacherRepository.findById(examDto.getTeacherId())
+//                    .orElseThrow(() -> new ResourceNotFoundException(
+//                            "Teacher not found with ID: " + examDto.getTeacherId()));
+//
+//            // 2. Location
+//            Location location = locationRepository.findById(examDto.getLocationId())
+//                    .orElseThrow(() -> new ResourceNotFoundException(
+//                            "Location not found with ID: " + examDto.getLocationId()));
+//
+//            // 3. Admin  ✅ THIS WAS MISSING
+//            Admin admin = adminRepository.findById(examDto.getAdminId())
+//                    .orElseThrow(() -> new ResourceNotFoundException(
+//                            "Admin not found with ID: " + examDto.getAdminId()));
+//
+//            // 4. Create Exam
+//            Exam exam = new Exam();
+//            exam.setTeacher(teacher);
+//            exam.setLocation(location);
+//            exam.setExamMode(examDto.getExamMode());
+//            exam.setAdmin(admin);   // ⭐ MOST IMPORTANT LINE
+//            exam.setTerm(examDto.getTerm());
+//            exam.setStartTime(examDto.getStartTime());
+//            exam.setEndTime(examDto.getEndTime());
+//            exam.setDuration(examDto.getDuration());
+//            exam.setTotalMarks(examDto.getTotalMarks());
+//
+//            // 5. Save
+//            Exam savedExam = examRepository.save(exam);
+//
+//            log.info("Attempting to create exam for teacherId={}, adminId={}",
+//                    examDto.getTeacherId(), examDto.getAdminId());
+//
+//            // Fetch teacher and admin
+//            Teacher teacher = teacherRepository.findById(examDto.getTeacherId())
+//                    .orElseThrow(() ->
+//                            new ResourceNotFoundException("Teacher not found with ID: " + examDto.getTeacherId()));
+//
+//            Admin admin = adminRepository.findById(examDto.getAdminId())
+//                    .orElseThrow(() ->
+//                            new ResourceNotFoundException("Admin not found with ID: " + examDto.getAdminId()));
+//
+//            // Validate exam times
+//            if (examDto.getStartTime() != null && examDto.getEndTime() != null &&
+//                    examDto.getEndTime().isBefore(examDto.getStartTime())) {
+//                throw new IllegalArgumentException("End time must be after start time");
+//            }
+//
+//            // Create exam entity
+//            Exam exam = new Exam();
+//            exam.setAdmin(admin);
+//            exam.setTeacher(teacher);
+//            exam.setTerm(examDto.getTerm());
+//            exam.setStartTime(examDto.getStartTime());
+//            exam.setEndTime(examDto.getEndTime());
+//            exam.setTotalMarks(examDto.getTotalMarks());
+//            exam.setStatus(examDto.getStatus());
+//
+//            //  Set examDate and day from startTime
+//            if (examDto.getStartTime() != null) {
+//                LocalDate examDate = examDto.getStartTime().toLocalDate();
+//                exam.setExamDate(examDate);
+//                exam.setDay(examDate.getDayOfWeek().name()); // MONDAY, TUESDAY, etc.
+//            }
+//
+//            // Calculate duration if not provided
+//            if (examDto.getDuration() != null) {
+//                exam.setDuration(examDto.getDuration());
+//            } else if (examDto.getStartTime() != null && examDto.getEndTime() != null) {
+//                exam.setDuration((int) Duration.between(examDto.getStartTime(), examDto.getEndTime()).toMinutes());
+//            }
+//
+//            // Handle questions if any
+//            if (examDto.getQuestions() != null && !examDto.getQuestions().isEmpty()) {
+//                List<ExamQuestion> questions = examDto.getQuestions().stream()
+//                        .map(qDto -> {
+//                            ExamQuestion q = new ExamQuestion();
+//                            q.setQuestionText(qDto.getQuestionText());
+//                            q.setMarks(qDto.getMarks());
+//                            q.setQuestionType(qDto.getQuestionType());
+//                            q.setCorrectAnswer(qDto.getCorrectAnswer());
+//                            q.setOptions(qDto.getOptions());
+//                            q.setExam(exam); // important for bidirectional relationship
+//                            return q;
+//                        })
+//                        .collect(Collectors.toList());
+//                exam.setQuestions(questions);
+//            }
+//
+//            // Save exam
+//            Exam savedExam = examRepository.save(exam);
+//
+//            log.info("Exam created successfully with ID: {}", savedExam.getExamId());
+//
+//            return mapToDto(savedExam);
+//        } catch (RuntimeException e) {
+//            throw new RuntimeException(e.getMessage());
+//        }
+//
+//    }
+
     @Override
+    @Transactional
     public ExamDto createExam(ExamDto examDto) {
 
-        log.info("Attempting to create exam for teacherId: {}", examDto.getTeacherId());
-
-        try {
-            // 1. Teacher
-            Teacher teacher = teacherRepository.findById(examDto.getTeacherId())
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Teacher not found with ID: " + examDto.getTeacherId()));
-
-            // 2. Location
-            Location location = locationRepository.findById(examDto.getLocationId())
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Location not found with ID: " + examDto.getLocationId()));
-
-            // 3. Admin  ✅ THIS WAS MISSING
-            Admin admin = adminRepository.findById(examDto.getAdminId())
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Admin not found with ID: " + examDto.getAdminId()));
-
-            // 4. Create Exam
-            Exam exam = new Exam();
-            exam.setTeacher(teacher);
-            exam.setLocation(location);
-            exam.setExamMode(examDto.getExamMode());
-            exam.setAdmin(admin);   // ⭐ MOST IMPORTANT LINE
-            exam.setTerm(examDto.getTerm());
-            exam.setStartTime(examDto.getStartTime());
-            exam.setEndTime(examDto.getEndTime());
-            exam.setDuration(examDto.getDuration());
-            exam.setTotalMarks(examDto.getTotalMarks());
-
-            // 5. Save
-            Exam savedExam = examRepository.save(exam);
-
-        log.info("Attempting to create exam for teacherId={}, adminId={}",
+        log.info("Creating exam for teacherId={}, adminId={}",
                 examDto.getTeacherId(), examDto.getAdminId());
 
-        // Fetch teacher and admin
+        // Validate time
+        if (examDto.getStartTime() != null && examDto.getEndTime() != null &&
+                examDto.getEndTime().isBefore(examDto.getStartTime())) {
+            throw new IllegalArgumentException("End time must be after start time");
+        }
+
         Teacher teacher = teacherRepository.findById(examDto.getTeacherId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Teacher not found with ID: " + examDto.getTeacherId()));
@@ -143,37 +222,41 @@ public class ExamServiceImpl implements ExamService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Admin not found with ID: " + examDto.getAdminId()));
 
-        // Validate exam times
-        if (examDto.getStartTime() != null && examDto.getEndTime() != null &&
-                examDto.getEndTime().isBefore(examDto.getStartTime())) {
-            throw new IllegalArgumentException("End time must be after start time");
+        Location location = null;
+        if (examDto.getLocationId() != null) {
+            location = locationRepository.findById(examDto.getLocationId())
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException("Location not found with ID: " + examDto.getLocationId()));
         }
 
-        // Create exam entity
         Exam exam = new Exam();
         exam.setAdmin(admin);
         exam.setTeacher(teacher);
+        exam.setLocation(location);
+        exam.setExamMode(examDto.getExamMode());
         exam.setTerm(examDto.getTerm());
         exam.setStartTime(examDto.getStartTime());
         exam.setEndTime(examDto.getEndTime());
         exam.setTotalMarks(examDto.getTotalMarks());
         exam.setStatus(examDto.getStatus());
 
-        //  Set examDate and day from startTime
+        // Set examDate & day
         if (examDto.getStartTime() != null) {
-            LocalDate examDate = examDto.getStartTime().toLocalDate();
-            exam.setExamDate(examDate);
-            exam.setDay(examDate.getDayOfWeek().name()); // MONDAY, TUESDAY, etc.
+            LocalDate date = examDto.getStartTime().toLocalDate();
+            exam.setExamDate(date);
+            exam.setDay(date.getDayOfWeek().name());
         }
 
-        // Calculate duration if not provided
+        // Duration
         if (examDto.getDuration() != null) {
             exam.setDuration(examDto.getDuration());
         } else if (examDto.getStartTime() != null && examDto.getEndTime() != null) {
-            exam.setDuration((int) Duration.between(examDto.getStartTime(), examDto.getEndTime()).toMinutes());
+            exam.setDuration((int) Duration
+                    .between(examDto.getStartTime(), examDto.getEndTime())
+                    .toMinutes());
         }
 
-        // Handle questions if any
+        // Questions
         if (examDto.getQuestions() != null && !examDto.getQuestions().isEmpty()) {
             List<ExamQuestion> questions = examDto.getQuestions().stream()
                     .map(qDto -> {
@@ -183,20 +266,19 @@ public class ExamServiceImpl implements ExamService {
                         q.setQuestionType(qDto.getQuestionType());
                         q.setCorrectAnswer(qDto.getCorrectAnswer());
                         q.setOptions(qDto.getOptions());
-                        q.setExam(exam); // important for bidirectional relationship
+                        q.setExam(exam);
                         return q;
                     })
                     .collect(Collectors.toList());
             exam.setQuestions(questions);
         }
 
-        // Save exam
         Exam savedExam = examRepository.save(exam);
-
-        log.info("Exam created successfully with ID: {}", savedExam.getExamId());
+        log.info("Exam created successfully with ID={}", savedExam.getExamId());
 
         return mapToDto(savedExam);
     }
+
 
 
     // ------------------- GET EXAM BY ID --------------------------
@@ -359,7 +441,7 @@ public class ExamServiceImpl implements ExamService {
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
-//<---------------------GET SCHEDULE EXAM---------------------
+    //<---------------------GET SCHEDULE EXAM---------------------
     @Override
     public ExamDto getExamScheduleByExamId(Long examId) {
 
@@ -469,26 +551,26 @@ public class ExamServiceImpl implements ExamService {
     }
 
     // ------------------- MAPPER --------------------------
-    private ExamDto mapToDto(Exam entity) {
-        return ExamDto.builder()
-                .examId(entity.getExamId())
-                .teacherId(entity.getTeacher() != null ? entity.getTeacher().getId() : null)
-                .adminId(entity.getAdmin() != null ? entity.getAdmin().getAdminId() : null)
-                 .term(entity.getTerm())
-                .startTime(entity.getStartTime())
-                .endTime(entity.getEndTime())
-                .day(entity.getDay())
-                .examDate(entity.getExamDate())
-                .duration(entity.getDuration())
-                .questions(entity.getQuestions() != null
-                        ? entity.getQuestions().stream()
-                        .map(this::mapToQuestionDto)
-                        .toList()
-                        : List.of())
-                .totalMarks(entity.getTotalMarks())
-                .status(entity.getStatus())
-                .build();
-    }
+//    private ExamDto mapToDto(Exam entity) {
+//        return ExamDto.builder()
+//                .examId(entity.getExamId())
+//                .teacherId(entity.getTeacher() != null ? entity.getTeacher().getId() : null)
+//                .adminId(entity.getAdmin() != null ? entity.getAdmin().getAdminId() : null)
+//                 .term(entity.getTerm())
+//                .startTime(entity.getStartTime())
+//                .endTime(entity.getEndTime())
+//                .day(entity.getDay())
+//                .examDate(entity.getExamDate())
+//                .duration(entity.getDuration())
+//                .questions(entity.getQuestions() != null
+//                        ? entity.getQuestions().stream()
+//                        .map(this::mapToQuestionDto)
+//                        .toList()
+//                        : List.of())
+//                .totalMarks(entity.getTotalMarks())
+//                .status(entity.getStatus())
+//                .build();
+//    }
 
 
 //    public ExamDto getExamForStudent(Long studentId, Long examId) {
@@ -552,8 +634,27 @@ public class ExamServiceImpl implements ExamService {
 
         throw new RuntimeException("Invalid exam mode configured");
     }
+    private ExamDto mapToDto(Exam entity) {
+        return ExamDto.builder()
+                .examId(entity.getExamId())
+                .teacherId(entity.getTeacher() != null ? entity.getTeacher().getId() : null)
+                .adminId(entity.getAdmin() != null ? entity.getAdmin().getAdminId() : null)
+                .term(entity.getTerm())
+                .startTime(entity.getStartTime())
+                .endTime(entity.getEndTime())
+                .day(entity.getDay())
+                .examDate(entity.getExamDate())
+                .duration(entity.getDuration())
+                .totalMarks(entity.getTotalMarks())
+                .status(entity.getStatus())
+                .questions(entity.getQuestions() != null
+                        ? entity.getQuestions().stream()
+                        .map(this::mapToQuestionDto)
+                        .collect(Collectors.toList())
+                        : List.of())
+                .build();
+    }
 
-}
     private ExamQuestionDto mapToQuestionDto(ExamQuestion question) {
         return ExamQuestionDto.builder()
                 .questionId(question.getId())
@@ -561,37 +662,27 @@ public class ExamServiceImpl implements ExamService {
                 .marks(question.getMarks())
                 .questionType(question.getQuestionType())
                 .correctAnswer(question.getCorrectAnswer())
-                .examId(question.getExam() != null ? question.getExam().getExamId() : null)
                 .options(question.getOptions())
+                .examId(question.getExam() != null ? question.getExam().getExamId() : null)
                 .build();
     }
-
-    @Scheduled(cron = "0 0 9 * * ?")
-    @Override
-    public void sendUpcomingExamReminders() {
-
-        LocalDate reminderDate = LocalDate.now().plusDays(10);
-
-        List<Object[]> exams =
-                examRepository.findExamDataForReminder(LocalDate.now().plusDays(10));
-
-        for (Object[] row : exams) {
-
-            Long teacherId = (Long) row[3];
-
-            KafkaNotificationDto dto = KafkaNotificationDto.builder()
-                    .userId(String.valueOf(teacherId))
-                    .receiverRole("STUDENT")
-                    .title(" Upcoming Exam Reminder")
-                    .message("Exam is scheduled on " + row[1])
-                    .source("EXAM")
-                    .build();
-
-            kafkaTemplate.send("notification-topic", dto);
-        }
-
-    }
-    }
-
-
 }
+//    private ExamQuestionDto mapToQuestionDto(ExamQuestion question) {
+//        return ExamQuestionDto.builder()
+//                .questionId(question.getId())
+//                .questionText(question.getQuestionText())
+//                .marks(question.getMarks())
+//                .questionType(question.getQuestionType())
+//                .correctAnswer(question.getCorrectAnswer())
+//                .examId(question.getExam() != null ? question.getExam().getExamId() : null)
+//                .options(question.getOptions())
+//                .build();
+//    }
+
+
+
+
+
+
+
+
