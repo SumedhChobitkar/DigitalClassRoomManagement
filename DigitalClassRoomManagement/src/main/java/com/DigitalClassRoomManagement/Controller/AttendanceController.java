@@ -118,6 +118,24 @@ public class AttendanceController {
         }
     }
 
+    @GetMapping("/getAttendanceByEmail/{email}")
+    public ResponseEntity<?> getAttendanceByEmail(@PathVariable String email) {
+
+        try {
+            log.info("Fetching attendance for email={}", email);
+
+            AttendanceDto response =
+                    service.getAttendanceByEmail(email);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error fetching attendance for email={}", email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
     /// ///////////////////////////////////////////
     @PostMapping("/join/{sessionId}/{email}")
     public ResponseEntity<?> join(@PathVariable Long sessionId,

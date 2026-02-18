@@ -26,4 +26,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     //METHOD
     List<Attendance> findAllByEmailAndClassDate(String email, LocalDate classDate);
     List<Attendance> findAllByEmail(String email);
+
+    List<Attendance> findByEmail(String email);
+
+    long countByEmail(String email);
+
 }

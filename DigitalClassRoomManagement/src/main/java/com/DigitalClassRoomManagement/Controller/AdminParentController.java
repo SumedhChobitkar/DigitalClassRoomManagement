@@ -7,7 +7,6 @@ import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Service.ParentService;
 import com.DigitalClassRoomManagement.Repository.StudentRepository;
 import com.DigitalClassRoomManagement.Repository.ParentRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
