@@ -11,6 +11,9 @@ public interface AttendanceService{
     public String updateAttendanceById(Long id, AttendanceDto dto);
     public String deleteById(Long id);
 
+    //Student will get their attendance info by their email
+    AttendanceDto getAttendanceByEmail(String email);
+
     String joinSession(String email, Long sessionId);
     String leaveSession(String email, Long sessionId);
     String markAbsent(Long sessionId, String email);

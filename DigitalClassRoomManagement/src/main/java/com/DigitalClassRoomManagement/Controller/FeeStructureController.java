@@ -27,7 +27,7 @@ public class FeeStructureController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @Operation(summary = "Create Fee Structure")
     public ResponseEntity<?> create(@RequestBody FeeStructureDto dto) {
         try {
@@ -41,7 +41,7 @@ public class FeeStructureController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @Operation(summary = "Update Fee Structure")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FeeStructureDto dto) {
         try {
@@ -55,7 +55,7 @@ public class FeeStructureController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','PRINCIPAL')")
     @Operation(summary = "Get Fee by ID")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
@@ -69,7 +69,7 @@ public class FeeStructureController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','PRINCIPAL')")
     @Operation(summary = "List All Fees")
     public ResponseEntity<?> list() {
         try {
@@ -83,7 +83,7 @@ public class FeeStructureController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @Operation(summary = "Delete Fee Structure")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {

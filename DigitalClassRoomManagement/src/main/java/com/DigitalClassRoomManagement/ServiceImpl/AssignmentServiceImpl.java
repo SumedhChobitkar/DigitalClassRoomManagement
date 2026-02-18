@@ -1,17 +1,13 @@
 package com.DigitalClassRoomManagement.ServiceImpl;
 
 import com.DigitalClassRoomManagement.Dto.AssignmentDto;
-import com.DigitalClassRoomManagement.Dto.KafkaNotificationDto;
 import com.DigitalClassRoomManagement.Entity.*;
 import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Service.AssignmentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,8 +22,6 @@ public class AssignmentServiceImpl implements AssignmentService {
     private final SubjectRepository subjectRepository;
     private final SectionRepository sectionRepository;
     private final TeacherRepository teacherRepository;
-
-    private final KafkaTemplate<String, KafkaNotificationDto> kafkaTemplate;
 
     // ---------------- CREATE ----------------
     @Override
@@ -259,47 +253,4 @@ public class AssignmentServiceImpl implements AssignmentService {
                 .teacherId(assignment.getTeacher().getId())
                 .build();
     }
-
-    @Scheduled(cron = "0 0 9 * * ?")
-    @Override
-    public void sendAssignmentDueDateReminders() {
-
-        LocalDate reminderDate = LocalDate.now().plusDays(5);
-
-        LocalDateTime start = reminderDate.atStartOfDay();
-        LocalDateTime end = reminderDate.plusDays(1).atStartOfDay();
-
-        List<Object[]> rows =
-                assignmentRepository
-                        .findStudentRegIdsForAssignmentReminder(start, end);
-
-        System.out.println("Rows found = " + rows.size());
-
-        for (Object[] row : rows) {
-
-            String studentRegId = row[0].toString();
-            String title = (String) row[1];
-            LocalDateTime dueDate = (LocalDateTime) row[2];
-
-            System.out.println(
-                    " Sending Kafka notification to studentRegId=" + studentRegId
-            );
-
-            KafkaNotificationDto dto = KafkaNotificationDto.builder()
-                    .userId(studentRegId)
-                    .receiverRole("STUDENT")
-                    .title(" Assignment Due Reminder")
-                    .message(
-                            "Assignment \"" + title +
-                                    "\" is due on " +
-                                    dueDate.toLocalDate()
-                    )
-                    .source("ASSIGNMENT")
-                    .build();
-
-            kafkaTemplate.send("notification-topic", dto);
-        }
-    }
-
-}
 }

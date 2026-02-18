@@ -4,7 +4,6 @@ import com.DigitalClassRoomManagement.Dto.StudentDTO;
 import com.DigitalClassRoomManagement.Entity.*;
 import com.DigitalClassRoomManagement.Repository.*;
 import com.DigitalClassRoomManagement.Service.StudentService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +45,7 @@ public class AdminStudentController {
     private SchoolClassRepository schoolClassRepository;
 
 
-
-
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @PostMapping(value = "/saveStudent", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createStudent(
             @RequestPart("student") StudentDTO studentDTO,
@@ -73,7 +70,7 @@ public class AdminStudentController {
     }
 
     // GET ALL STUDENTS
-    @PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
+    @PreAuthorize("hasAnyRole('TEACHER','ADMIN','PRINCIPAL')")
     @GetMapping("/getAllStudent")
     public ResponseEntity<List<Student>> getAllStudents() {
         logger.info("Get all students API called");
@@ -94,7 +91,7 @@ public class AdminStudentController {
         return ResponseEntity.ok(student);
     }*/
 
-    @PreAuthorize("hasAnyRole('STUDENT','TEACHER','ADMIN','PARENT')")
+    @PreAuthorize("hasAnyRole('STUDENT','TEACHER','ADMIN','PARENT','PRINCIPAL')")
     @GetMapping("/getStudentById/{id}")
     public ResponseEntity<?> getStudentById(@PathVariable Long id) {
 
@@ -117,7 +114,7 @@ public class AdminStudentController {
     }
 
     // UPDATE STUDENT
-    @PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
+    @PreAuthorize("hasAnyRole('TEACHER','ADMIN','PRINCIPAL')")
     @PutMapping("/updateStudentById/{id}")
     public ResponseEntity<?> updateStudent(
             @PathVariable Long id,
@@ -132,7 +129,7 @@ public class AdminStudentController {
 
 
     // DELETE STUDENT
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @DeleteMapping("/deleteStudentById/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
 
@@ -152,7 +149,7 @@ public class AdminStudentController {
         }
     }
     // assign teacher by studentid
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @PutMapping("/assignTeacher/{studentId}/{teacherId}")
     public ResponseEntity<?> assignTeacherToStudent(
             @PathVariable Long studentId,
@@ -178,8 +175,9 @@ public class AdminStudentController {
                     .body("Failed to assign teacher: " + e.getMessage());
         }
     }
+
     // assign section by studentid
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @PutMapping("/assignSection/{studentId}/{sectionId}")
     public ResponseEntity<?> assignSectionToStudent(
             @PathVariable Long studentId,
@@ -200,7 +198,7 @@ public class AdminStudentController {
         }
     }
     // assign parent by studentid
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @PutMapping("/assignParent/{studentId}/{parentId}")
     public ResponseEntity<?> assignParentToStudent(
             @PathVariable Long studentId,
@@ -226,7 +224,7 @@ public class AdminStudentController {
         }
     }
     // assign class by studentbyid
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @PutMapping("/assignClass/{studentId}/{classId}")
     public ResponseEntity<?> assignClassToStudent(
             @PathVariable Long studentId,
@@ -256,8 +254,7 @@ public class AdminStudentController {
 
 
     // enroll student
-
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @PutMapping("/enroll/{studentId}")
     public ResponseEntity<StudentDTO.StudentCreateResponse> enrollStudent(
             @PathVariable Long studentId,
@@ -289,7 +286,6 @@ public class AdminStudentController {
         }
     }
 
-
     @PutMapping("/{studentId}/location/{locationId}")
     public ResponseEntity<?> updateStudentLocation(
             @PathVariable Long studentId,
@@ -307,10 +303,6 @@ public class AdminStudentController {
                     .body("Failed to update location: " + e.getMessage());
         }
     }
-
-
-
-
 
 
 }

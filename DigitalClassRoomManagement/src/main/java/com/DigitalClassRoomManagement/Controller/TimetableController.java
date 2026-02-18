@@ -20,7 +20,7 @@ public class TimetableController {
     @Autowired
     private TimetableService timetableService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @PostMapping("/createTimetable")
     public ResponseEntity<?> create(@RequestBody TimetableDTO dto) {
         try {
@@ -31,7 +31,7 @@ public class TimetableController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody TimetableDTO dto) {
         try {
@@ -42,7 +42,7 @@ public class TimetableController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
@@ -77,7 +77,7 @@ public class TimetableController {
 //        }
 //    }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllTimetables() {
         try {
@@ -92,7 +92,7 @@ public class TimetableController {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {

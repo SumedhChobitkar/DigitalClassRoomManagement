@@ -95,6 +95,29 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
 
+    //Student will get their attendance info by their email
+    @Override
+    public AttendanceDto getAttendanceByEmail(String email){
+        List<Attendance> records= repo.findByEmail(email);
+        if(records.isEmpty()){
+            throw  new RuntimeException("No attendance records found for email :"+email);
+        }
+        long totalSessions= repo.countByEmail(email);
+        long attendedSessions=repo.countByEmailAndStatus(email, AttendanceStatus.PRESENT);
+        double percentage=0;
+        if(totalSessions>0){
+            percentage=((double)attendedSessions/totalSessions)*100;
+        }
+        return  AttendanceDto.builder()
+                .email(email)
+                .totalSessions(totalSessions)
+                .attendedSessions(attendedSessions)
+                .attendancePercentage(Math.round(percentage * 100.0) / 100.0)
+                .attendanceDetails(records)
+                .build();
+    }
+
+
     //CORE LOGIC – AUTO ATTENDANCE ON JOIN + LATE LOGIC
     @Override
     public String joinSession(String email, Long sessionId) {

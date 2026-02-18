@@ -24,7 +24,7 @@ public class SchoolClassController {
     private final TeacherService teacherService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     public ResponseEntity<?> create(@Valid @RequestBody SchoolClassRequestDto request) {
         try {
             log.info("Admin creating class: {}", request.className);            SchoolClassResponseDto body = schoolClassService.create(request);
@@ -36,7 +36,7 @@ public class SchoolClassController {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     public ResponseEntity<?> update(@PathVariable Long id,
                                     @Valid @RequestBody SchoolClassRequestDto request) {
         try {
@@ -49,7 +49,7 @@ public class SchoolClassController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             log.info("Admin deleting class ID: {}", id);
@@ -62,7 +62,7 @@ public class SchoolClassController {
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT','PRINCIPAL')")
     public ResponseEntity<?> getAll() {
         try {
             log.info("Fetching all classes");
@@ -75,7 +75,7 @@ public class SchoolClassController {
     }
 
     @GetMapping("/getById/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT','PRINCIPAL')")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             log.info("Fetching class by id: {}", id);
@@ -87,7 +87,7 @@ public class SchoolClassController {
     }
 
     @GetMapping("/getTeachersOfClass/{classId}/teachers")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','PRINCIPAL')")
     public ResponseEntity<?> getTeachersOfClass(@PathVariable Long classId) {
         try {
             log.info("Fetching teachers of class {}", classId);

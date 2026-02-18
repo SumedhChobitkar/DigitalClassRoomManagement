@@ -149,7 +149,7 @@ public class TeacherController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not Changed");
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @PostMapping("/assign/{classId}/{sectionId}")
     public ResponseEntity<?> assignTeacher(@PathVariable Long classId,
                                            @PathVariable Long sectionId,
@@ -163,7 +163,7 @@ public class TeacherController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @GetMapping("/getTeacherByClassId/{classId}")
     public ResponseEntity<?> getTeachersByClassId(@PathVariable Long classId) {
         try {
@@ -176,7 +176,7 @@ public class TeacherController {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','PRINCIPAL')")
     @GetMapping("/getTeacherBySectionId/{sectionId}")
     public ResponseEntity<?> getTeachersBySectionId(@PathVariable Long sectionId) {
         try {
