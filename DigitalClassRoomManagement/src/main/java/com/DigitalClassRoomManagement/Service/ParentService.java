@@ -1,6 +1,7 @@
 package com.DigitalClassRoomManagement.Service;
 
 import com.DigitalClassRoomManagement.Entity.Parent;
+import com.DigitalClassRoomManagement.Enum.Status;
 
 import java.util.List;
 
@@ -8,9 +9,13 @@ import java.util.List;
 
 public interface ParentService {
     Parent createParent(Parent parent);
+
     Parent getParentById(Long id);
     List<Parent> getAllParents();
     Parent updateParent(Long id, Parent parent);
     void deleteParent(Long id);
     String linkParentToStudent(Long parentId, Long studentId, String relationship);
+    //new line
+    List<Parent> getParentsByStatus(Status status);
+
 }

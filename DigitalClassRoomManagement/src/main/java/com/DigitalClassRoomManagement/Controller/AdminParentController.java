@@ -3,6 +3,7 @@ package com.DigitalClassRoomManagement.Controller;
 import com.DigitalClassRoomManagement.Entity.Parent;
 import com.DigitalClassRoomManagement.Entity.Student;
 import com.DigitalClassRoomManagement.Enum.Relationship;
+import com.DigitalClassRoomManagement.Enum.Status;
 import com.DigitalClassRoomManagement.Service.ParentService;
 import com.DigitalClassRoomManagement.Repository.StudentRepository;
 import com.DigitalClassRoomManagement.Repository.ParentRepository;
@@ -64,7 +65,7 @@ public class AdminParentController {
     }
 
     // GET all Parents
-    @GetMapping("/getAllParent")
+   /* @GetMapping("/getAllParent")
     public ResponseEntity<?> getAllParents() {
         logger.info("Fetching all parents...");
 
@@ -77,7 +78,40 @@ public class AdminParentController {
             return new ResponseEntity<>("Unable to fetch parent list: " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }*/
+
+    //new line
+    // GET all Parents OR by Status (APPROVED / UNAPPROVED)
+    @GetMapping("/getAllParent")
+    public ResponseEntity<?> getAllParents(
+            @RequestParam(required = false) String status) {
+
+        logger.info("Fetching parents...");
+
+        try {
+
+            if (status != null) {
+                Status parentStatus = Status.valueOf(status.toUpperCase());
+                List<Parent> parents = parentService.getParentsByStatus(parentStatus);
+                logger.info("Total parents found with status " + status + ": " + parents.size());
+                return new ResponseEntity<>(parents, HttpStatus.OK);
+            }
+
+            List<Parent> parents = parentService.getAllParents();
+            logger.info("Total parents found: " + parents.size());
+            return new ResponseEntity<>(parents, HttpStatus.OK);
+
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("Invalid status value. Use APPROVED or UNAPPROVED.",
+                    HttpStatus.BAD_REQUEST);
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Unable to fetch parent list: " + e.getMessage(), e);
+            return new ResponseEntity<>("Unable to fetch parent list: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 
     // UPDATE Parent
     @PutMapping("/updateParent/{id}")
